@@ -4,6 +4,7 @@
 #include <string>
 #include <ESP8266WiFi.h>
 #include "wifi_ostream.h"
+#include "wifi_secrets.h"
 #include "debug_interface.h"
 
 class WifiOstream;
@@ -91,8 +92,8 @@ class WifiInterfaceEthernet: public NetInterface {
   void handleNewConnections( WifiDebugOstream &log );
 
   // Make a CI Test to lock these defaults in?
-  const char* ssid{"donotcheckinssid"};//type your ssid  
-  const char* password{"andpasswordtogithub"};//type your password  
+  static constexpr const char* ssid = WifiSecrets::ssid; 
+  static constexpr const char* password = WifiSecrets::password;
   const uint16_t tcp_port{4999};
 
   WiFiServer m_server{tcp_port};
