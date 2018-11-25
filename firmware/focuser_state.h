@@ -38,6 +38,8 @@ class FOCUSER_STATE
     E_SET_DIR,
     E_MOVING,
     E_STOP_AT_HOME,
+    E_LOW_POWER,
+    E_AWAKEN,
     E_END          
   } STATE;
 
@@ -62,6 +64,8 @@ class FOCUSER_STATE
   void state_doing_steps( void );
   void state_set_dir( void );
   void state_stop_at_home( void );
+  void state_low_power( void );
+  void state_awaken( void );
 
   COMMAND_PACKET& get_current_command( void );
 
@@ -78,7 +82,7 @@ class FOCUSER_STATE
 
   const int dirPin = 5; // GPIO5 of ESP8266
   const int stepPin = 4; // GPIO4 of ESP8266
-  const int enaPin = 6;
+  const int enaPin = 14;  // D5 Board, GPI14 of ESP8266
   const int homePin = 13;
   const int steps_per_rotation = 200;
   const int max_rotations_per_second = 2;

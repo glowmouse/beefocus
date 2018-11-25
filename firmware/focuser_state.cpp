@@ -49,6 +49,8 @@ void FOCUSER_STATE::setup()
   
   hardware->PinMode(stepPin, HardwareInterface::output );  
   hardware->PinMode(dirPin,  HardwareInterface::output );  
+  hardware->PinMode(enaPin,  HardwareInterface::output );  
+  hardware->DigitalWrite( enaPin, HardwareInterface::low );        
   hardware->PinMode(homePin, HardwareInterface::input  );  
 
   log << "FOCUSER_STATE is up\n";
@@ -78,47 +80,43 @@ FOCUSER_STATE::COMMAND_PACKET& FOCUSER_STATE::get_current_command( void )
 void FOCUSER_STATE::check_for_commands( bool accept_only_abort )
 {
   DebugInterface& log = *debugLog;
-  int new_speed = 0;
-  int new_position = 0;
-  bool new_abort = 0;
-  bool new_home = 0;
 
   STATE state = get_current_command().state;
   int arg0 = get_current_command().arg0;
 
-  CommandParser::checkForCommands( log, *net, focuser_position, state_names[ state ], arg0, new_speed, new_position, new_abort, new_home  );
+  auto deltas = CommandParser::checkForCommands( log, *net, focuser_position, state_names[ state ], arg0 );
 
-  if ( new_abort ) {
+  if ( deltas.new_abort ) {
     // Abort command, unroll the state stack and start accepting commands.
     hard_reset_state( E_ACCEPT_COMMANDS, 0 );
     return;
   }
 
-  if (( new_speed != NO_VALUE || new_position != NO_VALUE ) && accept_only_abort ) {   
-    return;
-  }
-
-  if ( new_home ) {
+  if ( deltas.new_home ) {
     hard_reset_state( E_ACCEPT_COMMANDS, 0 );
     push_state( E_STOP_AT_HOME );
     return;
   }  
 
-  if ( new_speed != NO_VALUE ) {
-    if ( new_speed <=1 || new_speed >= max_rotations_per_second ) {
-      hard_reset_state( E_ERROR_STATE, __LINE__ );
-      return;
-    }
-  }
-  if ( new_position != NO_VALUE ) {
-    push_state( E_MOVING, new_position );
-        
+  if ( deltas.position_changed ) {
+    push_state( E_MOVING, deltas.position_changed_arg );
+    int new_position = deltas.position_changed_arg;       
+
     if ( new_position < focuser_position )
     {
       int backtrack = new_position - 500;
       backtrack = backtrack < 0 ? 0 : backtrack;
       push_state( E_MOVING, backtrack );
     }
+  }
+
+  if ( deltas.new_sleep ) {
+    push_state( E_LOW_POWER, 0 );
+	}
+  if ( deltas.new_awaken && state == E_LOW_POWER )
+  {
+    hard_reset_state( E_ACCEPT_COMMANDS, 0 );
+    push_state( E_AWAKEN );
   }
 }
 
@@ -179,6 +177,8 @@ void FOCUSER_STATE::state_doing_steps()
 
 void FOCUSER_STATE::state_moving()
 {
+  hardware->DigitalWrite( enaPin, HardwareInterface::low );
+        
   WifiDebugOstream log( debugLog.get(), net.get() );
   log << "Moving " << focuser_position << "\n";
   
@@ -233,6 +233,19 @@ void FOCUSER_STATE::state_stop_at_home()
   focuser_position--;
 }
 
+void FOCUSER_STATE::state_low_power()
+{
+  hardware->DigitalWrite( enaPin, HardwareInterface::high );        
+  bool dont_accept_only_abort = false;
+  check_for_commands( dont_accept_only_abort );
+}
+
+void FOCUSER_STATE::state_awaken()
+{
+  hardware->DigitalWrite( enaPin, HardwareInterface::low );        
+  state_stack.pop_back();
+}
+
 void FOCUSER_STATE::loop(void)
 {
   STATE next_state = get_current_command().state;
@@ -256,6 +269,12 @@ void FOCUSER_STATE::loop(void)
       break;
     case E_STOP_AT_HOME:
       state_stop_at_home();
+      break;      
+    case E_LOW_POWER:
+      state_low_power();
+      break;      
+    case E_AWAKEN:
+      state_awaken();
       break;      
     case E_ERROR_STATE:
     default:    

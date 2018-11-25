@@ -20,16 +20,14 @@ static int process_int( const std::string& string,  size_t pos )
   return result;
 }
 
-void checkForCommands( DebugInterface& serialLog, NetInterface& wifi, int focuser_position,  const char *state, int state_arg, int &new_speed,  int &new_position,  bool &new_abort, bool &new_home  ) 
+const Deltas checkForCommands( 
+	DebugInterface& serialLog, 
+	NetInterface& wifi, 
+	int focuser_position,  
+	const char *state,
+  int state_arg  )
 {
-
-  // Set defualt inits,  We'll do nothing unless we get a command
-
-  new_speed = BeeFocus::noValue;
-  new_position = BeeFocus::noValue;
-  new_abort = false;
-  new_home = false;
-
+	Deltas result;
   
   WifiDebugOstream log( &serialLog, &wifi );
 
@@ -39,7 +37,7 @@ void checkForCommands( DebugInterface& serialLog, NetInterface& wifi, int focuse
   bool dataReady = wifi.getString( log, command );
   if ( !dataReady )
   {
-    return;
+    return result;
   }
 
   log << "Got: " << command << "\n";
@@ -53,13 +51,13 @@ void checkForCommands( DebugInterface& serialLog, NetInterface& wifi, int focuse
   if ( command.find("ABORT") == 0 )
   {
     log << "Queued abort for processing\n"; 
-    new_abort = true;
+    result.new_abort = true;
   }
 
   if ( command.find( "HOME") == 0)
   {
     log << "ACK_HOME\n";
-    new_home = true;
+    result.new_home = true;
   }
 
   if ( command.find( "STATUS") == 0 )
@@ -83,38 +81,22 @@ void checkForCommands( DebugInterface& serialLog, NetInterface& wifi, int focuse
 
   if ( command.find( "ABS_POS=" ) == 0 )
   {
-    new_position = process_int( command,  8 );
-    log << "ACK_ABS_POS " << new_position << "\n";       
+    result.position_changed= true;
+    result.position_changed_arg= process_int( command,  8 );
+    log << "ACK_ABS_POS " << result.position_changed_arg << "\n";       
   }
 
-#ifdef TODO
-  if ( has
-
-  int speed_index = request.indexOf("SPEED=");
-  if (speed_index != -1 )
-    new_speed = process_int( request,  speed_index+6 );
-
-  int abs_pos_index = request.indexOf("ABS_POS=");
-  if (abs_pos_index != -1 ) {
-    // multiply by 32 to make sure we don't micro-step.  Holding a
-    // micro-step seems to eat power.
-    new_position = process_int( request,  abs_pos_index+8 ) * 32;
-    log.print("CFC RAW_ABS_POS=");
-    log.println(new_position);    
-    if ( new_position < 1 ) new_position = NO_VALUE;
-    log.print("CFC ABS_POS=");
-    log.println(new_position);
-  }
-
-  
-  int rel_pos_index = request.indexOf("REL_POS=");
-  if (rel_pos_index != -1 )
-    new_position = process_int( request,  rel_pos_index+8 );
-    if ( new_position + focuser_position < 0 ) new_position = NO_VALUE;
-
-#endif
-
-
+  if ( command.find( "SLEEP") == 0 )
+	{
+    result.new_sleep = true;
+		log << "Entering sleep mode\n";
+	}
+  if ( command.find( "WAKE") == 0 )
+	{
+    result.new_awaken = true;
+		log << "Waking from sleep mode\n";
+	}
+  return result;
 }
 
 

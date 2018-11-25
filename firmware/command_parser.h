@@ -9,21 +9,53 @@ class NetInterface;
 
 namespace CommandParser {
 
+	class Deltas {
+		public:
+
+		Deltas() :
+			position_changed{false},
+			position_changed_arg{0},
+			new_abort{false},
+			new_home{false},
+			new_sleep{false},
+			new_awaken{false} 
+		{	}
+
+		public:
+
+    /// @brief true if the client requested a position change, false otherwise
+		bool position_changed;
+    /// @brief if position_change is true, position_change_arg is the new
+    ///        position.
+		int  position_changed_arg;
+    /// @brief True if the client requested an abort, false otherwise.
+		bool new_abort;
+    /// @brief True if the client requested a home, false otherwise
+		bool new_home;
+    /// @brief True if the client wants to go into low power mode
+		bool new_sleep;
+    /// @brief True if the client wants to go to wake from low power mode
+		bool new_awaken;
+	};
+
   /// @brief Get commands from the network interface
   ///
-  /// TODO - refactor the interface.  When I try to describe
-  /// what the arguments do it comes out sounding silly
+  /// @param[in] log          - Debug Log stream
+  /// @param[in] netInterface - The network interface that we'll query
+  ///            for the command.
+  /// @return    New requests from netInterface that need to be acted
+  ///            on.
   ///
-  void checkForCommands( 
-    DebugInterface& log,
-    NetInterface& netInterface,
-    int focuser_position,  
-    const char *state, 
-    int state_arg,  
-    int &new_speed,  
-    int &new_position,  
-    bool &new_abort,  
-    bool &new_home  
+  /// TODO 
+  /// - Error handling (has none).
+  /// - Move extra parameters used by the STATUS command.
+  ///
+  const Deltas checkForCommands( 
+    DebugInterface& log,				// Input: Debug Log Strem
+    NetInterface& netInterface,	// Input: Network Interface
+    int focuser_position,  			// Input: For STATUS command.  TODO, move
+    const char *state, 					// Input: For STATUS command.  TODO, move
+    int state_arg  							// Input: For STATUS command.  TODO, move
   );
 
 };
