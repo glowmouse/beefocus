@@ -1,4 +1,5 @@
-# H1 beefocus
+Beefocus
+========
 
 Beefocus is an Open Source Hardware/ Software Telescope Focuser 
 The goal of the project is to create a high quality DIY focuser that's
