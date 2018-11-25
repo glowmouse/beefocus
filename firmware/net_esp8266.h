@@ -90,10 +90,9 @@ class WifiInterfaceEthernet: public NetInterface {
 
   void handleNewConnections( WifiDebugOstream &log );
 
-  const char* ssid{"wormhole"};//type your ssid  
-  const char* password{"neverhavemoney"};//type your password  
-//  const char* ssid{"itsarealcoolclubandyoucantjoin"};//type your ssid  
-//  const char* password{"ttlshIwwya"};//type your password  
+  // Make a CI Test to lock these defaults in?
+  const char* ssid{"donotcheckinssid"};//type your ssid  
+  const char* password{"andpasswordtogithub"};//type your password  
   const uint16_t tcp_port{4999};
 
   WiFiServer m_server{tcp_port};
