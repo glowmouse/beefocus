@@ -20,11 +20,31 @@ else
   echo "LOG: Directory $sdk_path empty"
 	pushd . > /dev/null
   cd "$sdk_path/.."
-  echo "LOG: Downloading Arduino SDK $sdk_file"
-  wget "https://downloads.arduino.cc/$sdk_file" -O "$sdk_file"
+  if [ -f $sdk_file ]; then
+     echo "LOG: Arduino SDK $sdk_file exists - assuming it's good"
+  else
+     echo "LOG: Downloading Arduino SDK $sdk_file"
+     wget "https://downloads.arduino.cc/$sdk_file" -O "$sdk_file"
+     echo "LOG: Done Downloading Arduino SDK $sdk_file"
+  fi
   echo "LOG: Untarring $sdk_file"
   tar -xf "$sdk_file"
-  echo "LOG: Install Successful"
+  echo "LOG: Arduino SDK Successful"
+  echo "LOG: Cloning ESP8266 from github"
+  cd "$sdk_path"
+	cd hardware
+  mkdir esp8266com
+  cd esp8266com
+	git clone https://github.com/esp8266/Arduino.git esp8266
+  echo "LOG: Done Cloning ESP8266 from github"
+  echo "LOG: Checking out ESP8266 to a stable tag"
+  git checkout tags/2.4.2
+  echo "LOG: Done Checking out ESP8266 to a stable tag"
+  echo "LOG: Git fetch successful"
+  echo "LOG: Downloading binary tools"
+  cd esp8266/tools
+  python get.py
+  echo "LOG: Download successful"
 	popd > /dev/null
 fi
 
