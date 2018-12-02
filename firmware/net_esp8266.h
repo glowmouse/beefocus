@@ -50,7 +50,7 @@ class WifiConnectionEthernet: public NetConnection {
     }
   }
 
-  void initConnection( WifiDebugOstream& log, WiFiServer &server );
+  void initConnection( WiFiServer &server );
   bool getString( WifiDebugOstream &log, std::string& string ) override;
   operator bool( void ) override {
     return m_connectedClient;

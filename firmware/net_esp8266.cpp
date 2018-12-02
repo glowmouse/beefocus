@@ -68,7 +68,7 @@ void WifiInterfaceEthernet::handleNewConnections( WifiDebugOstream &log )
       log << "An existing client exists - disconnecting it\n";
     }
 
-    slot->initConnection( log, m_server );
+    slot->initConnection( m_server );
   }
 }
 
@@ -89,7 +89,7 @@ void WifiInterfaceEthernet::reset(void)
   });
 }
 
-void WifiConnectionEthernet::initConnection( WifiDebugOstream &log, WiFiServer &server )
+void WifiConnectionEthernet::initConnection( WiFiServer &server )
 {
   if ( m_connectedClient )
   {
