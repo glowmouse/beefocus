@@ -100,8 +100,6 @@ void WifiConnectionEthernet::initConnection( WifiDebugOstream &log, WiFiServer &
   (*this) << "# Bee Focuser is ready for commands\n";  
 }
 
-//    m_connectedClient = m_server.available();
-
 bool WifiConnectionEthernet::getString( WifiDebugOstream &log, std::string& string )
 {
   handleNewIncomingData( log );
@@ -128,6 +126,7 @@ bool WifiConnectionEthernet::getString( WifiDebugOstream &log, std::string& stri
 
 void WifiConnectionEthernet::handleNewIncomingData( WifiDebugOstream& log )
 {
+  (void) log; // silence argsused warning
   std::string& incomingBuffer = m_incomingBuffers[ m_currentIncomingBuffer ];
   
   if ( !m_connectedClient || !m_connectedClient.available())
@@ -141,7 +140,6 @@ void WifiConnectionEthernet::handleNewIncomingData( WifiDebugOstream& log )
     m_connectedClient.read( &byte, 1 );
     incomingBuffer += ((char) byte);
   }
-  // log << "New Buffer " << incomingBuffer << "\n";
 }
 
 

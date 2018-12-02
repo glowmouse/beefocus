@@ -92,6 +92,14 @@ void FOCUSER_STATE::check_for_commands( bool accept_only_abort )
     return;
   }
 
+  if ( accept_only_abort )
+  {
+    // for now, return.  refactor when
+    // https://github.com/glowmouse/beefocus/issues/5
+    // is resolved.
+    return;
+  } 
+
   if ( deltas.new_home ) {
     hard_reset_state( E_ACCEPT_COMMANDS, 0 );
     push_state( E_STOP_AT_HOME );

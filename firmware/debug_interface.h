@@ -13,6 +13,7 @@ class DebugInterface
 inline DebugInterface& operator<<( DebugInterface& stream, char c )
 {
 	stream.rawWrite( &c, 1 );
+  return stream;
 }
 
 inline void rawWrite( DebugInterface& stream, const char *bytes, std::size_t numBytes )

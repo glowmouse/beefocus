@@ -37,6 +37,7 @@ class NetConnection {
   NetConnection& operator<<( char c )
   {
     putchar( c );
+    return *this;
   }
   virtual bool getString( WifiDebugOstream& lot, std::string& string )=0;
   virtual operator bool( void ) = 0;
