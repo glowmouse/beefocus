@@ -16,14 +16,14 @@ example...
 Why start a new project?
 ------------------------
 
-- **Origianally, I needed a custom focuser solution for my telescope**.
+- **Originally, I needed a custom focuser solution for my telescope**.
   I have a Celestron C11 with a Hyperstar.  When I started this I
   couldn't find a good out of the box solution.
 - **I want to try using an ESP-8266 internet of things micro-controller 
   instead of a traditional arduino**.  I've found that every wire you 
   get rid of simplifies your telescope setup and observing
 - **I want to open-source the hardware design under a permissive license.**   
-  I'm intigued by the idea of open-source hardware.  I'm including the
+  I'm intrigued by the idea of open-source hardware.  I'm including the
   Eagle CAD files for the hardware under a Creative Commons 4.0 license.
   The goal is to make builds as inexpensive and easy as possible.
 - This project is a good personal learning experience.
@@ -35,10 +35,10 @@ Status
 - I have a physical prototype. It's been field tested and
   it worked almost flawlessly.  The issues that I want to fix before
   "Version 1.0" are tracked on the [Github Project Issues Page].
-. The [prototype ESP8266 firmeware] is posted
-- There is a [prototype INDI Driver].  I need to refactor the INDI driver 
+- The [Prototype ESP8266 Firmware] is posted.
+- There is a [Prototype INDI Driver].  I need to refactor the INDI driver 
   once I'm finished making changes to the firmware and ask to have my driver 
-  pulled into the [Main INDI project] 
+  pulled into the [Main INDI Project].
 - I've published a [Prototype Board Design].  I made my prototype using 
   a CNC circuit router.  I've sent the board off to be professionally 
   fabricated, and I'm waiting for the results.
@@ -49,8 +49,8 @@ Status
 
 ![alt text](https://raw.githubusercontent.com/glowmouse/beefocus/master/boards/nema_14_b0/board_layout.png "Nema 14 Build Board")
 
-[Github Project Issues Page]:(https://github.com/glowmouse/beefocus/issues)
-[Prototype ESP8266 firmeware]: https://github.com/glowmouse/beefocus/tree/master/firmware
+[Github Project Issues Page]:https://github.com/glowmouse/beefocus/issues
+[Prototype ESP8266 firmware]: https://github.com/glowmouse/beefocus/tree/master/firmware
 [Prototype INDI Driver]: https://github.com/glowmouse/indi
 [Main INDI project]: https://github.com/indilib/indi
 [Prototype board design]: https://github.com/glowmouse/beefocus/tree/master/boards/nema_14_b0
