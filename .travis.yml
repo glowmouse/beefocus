@@ -14,16 +14,18 @@ compiler:
  - gcc
 
 language: cpp
+sudo: required
 dist: trusty    # Ubuntu 14.04.  Current Unbuntu for Raspberry Pi 
 
 # Nothing to do here for now
 before_install:
-  - echo Setting up environment
+  - echo Installing Google Test Framework
+  - travis-ci/install-gtest.sh
 
 install:
-  - echo Building Simulator
-  - travis-ci/build-simulator.sh
+  - echo Building
+  - travis-ci/build-all.sh
 
 script:
-  - echo Run unit tests here.
+  - echo Post Build.  Nothing to do.
 

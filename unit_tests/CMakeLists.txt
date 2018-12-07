@@ -1,0 +1,25 @@
+ENABLE_TESTING()
+
+SET (TEST_CHECK_FOR_COMMAND_SOURCES ${FIRMWARE_SOURCES})
+LIST(APPEND TEST_CHECK_FOR_COMMAND_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/test_check_for_commands.cpp)
+
+ADD_EXECUTABLE(test_check_for_commands ${TEST_CHECK_FOR_COMMAND_SOURCES})
+
+MESSAGE( STATUS  ${GTEST_BOTH_LIBRARIES} )
+
+TARGET_LINK_LIBRARIES(test_check_for_commands 
+  ${GTEST_BOTH_LIBRARIES}
+  ${GTEST_LIBRARIES}
+  ${CMAKE_THREAD_LIBS_INIT}
+)
+
+ADD_TEST(test_check_for_commands test_check_for_commands)
+
+ADD_CUSTOM_COMMAND(
+  TARGET test_check_for_commands
+  COMMENT "Running tests"
+  POST_BUILD
+  WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+  COMMAND test_check_for_commands --output_on_failures
+)
+

@@ -9,6 +9,8 @@ class NetInterface;
 
 namespace CommandParser {
 
+  int process_int( const std::string& string,  size_t pos );
+
 	class Deltas {
 		public:
 

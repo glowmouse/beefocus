@@ -8,12 +8,12 @@ set -e
 
 # Make a build directory
 mkdir -p build/simulator
-pushd build/simulator
+pushd build/simulator 2> /dev/null
 
 # Create makefiles and run make
 cmake ../..
 make
 
-popd
+popd 2> /dev/null
 exit 0
 
