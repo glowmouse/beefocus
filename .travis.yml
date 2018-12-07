@@ -22,6 +22,7 @@ before_install:
 
 install:
   - echo Building Simulator
+  - ls
   - travis-ci/build_simulator.sh
 
 script:
