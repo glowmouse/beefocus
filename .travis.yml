@@ -25,5 +25,5 @@ install:
   - travis-ci/build-simulator.sh
 
 script:
-  - echo One day we'll run unit tests here.
+  - echo Run unit tests here.
 
