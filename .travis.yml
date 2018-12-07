@@ -1,0 +1,29 @@
+#
+# This file controls the continuous contegration that's run whenever
+# a change is put back to github.  Right now we're just building 
+# the firmware in "simulator mode", on ubuntu linux.  Future 
+# planned integrations are:
+#
+# 1) Unit Tests, running on Ubuntu Linux
+# 2) An actual arduino firward build
+#
+# The actual Arduino firward build looks involved.
+#
+
+compiler:
+ - gcc
+
+language: cpp
+dist: trusty    # Ubuntu 14.04.  Current Unbuntu for Raspberry Pi 
+
+# Nothing to do here for now
+before_install:
+  - echo Setting up environment
+
+install:
+  - echo Building Simulator
+  - travis-ci/build-simulator.sh
+
+script:
+  - echo Run unit tests here.
+

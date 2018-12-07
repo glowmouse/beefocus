@@ -32,10 +32,10 @@ else
   echo "LOG: Arduino SDK Successful"
   echo "LOG: Cloning ESP8266 from github"
   cd "$sdk_path"
-	cd hardware
+  cd hardware
   mkdir esp8266com
   cd esp8266com
-	git clone https://github.com/esp8266/Arduino.git esp8266
+  git clone https://github.com/esp8266/Arduino.git esp8266
   echo "LOG: Done Cloning ESP8266 from github"
   echo "LOG: Checking out ESP8266 to a stable tag"
   git checkout tags/2.4.2
@@ -45,7 +45,7 @@ else
   cd esp8266/tools
   python get.py
   echo "LOG: Download successful"
-	popd > /dev/null
+  popd > /dev/null
 fi
 
 
