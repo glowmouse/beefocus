@@ -6,7 +6,7 @@
 namespace CommandParser
 {
 
-static int process_int( const std::string& string,  size_t pos )
+int process_int( const std::string& string,  size_t pos )
 {
   int end = string.length();
   int result = 0;
