@@ -26,3 +26,6 @@ install:
   - echo Building
   - travis-ci/build-all.sh
 
+script:
+  - echo Post Build.  Nothing to do.
+
