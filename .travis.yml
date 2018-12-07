@@ -22,8 +22,7 @@ before_install:
 
 install:
   - echo Building Simulator
-  - ls
-  - travis-ci/build_simulator.sh
+  - travis-ci/build-simulator.sh
 
 script:
   - echo One day we'll run unit tests here.
