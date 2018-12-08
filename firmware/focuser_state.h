@@ -12,7 +12,7 @@ class FOCUSER_STATE
  
   FOCUSER_STATE( 
 		std::unique_ptr<NetInterface> netArg,
-		std::unique_ptr<HardwareInterface> hardwareArg,
+		std::unique_ptr<HWI> hardwareArg,
 		std::unique_ptr<DebugInterface> debugArg
 	)
   {
@@ -80,7 +80,7 @@ class FOCUSER_STATE
   COMMAND_PACKET& get_current_command( void );
 
   std::unique_ptr<NetInterface> net;
-  std::unique_ptr<HardwareInterface> hardware;
+  std::unique_ptr<HWI> hardware;
   std::unique_ptr<DebugInterface> debugLog;
   
   int focuser_position;       // Stepper Motor Position

@@ -3,18 +3,18 @@
 
 #include "hardware_interface.h"
 
-class HardwareESP8266: public HardwareInterface
+class HardwareESP8266: public HWI
 {
   public:
 
-  void DigitalWrite( Pin pin, int state ) override;
-  void PinMode( Pin pin, int state ) override;
-  int  DigitalRead( Pin pin) override;
+  void     DigitalWrite( Pin pin, PinState state ) override;
+  void     PinMode( Pin pin, int state ) override;
+  PinState DigitalRead( Pin pin) override;
 
   private:
-  
-  // @brief map generic pins to build specific pins
-  int mapPins( Pin pin);
+ 
+  static const std::unordered_map<HWI::Pin, int, EnumHash > pinMap;
+  static const std::unordered_map<HWI::PinState, int, EnumHash > pinStateMap;
 };
 
 #endif

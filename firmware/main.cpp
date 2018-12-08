@@ -17,7 +17,7 @@ void loop() {
 
 void setup() {
   std::unique_ptr<NetInterface> wifi( new WifiInterfaceEthernet );
-  std::unique_ptr<HardwareInterface> hardware( new HardwareESP8266 );
+  std::unique_ptr<HWI> hardware( new HardwareESP8266 );
   std::unique_ptr<DebugInterface> debug( new DebugESP8266 );
   focuser = std::unique_ptr<FOCUSER_STATE>(
      new FOCUSER_STATE( 

@@ -40,23 +40,25 @@ class NetInterfaceSim: public NetInterface {
   }
 };
 
-class HardwareInterfaceSim: public HardwareInterface
+class HWISim: public HWI
 {
   public: 
 
-  void PinMode( Pin pin, int state ) override
+  void PinMode( Pin pin, int mode ) override
   {
-    //std::cout << "Pin Mode " << HardwareInterface::pinNames.at(pin) << " set to state " << state << "\n";
+    std::cout << "Pin Mode (" << HWI::pinNames.at(pin) << ") = " << mode << "\n";
   }
-  void DigitalWrite( Pin pin, int state ) override
+  void DigitalWrite( Pin pin, PinState state ) override
   {
-    const std::string name = HardwareInterface::pinNames.at(pin);
-    std::cout << "Digital Write Pin " << name << " state " << state << "\n";
+    const std::string name = HWI::pinNames.at(pin);
+    std::cout << "DW (" << HWI::pinNames.at(pin) 
+              << ") = " << HWI::pinStateNames.at( state ) 
+              << "\n";
   }
-  int DigitalRead( Pin pin ) override
+  PinState DigitalRead( Pin pin ) override
   {
-    //std::cout << "Digital Read " << HardwareInterface::pinNames.at(pin) << " returning 0";
-    return 0;
+    std::cout << "DR " << HWI::pinNames.at(pin) << " returning HOME_INACTIVE";
+    return HWI::PinState::HOME_INACTIVE;
   }
 };
 
@@ -77,7 +79,7 @@ void loop() {
 
 void setup() {
   std::unique_ptr<NetInterface> wifi( new NetInterfaceSim );
-  std::unique_ptr<HardwareInterface> hardware( new HardwareInterfaceSim );
+  std::unique_ptr<HWI> hardware( new HWISim );
   std::unique_ptr<DebugInterface> debug( new DebugInterfaceSim );
   focuser = std::unique_ptr<FOCUSER_STATE>(
      new FOCUSER_STATE( 

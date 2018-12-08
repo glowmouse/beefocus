@@ -14,7 +14,7 @@ struct EnumHash
   }
 };
 
-class HardwareInterface
+class HWI
 {
   public:
 
@@ -27,11 +27,25 @@ class HardwareInterface
     END_OF_PINS 
   };
 
-  const static std::unordered_map<Pin,std::string,EnumHash> pinNames;
+  enum class PinState {
+    START_OF_PIN_STATES = 0,
+    STEP_HIGH = 0,
+    STEP_LOW,
+    DIR_FORWARD,
+    DIR_BACKWARD,
+    MOTOR_ON,       // 0 on the nema build
+    MOTOR_OFF,      // 1 on the nema build
+    HOME_ACTIVE,    // 0 on the nema build
+    HOME_INACTIVE,  // 1 on the nema build
+    END_OF_PIN_STATES
+  };
 
-  virtual void DigitalWrite( Pin pin, int state ) = 0;
-  virtual void PinMode( Pin pin, int state ) = 0;
-  virtual int  DigitalRead( Pin pin) = 0;
+  const static std::unordered_map<Pin,std::string,EnumHash> pinNames;
+  const static std::unordered_map<PinState,std::string,EnumHash> pinStateNames;
+
+  virtual void DigitalWrite( Pin pin, PinState state ) = 0;
+  virtual void PinMode( Pin pin, int mode ) = 0;
+  virtual PinState DigitalRead( Pin pin) = 0;
 
   constexpr static int low = 0;
   constexpr static int high = 1;
@@ -44,14 +58,31 @@ class HardwareInterface
 // @param[in] pin - The pin to increment. 
 // @return - The next value in the Enum.
 //
-inline HardwareInterface::Pin& operator++( HardwareInterface::Pin &pin ) 
+inline HWI::Pin& operator++( HWI::Pin &pin ) 
 {
-  if ( pin != HardwareInterface::Pin::END_OF_PINS )
+  if ( pin != HWI::Pin::END_OF_PINS )
   {
     // wee hacky
-    pin = static_cast<HardwareInterface::Pin>( static_cast<int>(pin) + 1 );
+    pin = static_cast<HWI::Pin>( static_cast<int>(pin) + 1 );
   }
   return pin;
+}
+
+// @brief Increment operator for Hardware Interface Pin State
+//
+// @param[in] pinState - The pin state to increment. 
+// @return - The next value in the Enum.
+// 
+// Todo - Template? Better pattern.
+//
+inline HWI::PinState& operator++( HWI::PinState &pinState ) 
+{
+  if ( pinState != HWI::PinState::END_OF_PIN_STATES )
+  {
+    // still wee hacky
+    pinState = static_cast<HWI::PinState>( static_cast<int>(pinState) + 1 );
+  }
+  return pinState;
 }
 
 #endif
