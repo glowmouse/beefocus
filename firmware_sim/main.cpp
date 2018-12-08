@@ -44,14 +44,6 @@ class HardwareInterfaceSim: public HardwareInterface
 {
   public: 
 
-  void DelayMicroseconds( int usecs ) override
-  {
-    // meh
-  }
-  void Delay( int secs ) override
-  {
-    DelayMicroseconds( secs * 1000 );
-  }
   void PinMode( int pin, int state ) override
   {
     std::cout << "Pin Mode " << pin << " set to state " << state << "\n";

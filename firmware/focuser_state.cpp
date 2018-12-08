@@ -76,7 +76,6 @@ FOCUSER_STATE::COMMAND_PACKET& FOCUSER_STATE::get_current_command( void )
 }
 
 
-
 void FOCUSER_STATE::check_for_commands( bool accept_only_abort )
 {
   DebugInterface& log = *debugLog;
@@ -128,28 +127,31 @@ void FOCUSER_STATE::check_for_commands( bool accept_only_abort )
   }
 }
 
-void FOCUSER_STATE::state_check_for_abort() 
+unsigned int FOCUSER_STATE::state_check_for_abort() 
 {
   // An abort check is always a one off
   state_stack.pop_back();
 
   bool accept_only_abort = true;
   check_for_commands( accept_only_abort );
+  return 10*1000;
 }
   
-void FOCUSER_STATE::state_accept_commands()
+unsigned int FOCUSER_STATE::state_accept_commands()
 {
   bool dont_accept_only_abort = false;
   check_for_commands( dont_accept_only_abort );
+  return 10*1000;
 }
 
-void FOCUSER_STATE::state_error()
+unsigned int FOCUSER_STATE::state_error()
 {
   bool accept_only_abort = true;  
   check_for_commands( accept_only_abort );
+  return 10*1000;
 }
 
-void FOCUSER_STATE::state_set_dir()
+unsigned int FOCUSER_STATE::state_set_dir()
 {
   FOCUSER_STATE::COMMAND_PACKET& state = get_current_command();  
   if ( state.arg0 ) {
@@ -162,9 +164,26 @@ void FOCUSER_STATE::state_set_dir()
   }    
 
   state_stack.pop_back();
+  return 0;
 }
 
-void FOCUSER_STATE::state_doing_steps()
+unsigned int FOCUSER_STATE::state_step_low_and_wait()
+{
+  int delay = 1000000 / focuser_speed / 2;
+  hardware->DigitalWrite( stepPin, HardwareInterface::low );
+  state_stack.pop_back();
+  return delay;
+}
+
+unsigned int FOCUSER_STATE::state_step_high_and_wait()
+{
+  int delay = 1000000 / focuser_speed / 2;
+  hardware->DigitalWrite( stepPin, HardwareInterface::high );
+  state_stack.pop_back();
+  return delay;
+}
+
+unsigned int FOCUSER_STATE::state_doing_steps()
 {
   FOCUSER_STATE::COMMAND_PACKET& state = get_current_command();
     
@@ -172,18 +191,17 @@ void FOCUSER_STATE::state_doing_steps()
   {
     // We're done at 0
     state_stack.pop_back();
-    return;
+    return 0;
   }
 
-  int delay = 1000000 / focuser_speed / 2;
-  hardware->DigitalWrite( stepPin, HardwareInterface::low );
-  hardware->DelayMicroseconds( delay );
-  hardware->DigitalWrite( stepPin, HardwareInterface::high );
-  hardware->DelayMicroseconds( delay );
-  state.arg0--;  
+  push_state( E_STEPPER_HIGH_AND_WAIT );
+  push_state( E_STEPPER_LOW_AND_WAIT );
+
+  state.arg0--;
+  return 0;  
 }
 
-void FOCUSER_STATE::state_moving()
+unsigned int FOCUSER_STATE::state_moving()
 {
   hardware->DigitalWrite( enaPin, HardwareInterface::low );
         
@@ -195,7 +213,7 @@ void FOCUSER_STATE::state_moving()
   if ( state.arg0 == focuser_position ) {
     // We're at the target,  exit
     state_stack.pop_back();
-    return;    
+    return 0;    
   }
 
   bool next_dir;
@@ -219,9 +237,10 @@ void FOCUSER_STATE::state_moving()
   push_state( E_CHECK_FOR_ABORT );
   push_state( E_DO_STEPS, steps );
   push_state( E_SET_DIR, next_dir );
+  return 0;        
 }
 
-void FOCUSER_STATE::state_stop_at_home()
+unsigned int FOCUSER_STATE::state_stop_at_home()
 {
   WifiDebugOstream log( debugLog.get(), net.get() );
 
@@ -234,60 +253,70 @@ void FOCUSER_STATE::state_stop_at_home()
     log << "Resetting position to 0\n";
     focuser_position = 0;
     state_stack.pop_back();
-    return;        
+    return 0;        
   }
   push_state( E_DO_STEPS, 1 );
   push_state( E_SET_DIR, 0 );
   focuser_position--;
+  return 0;        
 }
 
-void FOCUSER_STATE::state_low_power()
+unsigned int FOCUSER_STATE::state_low_power()
 {
   hardware->DigitalWrite( enaPin, HardwareInterface::high );        
   bool dont_accept_only_abort = false;
   check_for_commands( dont_accept_only_abort );
+  return 100*1000;
 }
 
-void FOCUSER_STATE::state_awaken()
+unsigned int FOCUSER_STATE::state_awaken()
 {
   hardware->DigitalWrite( enaPin, HardwareInterface::low );        
   state_stack.pop_back();
+  return 0;
 }
 
-void FOCUSER_STATE::loop(void)
+unsigned int FOCUSER_STATE::loop(void)
 {
   STATE next_state = get_current_command().state;
 
   switch ( next_state ) {
     case E_CHECK_FOR_ABORT:
-      state_check_for_abort();
+      return state_check_for_abort();
       break;
     case E_ACCEPT_COMMANDS:
       state_accept_commands();
-      hardware->Delay(10);
+      return 10*1000;   // 10 microseconds
       break;
     case E_DO_STEPS:
-      state_doing_steps();
+      return state_doing_steps();
       break;
     case E_SET_DIR:
-      state_set_dir();
+      return state_set_dir();
       break;      
     case E_MOVING:
-      state_moving();
+      return state_moving();
       break;
     case E_STOP_AT_HOME:
-      state_stop_at_home();
+      return state_stop_at_home();
       break;      
     case E_LOW_POWER:
-      state_low_power();
+      return state_low_power();
       break;      
     case E_AWAKEN:
-      state_awaken();
-      break;      
+      return state_awaken();
+      break;
+    case E_STEPPER_LOW_AND_WAIT:      
+      return state_step_low_and_wait();
+      break;
+    case E_STEPPER_HIGH_AND_WAIT:      
+      return state_step_high_and_wait();
+      break;
     case E_ERROR_STATE:
     default:    
       state_error();
       break;
   }
+  return 10*1000;   // 10 microseconds
 }
 

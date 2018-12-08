@@ -8,7 +8,11 @@
 std::unique_ptr<FOCUSER_STATE> focuser;
 
 void loop() {
-  focuser->loop();
+  unsigned int pause = focuser->loop();
+  if ( pause != 0 )
+  {
+    delayMicroseconds( pause );
+  }
 }
 
 void setup() {

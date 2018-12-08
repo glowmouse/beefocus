@@ -7,7 +7,7 @@
 set -e
 
 mkdir -p build
-pushd build
+pushd build 2> /dev/null
 git clone https://github.com/google/googletest.git
 if [ ! -d googletest ]; then
 echo "Failed to get googletest.git repo"
@@ -18,7 +18,7 @@ mkdir build
 cd build
 cmake .. -DCMAKE_CXX_FLAGS="-fPIC"
 sudo make install
-popd
+popd 2> /dev/null
 rm -rf googletest
-popd
+popd 2> /dev/null
 
