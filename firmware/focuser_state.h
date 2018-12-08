@@ -22,8 +22,14 @@ class FOCUSER_STATE
   }
   FOCUSER_STATE( const FOCUSER_STATE& other ) = delete;
 
+  // TODO - remove and bring functionality into constructor
   void setup( );
-  void loop();
+  
+  // @brief Update State
+  //
+  // @return The amount of time the caller should wait (in microsecodns)
+  //         before calling loop again.
+  unsigned int loop();
 
   private:
 
@@ -35,6 +41,8 @@ class FOCUSER_STATE
     E_ACCEPT_COMMANDS,
     E_ERROR_STATE,  
     E_DO_STEPS,
+    E_STEPPER_LOW_AND_WAIT,
+    E_STEPPER_HIGH_AND_WAIT,
     E_SET_DIR,
     E_MOVING,
     E_STOP_AT_HOME,
@@ -57,15 +65,17 @@ class FOCUSER_STATE
   void push_state( STATE new_state, int arg0 = -1,  int arg1 = -1 );
   void check_for_commands( bool accept_only_abort );
 
-  void state_check_for_abort( void );
-  void state_accept_commands( void );  
-  void state_error( void );
-  void state_moving( void );
-  void state_doing_steps( void );
-  void state_set_dir( void );
-  void state_stop_at_home( void );
-  void state_low_power( void );
-  void state_awaken( void );
+  unsigned int state_check_for_abort( void );
+  unsigned int state_accept_commands( void );  
+  unsigned int state_error( void );
+  unsigned int state_moving( void );
+  unsigned int state_doing_steps( void );
+  unsigned int state_set_dir( void );
+  unsigned int state_stop_at_home( void );
+  unsigned int state_low_power( void );
+  unsigned int state_awaken( void );
+  unsigned int state_step_high_and_wait( void );
+  unsigned int state_step_low_and_wait( void );
 
   COMMAND_PACKET& get_current_command( void );
 
@@ -80,10 +90,6 @@ class FOCUSER_STATE
   std::vector< COMMAND_PACKET > state_stack;
   const char *state_names[ E_END ];  
 
-  const int dirPin = 5; // GPIO5 of ESP8266
-  const int stepPin = 4; // GPIO4 of ESP8266
-  const int enaPin = 14;  // D5 Board, GPI14 of ESP8266
-  const int homePin = 13;
   const int steps_per_rotation = 200;
   const int max_rotations_per_second = 2;
   const int NO_VALUE = -1;

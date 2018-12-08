@@ -1,28 +1,36 @@
 #include <ESP8266WiFi.h>
 #include "hardware_esp8266.h"
 
-void HardwareESP8266::DelayMicroseconds( int usecs ) 
+int HardwareESP8266::mapPins( Pin pin )
 {
-  delayMicroseconds( usecs );
+  switch( pin )
+  {
+    case Pin::STEP:
+      return 4;
+    case Pin::DIR:
+      return 5;
+    case Pin::MOTOR_ENA:
+      return 14; 
+    case Pin::HOME:
+      return 13; 
+    case Pin::END_OF_PINS:
+      return -1;    // oh oh. todo, how to handle
+  }
+  return -1;    // oh oh, todo, how to handle
 }
 
-void HardwareESP8266::Delay( int secs )
+void HardwareESP8266::DigitalWrite( Pin pin, int state )
 {
-  delay( secs );
+  digitalWrite( mapPins(pin), state==low ? LOW : HIGH );
 }
 
-void HardwareESP8266::DigitalWrite( int pin, int state )
+void HardwareESP8266::PinMode( Pin pin, int state )
 {
-  digitalWrite( pin, state==low ? LOW : HIGH );
+  pinMode( mapPins(pin), state == output ? OUTPUT : INPUT );
 }
 
-void HardwareESP8266::PinMode( int pin, int state )
+int HardwareESP8266::DigitalRead( Pin pin)
 {
-  pinMode( pin, state == output ? OUTPUT : INPUT );
-}
-
-int HardwareESP8266::DigitalRead( int pin)
-{
-  return digitalRead( pin );
+  return digitalRead( mapPins(pin) );
 }
 

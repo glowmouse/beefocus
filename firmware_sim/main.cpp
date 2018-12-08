@@ -44,25 +44,18 @@ class HardwareInterfaceSim: public HardwareInterface
 {
   public: 
 
-  void DelayMicroseconds( int usecs ) override
+  void PinMode( Pin pin, int state ) override
   {
-    // meh
+    //std::cout << "Pin Mode " << HardwareInterface::pinNames.at(pin) << " set to state " << state << "\n";
   }
-  void Delay( int secs ) override
+  void DigitalWrite( Pin pin, int state ) override
   {
-    DelayMicroseconds( secs * 1000 );
+    const std::string name = HardwareInterface::pinNames.at(pin);
+    std::cout << "Digital Write Pin " << name << " state " << state << "\n";
   }
-  void PinMode( int pin, int state ) override
+  int DigitalRead( Pin pin ) override
   {
-    std::cout << "Pin Mode " << pin << " set to state " << state << "\n";
-  }
-  void DigitalWrite( int pin, int state ) override
-  {
-    std::cout << "Digital Write Pin " << pin << " state " << state << "\n";
-  }
-  int DigitalRead( int pin ) override
-  {
-    std::cout << "Digital Read " << pin << " returning 0";
+    //std::cout << "Digital Read " << HardwareInterface::pinNames.at(pin) << " returning 0";
     return 0;
   }
 };
