@@ -44,19 +44,21 @@ class HWISim: public HWI
 {
   public: 
 
-  void PinMode( Pin pin, int state ) override
+  void PinMode( Pin pin, int mode ) override
   {
-    //std::cout << "Pin Mode " << HWI::pinNames.at(pin) << " set to state " << state << "\n";
+    std::cout << "Pin Mode (" << HWI::pinNames.at(pin) << ") = " << mode << "\n";
   }
-  void DigitalWrite( Pin pin, int state ) override
+  void DigitalWrite( Pin pin, PinState state ) override
   {
     const std::string name = HWI::pinNames.at(pin);
-    std::cout << "Digital Write Pin " << name << " state " << state << "\n";
+    std::cout << "DW (" << HWI::pinNames.at(pin) 
+              << ") = " << HWI::pinStateNames.at( state ) 
+              << "\n";
   }
-  int DigitalRead( Pin pin ) override
+  PinState DigitalRead( Pin pin ) override
   {
-    //std::cout << "Digital Read " << HWI::pinNames.at(pin) << " returning 0";
-    return 0;
+    std::cout << "DR " << HWI::pinNames.at(pin) << " returning HOME_INACTIVE";
+    return HWI::PinState::HOME_INACTIVE;
   }
 };
 
