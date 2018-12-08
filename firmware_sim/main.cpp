@@ -44,17 +44,18 @@ class HardwareInterfaceSim: public HardwareInterface
 {
   public: 
 
-  void PinMode( int pin, int state ) override
+  void PinMode( Pin pin, int state ) override
   {
-    std::cout << "Pin Mode " << pin << " set to state " << state << "\n";
+    //std::cout << "Pin Mode " << HardwareInterface::pinNames.at(pin) << " set to state " << state << "\n";
   }
-  void DigitalWrite( int pin, int state ) override
+  void DigitalWrite( Pin pin, int state ) override
   {
-    std::cout << "Digital Write Pin " << pin << " state " << state << "\n";
+    const std::string name = HardwareInterface::pinNames.at(pin);
+    std::cout << "Digital Write Pin " << name << " state " << state << "\n";
   }
-  int DigitalRead( int pin ) override
+  int DigitalRead( Pin pin ) override
   {
-    std::cout << "Digital Read " << pin << " returning 0";
+    //std::cout << "Digital Read " << HardwareInterface::pinNames.at(pin) << " returning 0";
     return 0;
   }
 };

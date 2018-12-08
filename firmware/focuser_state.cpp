@@ -47,11 +47,11 @@ void FOCUSER_STATE::setup()
 
 
   
-  hardware->PinMode(stepPin, HardwareInterface::output );  
-  hardware->PinMode(dirPin,  HardwareInterface::output );  
-  hardware->PinMode(enaPin,  HardwareInterface::output );  
-  hardware->DigitalWrite( enaPin, HardwareInterface::low );        
-  hardware->PinMode(homePin, HardwareInterface::input  );  
+  hardware->PinMode(HardwareInterface::Pin::STEP, HardwareInterface::output );  
+  hardware->PinMode(HardwareInterface::Pin::DIR,  HardwareInterface::output );  
+  hardware->PinMode(HardwareInterface::Pin::MOTOR_ENA,  HardwareInterface::output );  
+  hardware->DigitalWrite( HardwareInterface::Pin::MOTOR_ENA, HardwareInterface::low );        
+  hardware->PinMode(HardwareInterface::Pin::HOME, HardwareInterface::input  );  
 
   log << "FOCUSER_STATE is up\n";
 }
@@ -156,11 +156,11 @@ unsigned int FOCUSER_STATE::state_set_dir()
   FOCUSER_STATE::COMMAND_PACKET& state = get_current_command();  
   if ( state.arg0 ) {
     dir = true;
-    hardware->DigitalWrite( dirPin, HardwareInterface::high );        
+    hardware->DigitalWrite( HardwareInterface::Pin::DIR, HardwareInterface::high );        
   }
   else {
     dir = false;
-    hardware->DigitalWrite( dirPin, HardwareInterface::low );        
+    hardware->DigitalWrite( HardwareInterface::Pin::DIR, HardwareInterface::low );        
   }    
 
   state_stack.pop_back();
@@ -170,7 +170,7 @@ unsigned int FOCUSER_STATE::state_set_dir()
 unsigned int FOCUSER_STATE::state_step_low_and_wait()
 {
   int delay = 1000000 / focuser_speed / 2;
-  hardware->DigitalWrite( stepPin, HardwareInterface::low );
+  hardware->DigitalWrite( HardwareInterface::Pin::STEP, HardwareInterface::low );
   state_stack.pop_back();
   return delay;
 }
@@ -178,7 +178,7 @@ unsigned int FOCUSER_STATE::state_step_low_and_wait()
 unsigned int FOCUSER_STATE::state_step_high_and_wait()
 {
   int delay = 1000000 / focuser_speed / 2;
-  hardware->DigitalWrite( stepPin, HardwareInterface::high );
+  hardware->DigitalWrite( HardwareInterface::Pin::STEP, HardwareInterface::high );
   state_stack.pop_back();
   return delay;
 }
@@ -203,7 +203,7 @@ unsigned int FOCUSER_STATE::state_doing_steps()
 
 unsigned int FOCUSER_STATE::state_moving()
 {
-  hardware->DigitalWrite( enaPin, HardwareInterface::low );
+  hardware->DigitalWrite( HardwareInterface::Pin::MOTOR_ENA, HardwareInterface::low );
         
   WifiDebugOstream log( debugLog.get(), net.get() );
   log << "Moving " << focuser_position << "\n";
@@ -248,7 +248,7 @@ unsigned int FOCUSER_STATE::state_stop_at_home()
   {
     log << "Homing " << focuser_position << "\n";
   }
-  if ( hardware->DigitalRead( homePin ) == 0 ) {
+  if ( hardware->DigitalRead( HardwareInterface::Pin::HOME ) == 0 ) {
     log << "Hit home at position " << focuser_position << "\n";
     log << "Resetting position to 0\n";
     focuser_position = 0;
@@ -263,7 +263,7 @@ unsigned int FOCUSER_STATE::state_stop_at_home()
 
 unsigned int FOCUSER_STATE::state_low_power()
 {
-  hardware->DigitalWrite( enaPin, HardwareInterface::high );        
+  hardware->DigitalWrite( HardwareInterface::Pin::MOTOR_ENA, HardwareInterface::high );        
   bool dont_accept_only_abort = false;
   check_for_commands( dont_accept_only_abort );
   return 100*1000;
@@ -271,7 +271,7 @@ unsigned int FOCUSER_STATE::state_low_power()
 
 unsigned int FOCUSER_STATE::state_awaken()
 {
-  hardware->DigitalWrite( enaPin, HardwareInterface::low );        
+  hardware->DigitalWrite( HardwareInterface::Pin::MOTOR_ENA, HardwareInterface::low );        
   state_stack.pop_back();
   return 0;
 }

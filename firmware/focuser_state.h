@@ -90,10 +90,6 @@ class FOCUSER_STATE
   std::vector< COMMAND_PACKET > state_stack;
   const char *state_names[ E_END ];  
 
-  const int dirPin = 5; // GPIO5 of ESP8266
-  const int stepPin = 4; // GPIO4 of ESP8266
-  const int enaPin = 14;  // D5 Board, GPI14 of ESP8266
-  const int homePin = 13;
   const int steps_per_rotation = 200;
   const int max_rotations_per_second = 2;
   const int NO_VALUE = -1;
