@@ -12,11 +12,11 @@ TEST( DEVICE, should_not_leak_wifi_secrets )
 
 TEST( DEVICE, should_have_complete_pinnanes )
 {
-  for( HardwareInterface::Pin pin = HardwareInterface::Pin::START_OF_PINS; 
-       pin < HardwareInterface::Pin::END_OF_PINS;
+  for( HWI::Pin pin = HWI::Pin::START_OF_PINS; 
+       pin < HWI::Pin::END_OF_PINS;
        ++pin )
   {
-    ASSERT_NE(HardwareInterface::pinNames.find( pin ), HardwareInterface::pinNames.end() );
+    ASSERT_NE(HWI::pinNames.find( pin ), HWI::pinNames.end() );
   }
 }
 

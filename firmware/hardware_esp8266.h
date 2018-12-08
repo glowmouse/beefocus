@@ -3,7 +3,7 @@
 
 #include "hardware_interface.h"
 
-class HardwareESP8266: public HardwareInterface
+class HardwareESP8266: public HWI
 {
   public:
 

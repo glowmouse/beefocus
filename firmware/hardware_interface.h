@@ -14,7 +14,7 @@ struct EnumHash
   }
 };
 
-class HardwareInterface
+class HWI
 {
   public:
 
@@ -44,12 +44,12 @@ class HardwareInterface
 // @param[in] pin - The pin to increment. 
 // @return - The next value in the Enum.
 //
-inline HardwareInterface::Pin& operator++( HardwareInterface::Pin &pin ) 
+inline HWI::Pin& operator++( HWI::Pin &pin ) 
 {
-  if ( pin != HardwareInterface::Pin::END_OF_PINS )
+  if ( pin != HWI::Pin::END_OF_PINS )
   {
     // wee hacky
-    pin = static_cast<HardwareInterface::Pin>( static_cast<int>(pin) + 1 );
+    pin = static_cast<HWI::Pin>( static_cast<int>(pin) + 1 );
   }
   return pin;
 }
