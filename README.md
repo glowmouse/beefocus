@@ -36,7 +36,7 @@ Status
   it worked almost flawlessly.  The issues that I want to fix before
   "Version 1.0" are tracked on the [Github Project Issues Page].
 - The [Prototype ESP8266 Firmware] is posted.
-- There is a [Prototype INDI Driver].  I need to refactor the INDI driver 
+- There is a Prototype INDI Driver.  I need to refactor the INDI driver 
   once I'm finished making changes to the firmware and ask to have my driver 
   pulled into the [Main INDI Project].
 - I've published a [Prototype Board Design].  I made my prototype using 
@@ -51,7 +51,6 @@ Status
 
 [Github Project Issues Page]:https://github.com/glowmouse/beefocus/issues
 [Prototype ESP8266 firmware]: https://github.com/glowmouse/beefocus/tree/master/firmware
-[Prototype INDI Driver]: https://github.com/glowmouse/indi
 [Main INDI project]: https://github.com/indilib/indi
 [Prototype board design]: https://github.com/glowmouse/beefocus/tree/master/boards/nema_14_b0
 
