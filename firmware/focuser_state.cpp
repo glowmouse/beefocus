@@ -83,9 +83,33 @@ void FOCUSER_STATE::check_for_commands( bool accept_only_abort )
   STATE state = get_current_command().state;
   int arg0 = get_current_command().arg0;
 
-  auto deltas = CommandParser::checkForCommands( log, *net, focuser_position, state_names[ state ], arg0 );
+  auto cp = CommandParser::checkForCommands( log, *net );
 
-  if ( deltas.new_abort ) {
+  // Status was originally before abort.  TODO, refactor this mess.
+
+  if ( cp.command == CommandParser::Command::Status )
+  {
+    log << "Processing pstatus request\n";
+    *net << "Position: " << focuser_position << "\n";
+    *net << "State: " << state_names[state] << " " << arg0 << "\n";
+    return;
+  }
+
+  if ( cp.command == CommandParser::Command::PStatus )
+  {
+    log << "Processing pstatus request\n";
+    *net << "Position: " << focuser_position << "\n";
+    return;
+  }
+
+  if ( cp.command == CommandParser::Command::SStatus )
+  {
+    log << "Processing sstatus request\n";
+    *net << "State: " << state_names[state] << " " << arg0 << "\n";
+    return;
+  }
+
+  if ( cp.command == CommandParser::Command::Abort ) {
     // Abort command, unroll the state stack and start accepting commands.
     hard_reset_state( E_ACCEPT_COMMANDS, 0 );
     return;
@@ -97,17 +121,17 @@ void FOCUSER_STATE::check_for_commands( bool accept_only_abort )
     // https://github.com/glowmouse/beefocus/issues/5
     // is resolved.
     return;
-  } 
+  }
 
-  if ( deltas.new_home ) {
+  if ( cp.command == CommandParser::Command::Home ) {
     hard_reset_state( E_ACCEPT_COMMANDS, 0 );
     push_state( E_STOP_AT_HOME );
     return;
   }  
 
-  if ( deltas.position_changed ) {
-    push_state( E_MOVING, deltas.position_changed_arg );
-    int new_position = deltas.position_changed_arg;       
+  if ( cp.command == CommandParser::Command::ABSPos ) {
+    push_state( E_MOVING, cp.optionalArg );
+    int new_position = cp.optionalArg;
 
     if ( new_position < focuser_position )
     {
@@ -117,10 +141,10 @@ void FOCUSER_STATE::check_for_commands( bool accept_only_abort )
     }
   }
 
-  if ( deltas.new_sleep ) {
+  if ( cp.command == CommandParser::Command::Sleep ) {
     push_state( E_LOW_POWER, 0 );
 	}
-  if ( deltas.new_awaken && state == E_LOW_POWER )
+  if ( cp.command == CommandParser::Command::Wake && state == E_LOW_POWER )
   {
     hard_reset_state( E_ACCEPT_COMMANDS, 0 );
     push_state( E_AWAKEN );

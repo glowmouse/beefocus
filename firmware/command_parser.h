@@ -11,34 +11,41 @@ namespace CommandParser {
 
   int process_int( const std::string& string,  size_t pos );
 
-	class Deltas {
-		public:
+  enum class Command {
+    Ping,
+    Abort,
+    Home,
+    Status,
+    PStatus,
+    SStatus,
+    ABSPos,
+    Sleep,
+    Wake,
+    NoCommand
+  };
 
-		Deltas() :
-			position_changed{false},
-			position_changed_arg{0},
-			new_abort{false},
-			new_home{false},
-			new_sleep{false},
-			new_awaken{false} 
-		{	}
+  constexpr int NoArg = -1;
 
-		public:
+  class CommandPacket  {
+    public:
+    CommandPacket(): command{Command::NoCommand}, optionalArg{NoArg}
+    {
+    }
+    CommandPacket( Command c ): command{c}, optionalArg{NoArg}
+    {
+    }
+    CommandPacket( Command c, int o ): command{c}, optionalArg{o}
+    {
+    }
 
-    /// @brief true if the client requested a position change, false otherwise
-		bool position_changed;
-    /// @brief if position_change is true, position_change_arg is the new
-    ///        position.
-		int  position_changed_arg;
-    /// @brief True if the client requested an abort, false otherwise.
-		bool new_abort;
-    /// @brief True if the client requested a home, false otherwise
-		bool new_home;
-    /// @brief True if the client wants to go into low power mode
-		bool new_sleep;
-    /// @brief True if the client wants to go to wake from low power mode
-		bool new_awaken;
-	};
+    bool operator==( const CommandPacket &rhs ) const 
+    {
+      return rhs.command == command && rhs.optionalArg == optionalArg;
+    }
+
+    Command command;
+    int optionalArg;
+  };
 
   /// @brief Get commands from the network interface
   ///
@@ -52,12 +59,9 @@ namespace CommandParser {
   /// - Error handling (has none).
   /// - Move extra parameters used by the STATUS command.
   ///
-  const Deltas checkForCommands( 
+  const CommandPacket checkForCommands( 
     DebugInterface& log,				// Input: Debug Log Strem
-    NetInterface& netInterface,	// Input: Network Interface
-    int focuser_position,  			// Input: For STATUS command.  TODO, move
-    const char *state, 					// Input: For STATUS command.  TODO, move
-    int state_arg  							// Input: For STATUS command.  TODO, move
+    NetInterface& netInterface	// Input: Network Interface
   );
 
 };
