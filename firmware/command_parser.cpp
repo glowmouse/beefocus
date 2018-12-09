@@ -2,13 +2,59 @@
 #include "debug_interface.h"
 #include "command_parser.h"
 #include "wifi_debug_ostream.h"
+#include <vector>
+#include <algorithm>
 
 namespace CommandParser
 {
 
+  enum class HasArg {
+    Yes,
+    No
+  };
+
+
+/// @brief The Template for a bee-focuser command
+///
+/// 
+class CommandTemplate
+{
+  public:
+
+  const std::string inputCommand;
+  CommandParser::Command outputCommand;
+  const HasArg hasArg;
+};
+
+const std::vector<CommandTemplate> commandTemplates =
+{
+  { "ping",       Command::Ping,     HasArg::No  },
+  { "abort",      Command::Abort,    HasArg::No  },
+  { "home",       Command::Home,     HasArg::No  },
+  { "status",     Command::Status,   HasArg::No  },
+  { "pstatus",    Command::PStatus,  HasArg::No  },
+  { "sstatus",    Command::SStatus,  HasArg::No  },
+  { "abs_pos",    Command::ABSPos,   HasArg::Yes },
+  { "sleep",      Command::Sleep,    HasArg::No  },
+  { "wake",       Command::Wake,     HasArg::No  },
+};
+
+/// @brief Process an integer argument
+///
+/// Read an integer argument from a string in a way that's guaranteed
+/// not to allocate memory 
+///
+/// @param[in] string - The string
+/// @param[in] pos    - The start position in the string.  i.e., if pos=5
+///   we'll look for the number at string element 5.
+/// @return           - The result.  Currently 0 if there's no number.
+///
 int process_int( const std::string& string,  size_t pos )
 {
-  int end = string.length();
+  size_t end = string.length();
+  if ( pos > end )
+    return 0;
+
   int result = 0;
   for ( int iter = pos; iter != end; iter++ ) {
     char current = string[ iter ];
@@ -20,14 +66,11 @@ int process_int( const std::string& string,  size_t pos )
   return result;
 }
 
-const Deltas checkForCommands( 
+const CommandPacket checkForCommands( 
 	DebugInterface& serialLog, 
-	NetInterface& wifi, 
-	int focuser_position,  
-	const char *state,
-  int state_arg  )
+	NetInterface& wifi  )
 {
-	Deltas result;
+	CommandPacket result;
   
   WifiDebugOstream log( &serialLog, &wifi );
 
@@ -40,63 +83,24 @@ const Deltas checkForCommands(
     return result;
   }
 
+  std::transform( command.begin(), command.end(), command.begin(), ::tolower);
+
   log << "Got: " << command << "\n";
 
-  if ( command.find("PING") == 0)
+  for ( const CommandTemplate& ct : commandTemplates )
   {
-    log << "Got Ping,  Sent Pong\n";
-    wifi << "PONG\n";             
-  }
-
-  if ( command.find("ABORT") == 0 )
-  {
-    log << "Queued abort for processing\n"; 
-    result.new_abort = true;
-  }
-
-  if ( command.find( "HOME") == 0)
-  {
-    log << "ACK_HOME\n";
-    result.new_home = true;
-  }
-
-  if ( command.find( "STATUS") == 0 )
-  {
-    log << "Processing pstatus request\n";
-    wifi << "Position: " << focuser_position << "\n";
-    wifi << "State: " << state << " " << state_arg << "\n";
-
-  }  
-  if ( command.find( "PSTATUS") == 0 )
-  {
-    log << "Processing pstatus request\n";    
-    wifi << "Position: " << focuser_position << "\n";  
-  }
-
-  if ( command.find( "SSTATUS") == 0 )
-  {
-    log << "Processing sstatus request\n";    
-    wifi << "State: " << state << " " << state_arg << "\n";     
-  }  
-
-  if ( command.find( "ABS_POS=" ) == 0 )
-  {
-    result.position_changed= true;
-    result.position_changed_arg= process_int( command,  8 );
-    log << "ACK_ABS_POS " << result.position_changed_arg << "\n";       
-  }
-
-  if ( command.find( "SLEEP") == 0 )
-	{
-    result.new_sleep = true;
-		log << "Entering sleep mode\n";
-	}
-  if ( command.find( "WAKE") == 0 )
-	{
-    result.new_awaken = true;
-		log << "Waking from sleep mode\n";
-	}
+    if ( command.find(ct.inputCommand ) == 0 )
+    {
+      result.command = ct.outputCommand;
+      if ( ct.hasArg == HasArg::Yes )
+      {
+        result.optionalArg =  process_int( command,  ct.inputCommand.length()+1  );
+      } 
+      return result;
+    }
+  } 
   return result;
+
 }
 
 

@@ -36,6 +36,7 @@ class NetInterfaceSim: public NetInterface {
   }
   NetInterface& operator<<( char c )
   {
+    std::cout << c;
     return *this;
   }
 };
@@ -66,10 +67,11 @@ class DebugInterfaceSim: public DebugInterface
 {
   void rawWrite( const char* bytes, std::size_t numBytes ) override
   {
-    for ( int i=0; i<numBytes; ++i )
-    {
-      std::cout << bytes[i];
-    }
+    // Ignore for now.
+    //for ( int i=0; i<numBytes; ++i )
+    //{
+    //  std::cout << bytes[i];
+    //}
   }
 };
 
