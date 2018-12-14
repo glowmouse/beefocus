@@ -18,3 +18,8 @@ const std::unordered_map<HWI::PinState,std::string,EnumHash> HWI::pinStateNames 
     { PinState::HOME_INACTIVE,   "Home Inactive" },
 };
 
+const std::unordered_map<HWI::PinIOMode,std::string,EnumHash> HWI::pinIOModeNames = {
+    { PinIOMode::M_INPUT,        "Input" },
+    { PinIOMode::M_OUTPUT,       "Output" }
+};
+

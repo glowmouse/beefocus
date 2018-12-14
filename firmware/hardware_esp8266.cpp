@@ -26,10 +26,10 @@ void HardwareESP8266::DigitalWrite( Pin pin, PinState state )
   digitalWrite( actualPin, actualState );
 }
 
-void HardwareESP8266::PinMode( Pin pin, int state )
+void HardwareESP8266::PinMode( Pin pin, PinIOMode mode )
 {
   int actualPin = pinMap.at( pin );
-  pinMode( actualPin, state == output ? OUTPUT : INPUT );
+  pinMode( actualPin, mode == PinIOMode::M_OUTPUT ? OUTPUT : INPUT );
 }
 
 HWI::PinState HardwareESP8266::DigitalRead( Pin pin)

@@ -40,18 +40,34 @@ class HWI
     END_OF_PIN_STATES
   };
 
+  // Arduino.h uses #define to redefine OUTPUT and INPUT,  so use
+  //           M_OUTPUT and M_INPUT here.  Thanks Obama.
+  enum class PinIOMode {
+    START_OF_PIN_IO_MODES = 0,
+    M_OUTPUT = 0,
+    M_INPUT = 1,
+    END_OF_IO_MODES
+  };
+
   const static std::unordered_map<Pin,std::string,EnumHash> pinNames;
   const static std::unordered_map<PinState,std::string,EnumHash> pinStateNames;
+  const static std::unordered_map<PinIOMode,std::string,EnumHash> pinIOModeNames;
 
   virtual void DigitalWrite( Pin pin, PinState state ) = 0;
-  virtual void PinMode( Pin pin, int mode ) = 0;
+  virtual void PinMode( Pin pin, PinIOMode mode ) = 0;
   virtual PinState DigitalRead( Pin pin) = 0;
-
-  constexpr static int low = 0;
-  constexpr static int high = 1;
-  constexpr static int output = 0;
-  constexpr static int input = 1;
 };
+
+template< typename PIN_ENUM, PIN_ENUM MAX_VAL >
+PIN_ENUM& advance(PIN_ENUM& pin )
+{
+  if ( pin != MAX_VAL )
+  {
+    // wee hacky
+    pin = static_cast<PIN_ENUM>( static_cast<int>(pin) + 1 );
+  }
+  return pin;
+}
 
 // @brief Increment operator for Hardware Interface Pin
 //
@@ -60,12 +76,7 @@ class HWI
 //
 inline HWI::Pin& operator++( HWI::Pin &pin ) 
 {
-  if ( pin != HWI::Pin::END_OF_PINS )
-  {
-    // wee hacky
-    pin = static_cast<HWI::Pin>( static_cast<int>(pin) + 1 );
-  }
-  return pin;
+  return advance< HWI::Pin, HWI::Pin::END_OF_PINS >( pin );
 }
 
 // @brief Increment operator for Hardware Interface Pin State
@@ -73,16 +84,19 @@ inline HWI::Pin& operator++( HWI::Pin &pin )
 // @param[in] pinState - The pin state to increment. 
 // @return - The next value in the Enum.
 // 
-// Todo - Template? Better pattern.
-//
-inline HWI::PinState& operator++( HWI::PinState &pinState ) 
+inline HWI::PinState& operator++( HWI::PinState &pin ) 
 {
-  if ( pinState != HWI::PinState::END_OF_PIN_STATES )
-  {
-    // still wee hacky
-    pinState = static_cast<HWI::PinState>( static_cast<int>(pinState) + 1 );
-  }
-  return pinState;
+  return advance< HWI::PinState, HWI::PinState::END_OF_PIN_STATES >( pin );
+}
+
+// @brief Increment operator for Hardware Interface Pin IO Mode
+//
+// @param[in] pinIoMode - The pin IO Mode to increment. 
+// @return - The next value in the Enum.
+// 
+inline HWI::PinIOMode& operator++( HWI::PinIOMode &pin ) 
+{
+  return advance< HWI::PinIOMode, HWI::PinIOMode::END_OF_IO_MODES >( pin );
 }
 
 #endif

@@ -77,7 +77,7 @@ TEST( COMMAND_PARSER, testGot)
 {
   DebugInterfaceIgnoreMock dbgmock;
 
-  NetMockSimpleTimed::TimedStrings input = {
+  NetMockSimpleTimed::TimedStringEvents input = {
     { 0, "sleep" },   // Sleep @ Time 0
     { 2, "wake" }     // Wake @ Time 2;
   };
@@ -94,7 +94,7 @@ TEST( COMMAND_PARSER, testGot)
  
   // Golden output - should have messages saying that the firmware
   // got the sleep and wake command
-  NetMockSimpleTimed::TimedStrings golden = {
+  NetMockSimpleTimed::TimedStringEvents golden = {
     { 0, "# Got: sleep" }, 
     { 2, "# Got: wake" } 
   };

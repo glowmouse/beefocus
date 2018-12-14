@@ -45,9 +45,9 @@ class HWISim: public HWI
 {
   public: 
 
-  void PinMode( Pin pin, int mode ) override
+  void PinMode( Pin pin, PinIOMode mode ) override
   {
-    std::cout << "Pin Mode (" << HWI::pinNames.at(pin) << ") = " << mode << "\n";
+    std::cout << "Pin Mode (" << HWI::pinNames.at(pin) << ") = " << HWI::pinIOModeNames.at(mode) << "\n";
   }
   void DigitalWrite( Pin pin, PinState state ) override
   {

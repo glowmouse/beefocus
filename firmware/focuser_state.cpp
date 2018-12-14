@@ -47,11 +47,11 @@ void FOCUSER_STATE::setup()
 
 
   
-  hardware->PinMode(HWI::Pin::STEP, HWI::output );  
-  hardware->PinMode(HWI::Pin::DIR,  HWI::output );  
-  hardware->PinMode(HWI::Pin::MOTOR_ENA,  HWI::output );  
+  hardware->PinMode(HWI::Pin::STEP, HWI::PinIOMode::M_OUTPUT );  
+  hardware->PinMode(HWI::Pin::DIR,  HWI::PinIOMode::M_OUTPUT );  
+  hardware->PinMode(HWI::Pin::MOTOR_ENA,  HWI::PinIOMode::M_OUTPUT );  
   hardware->DigitalWrite( HWI::Pin::MOTOR_ENA, HWI::PinState::MOTOR_ON );        
-  hardware->PinMode(HWI::Pin::HOME, HWI::input  );  
+  hardware->PinMode(HWI::Pin::HOME, HWI::PinIOMode::M_INPUT );  
 
   log << "FOCUSER_STATE is up\n";
 }

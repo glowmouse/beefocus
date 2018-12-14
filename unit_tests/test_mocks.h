@@ -53,14 +53,39 @@ class NetMockSimple: public NetInterfaceMockBase
   std::string payload;
 };
 
+template< class Event >
+using OptionalEvent = std::pair<bool, Event>;
+
+template< class Event > class TimedEvent
+{
+  public:
+
+  using EventType = Event;
+
+  TimedEvent() : time{0}
+  {
+  }
+  TimedEvent( int timeRHS, const Event& eventRHS ) :
+    time{ timeRHS }, event{ eventRHS }
+  {
+  }
+  bool operator==( const TimedEvent& rhs ) const 
+  { 
+    return time==rhs.time && event==rhs.event;
+  }
+
+  int time;
+  Event event;
+};
+
 class NetMockSimpleTimed: public NetInterfaceMockBase
 {
   public:
 
-  using TimedString = std::pair<unsigned int, std::string>;
-  using TimedStrings = std::vector<TimedString>;
+  using TimedStringEvent = TimedEvent<std::string>;
+  using TimedStringEvents = std::vector<TimedStringEvent>; 
 
-  NetMockSimpleTimed( const TimedStrings& inputEventsArg)
+  NetMockSimpleTimed( const TimedStringEvents& inputEventsArg)
     : inputEvents{inputEventsArg}, 
       actualTime{0},
       nextInputEvent{inputEvents.begin()},
@@ -77,10 +102,10 @@ class NetMockSimpleTimed: public NetInterfaceMockBase
   {
     if ( nextInputEvent == inputEvents.end() )
       return false;
-    if ( nextInputEvent->first > actualTime )
+    if ( nextInputEvent->time > actualTime )
       return false;
 
-    input = nextInputEvent->second;
+    input = nextInputEvent->event;
     nextInputEvent++;
 
     return true;
@@ -90,25 +115,25 @@ class NetMockSimpleTimed: public NetInterfaceMockBase
   {
     if ( lastOutputEvent == outputEvents.end() )
     {
-      outputEvents.emplace_back(TimedString(actualTime, "" ));
+      outputEvents.emplace_back(TimedStringEvent(actualTime, std::string("") ));
       lastOutputEvent = outputEvents.begin() + outputEvents.size() - 1;
     }
     if ( c == '\n' )
       ++lastOutputEvent;
     else
-      lastOutputEvent->second += c;
+      lastOutputEvent->event += c;
   }
 
-  const TimedStrings& getOutput() 
+  const TimedStringEvents& getOutput() 
   {
     return outputEvents;
   }
 
   private:
-  TimedStrings inputEvents;
-  TimedStrings::iterator nextInputEvent;
-  TimedStrings outputEvents;
-  TimedStrings::iterator lastOutputEvent; 
+  TimedStringEvents inputEvents;
+  TimedStringEvents::iterator nextInputEvent;
+  TimedStringEvents outputEvents;
+  TimedStringEvents::iterator lastOutputEvent; 
   int actualTime;
 };
 
