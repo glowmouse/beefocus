@@ -53,6 +53,65 @@ class NetMockSimple: public NetInterfaceMockBase
   std::string payload;
 };
 
+class NetMockSimpleTimed: public NetInterfaceMockBase
+{
+  public:
+
+  using TimedString = std::pair<unsigned int, std::string>;
+  using TimedStrings = std::vector<TimedString>;
+
+  NetMockSimpleTimed( const TimedStrings& inputEventsArg)
+    : inputEvents{inputEventsArg}, 
+      actualTime{0},
+      nextInputEvent{inputEvents.begin()},
+      lastOutputEvent{outputEvents.end()}
+  {
+  }
+
+  void advanceTime( int ticks )
+  {
+    actualTime+=ticks;
+  }
+
+  bool getString( WifiDebugOstream& log, std::string& input ) override
+  {
+    if ( nextInputEvent == inputEvents.end() )
+      return false;
+    if ( nextInputEvent->first > actualTime )
+      return false;
+
+    input = nextInputEvent->second;
+    nextInputEvent++;
+
+    return true;
+  }
+
+  NetInterface& operator<<( char c ) override 
+  {
+    if ( lastOutputEvent == outputEvents.end() )
+    {
+      outputEvents.emplace_back(TimedString(actualTime, "" ));
+      lastOutputEvent = outputEvents.begin() + outputEvents.size() - 1;
+    }
+    if ( c == '\n' )
+      ++lastOutputEvent;
+    else
+      lastOutputEvent->second += c;
+  }
+
+  const TimedStrings& getOutput() 
+  {
+    return outputEvents;
+  }
+
+  private:
+  TimedStrings inputEvents;
+  TimedStrings::iterator nextInputEvent;
+  TimedStrings outputEvents;
+  TimedStrings::iterator lastOutputEvent; 
+  int actualTime;
+};
+
 
 class DebugInterfaceIgnoreMock: public DebugInterface
 {
