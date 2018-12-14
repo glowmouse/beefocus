@@ -11,8 +11,16 @@ constexpr int steps_per_rotation = 200;
 constexpr int max_rotations_per_second = 2;
 constexpr int NO_VALUE = -1;
 
-void FOCUSER_STATE::setup()
-{  
+FOCUSER_STATE::FOCUSER_STATE(
+    std::unique_ptr<NetInterface> netArg,
+    std::unique_ptr<HWI> hardwareArg,
+    std::unique_ptr<DebugInterface> debugArg
+)
+{
+  std::swap( net, netArg );
+  std::swap( hardware, hardwareArg );
+  std::swap( debugLog, debugArg );
+  
   DebugInterface& log = *debugLog;
   log << "Bringing up net interface\n";
   

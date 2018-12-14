@@ -1,6 +1,6 @@
 ENABLE_TESTING()
 
-SET(UNIT_TESTS test_check_for_commands test_device)
+SET(UNIT_TESTS test_check_for_commands test_device test_focuser_state)
 
 foreach( TEST ${UNIT_TESTS} )
 

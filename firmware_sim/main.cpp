@@ -47,7 +47,7 @@ class HWISim: public HWI
 
   void PinMode( Pin pin, PinIOMode mode ) override
   {
-    std::cout << "Pin Mode (" << HWI::pinNames.at(pin) << ") = " << HWI::pinIOModeNames.at(mode) << "\n";
+    std::cout << "PM (" << HWI::pinNames.at(pin) << ") = " << HWI::pinIOModeNames.at(mode) << "\n";
   }
   void DigitalWrite( Pin pin, PinState state ) override
   {
@@ -89,7 +89,6 @@ void setup() {
         std::move(hardware),
 				std::move(debug) )
   );
-  focuser->setup();
 }
 
 int main(int argc, char* argv[])

@@ -78,6 +78,13 @@ template< class Event > class TimedEvent
   Event event;
 };
 
+template< class Event >
+std::ostream& operator<<(std::ostream& stream, const TimedEvent<Event>& timedEvent ) 
+{
+  stream << "Time: " << timedEvent.time << " " << timedEvent.event << "\n";
+  return stream;
+}
+
 class NetMockSimpleTimed: public NetInterfaceMockBase
 {
   public:
@@ -147,5 +154,74 @@ class DebugInterfaceIgnoreMock: public DebugInterface
   }
 };
 
+enum class HWOutEventType
+{
+  DIGITAL_WRITE,
+  PIN_MODE,
+};
+
+class HWOutEvent
+{
+  public:
+
+  HWOutEvent( HWI::Pin& pinRHS, HWI::PinState& stateRHS ) :
+    pin{ pinRHS },
+    state{ stateRHS },
+    type{ HWOutEventType::DIGITAL_WRITE }
+  {
+  }
+ 
+  HWOutEvent( HWI::Pin& pinRHS, HWI::PinIOMode& modeRHS) :
+    pin{ pinRHS },
+    mode{ modeRHS },
+    type{ HWOutEventType::PIN_MODE }
+  {
+  } 
+
+  HWI::Pin pin;
+  HWOutEventType type;
+  union {
+    HWI::PinState state;
+    HWI::PinIOMode mode;
+  };
+};
+
+using HWOutTimedEvent = TimedEvent<HWOutEvent>; 
+using HWOutTimedEvents = std::vector<HWOutTimedEvent>;
+
+class HWMockTimed: public HWI
+{
+  public:
+
+  HWMockTimed() : time{ 0 }
+  {
+  }
+    
+  void DigitalWrite( Pin pin, PinState state ) override
+  {
+    outEvents.emplace_back( HWOutTimedEvent( time, HWOutEvent( pin, state ))); 
+  }
+
+  void PinMode( Pin pin, PinIOMode mode ) override
+  {
+    outEvents.emplace_back( HWOutTimedEvent( time, HWOutEvent( pin, mode ))); 
+  }
+
+  void advanceTime( int ticks )
+  {
+    time+=ticks;
+  }
+
+  PinState DigitalRead( Pin pin ) override
+  {
+  }
+
+  const HWOutTimedEvents& getOutEvents() { return outEvents; }
+
+  private:
+
+  int time;
+  HWOutTimedEvents outEvents;
+};
 
 

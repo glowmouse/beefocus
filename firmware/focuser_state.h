@@ -14,17 +14,9 @@ class FOCUSER_STATE
 		std::unique_ptr<NetInterface> netArg,
 		std::unique_ptr<HWI> hardwareArg,
 		std::unique_ptr<DebugInterface> debugArg
-	)
-  {
-    std::swap( net, netArg );
-    std::swap( hardware, hardwareArg );
-    std::swap( debugLog, debugArg );
-  }
+	);
   FOCUSER_STATE( const FOCUSER_STATE& other ) = delete;
 
-  // TODO - remove and bring functionality into constructor
-  void setup( );
-  
   // @brief Update State
   //
   // @return The amount of time the caller should wait (in microsecodns)
