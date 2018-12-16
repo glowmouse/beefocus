@@ -136,6 +136,20 @@ class NetMockSimpleTimed: public NetInterfaceMockBase
     return outputEvents;
   }
 
+  /// @brief Return network output without comments
+  TimedStringEvents getFilteredOutput()
+  {
+    TimedStringEvents filteredEvents;
+    for ( const auto& i: outputEvents )
+    {
+      if ( i.event[0] != '#' )
+      {
+        filteredEvents.push_back( i );
+      }
+    }
+    return filteredEvents;
+  }
+
   private:
   TimedStringEvents inputEvents;
   TimedStringEvents::iterator nextInputEvent;

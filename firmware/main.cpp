@@ -25,6 +25,5 @@ void setup() {
         std::move(hardware),
 				std::move(debug) )
   );
-  focuser->setup();
 }
 

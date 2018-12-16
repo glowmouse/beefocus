@@ -96,16 +96,13 @@ TEST( COMMAND_PARSER, run_status)
   simulateFocuser( focuser.get(), wifiAlias, hwMockAlias, 1000 );
 
   NetMockSimpleTimed::TimedStringEvents goldenNet = {
-    {  0, "# Got: status" },
     {  0, "Position: 0" },
     {  0, "State: ACCEPTING_COMMANDS 0"},
-    { 50, "# Got: pstatus" },
     { 50, "Position: 0" },
-    { 70, "# Got: sstatus" },
     { 70, "State: ACCEPTING_COMMANDS 0"},
   };
 
-  ASSERT_EQ( goldenNet, wifiAlias->getOutput() );
+  ASSERT_EQ( goldenNet, wifiAlias->getFilteredOutput() );
   ASSERT_EQ( goldenHWStart, hwMockAlias->getOutEvents() );
 }
 
@@ -120,11 +117,7 @@ TEST( COMMAND_PARSER, run_abs_pos )
   auto focuser = make_focuser( input, wifiAlias, hwMockAlias ); 
   simulateFocuser( focuser.get(), wifiAlias, hwMockAlias, 1000 );
 
-  NetMockSimpleTimed::TimedStringEvents goldenNet = {
-    { 10, "# Got: abs_pos=3" },
-    { 20, "# Moving 0"},
-    { 37, "# Moving 3"},
-  };
+  NetMockSimpleTimed::TimedStringEvents goldenNet;
 
   HWOutTimedEvents goldenHW = {
     { 20, { HWI::Pin::STEP,       HWI::PinState::STEP_LOW} },
@@ -136,7 +129,7 @@ TEST( COMMAND_PARSER, run_abs_pos )
   };
   goldenHW.insert( goldenHW.begin(), goldenHWStart.begin(), goldenHWStart.end());
 
-  ASSERT_EQ( goldenNet, wifiAlias->getOutput() );
+  ASSERT_EQ( goldenNet, wifiAlias->getFilteredOutput() );
   ASSERT_EQ( goldenHW, hwMockAlias->getOutEvents() );
 }
 
