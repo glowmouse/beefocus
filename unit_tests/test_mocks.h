@@ -154,37 +154,59 @@ class DebugInterfaceIgnoreMock: public DebugInterface
   }
 };
 
-enum class HWOutEventType
-{
-  DIGITAL_WRITE,
-  PIN_MODE,
-};
-
 class HWOutEvent
 {
   public:
 
-  HWOutEvent( HWI::Pin& pinRHS, HWI::PinState& stateRHS ) :
+  enum class Type
+  {
+    DIGITAL_WRITE,
+    PIN_MODE,
+  };
+
+  HWOutEvent( HWI::Pin pinRHS, HWI::PinState stateRHS ) :
     pin{ pinRHS },
     state{ stateRHS },
-    type{ HWOutEventType::DIGITAL_WRITE }
+    type{ Type::DIGITAL_WRITE }
   {
   }
  
-  HWOutEvent( HWI::Pin& pinRHS, HWI::PinIOMode& modeRHS) :
+  HWOutEvent( HWI::Pin pinRHS, HWI::PinIOMode modeRHS) :
     pin{ pinRHS },
     mode{ modeRHS },
-    type{ HWOutEventType::PIN_MODE }
+    type{ Type::PIN_MODE }
   {
-  } 
+  }
+ 
+  bool operator==( const HWOutEvent& rhs ) const 
+  {
+    return ( pin == rhs.pin ) &&
+      type == Type::DIGITAL_WRITE ? ( state == rhs.state ) :
+        ( mode == rhs.mode ); 
+  }
 
   HWI::Pin pin;
-  HWOutEventType type;
+  Type type;
   union {
     HWI::PinState state;
     HWI::PinIOMode mode;
   };
 };
+
+inline std::ostream& operator<<(std::ostream& stream, const HWOutEvent& event) 
+{
+  stream << "{ PIN: " << HWI::pinNames.at( event.pin );
+  if ( event.type ==  HWOutEvent::Type::DIGITAL_WRITE )
+  {
+    stream << " WRITE: " << HWI::pinStateNames.at(event.state); 
+  }
+  else
+  {
+    stream << " MODE:  " << HWI::pinIOModeNames.at(event.mode); 
+  }
+  stream << " }";
+  return stream;
+}
 
 using HWOutTimedEvent = TimedEvent<HWOutEvent>; 
 using HWOutTimedEvents = std::vector<HWOutTimedEvent>;
@@ -216,7 +238,7 @@ class HWMockTimed: public HWI
   {
   }
 
-  const HWOutTimedEvents& getOutEvents() { return outEvents; }
+  const HWOutTimedEvents& getOutEvents() const { return outEvents; } 
 
   private:
 

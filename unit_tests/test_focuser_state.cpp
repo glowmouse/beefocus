@@ -5,7 +5,8 @@
 
 std::unique_ptr<FOCUSER_STATE> make_focuser( 
   const NetMockSimpleTimed::TimedStringEvents& wifiIn,
-  NetMockSimpleTimed* &net_interface
+  NetMockSimpleTimed* &net_interface,
+  HWMockTimed* &hw_interface
 )
 {
   std::unique_ptr<NetMockSimpleTimed> wifi( new NetMockSimpleTimed( wifiIn ));
@@ -13,6 +14,7 @@ std::unique_ptr<FOCUSER_STATE> make_focuser(
   std::unique_ptr<HWMockTimed> hardware( new HWMockTimed );
   
   net_interface = wifi.get();
+  hw_interface = hardware.get();
 
   auto focuser = std::unique_ptr<FOCUSER_STATE>(
      new FOCUSER_STATE(
@@ -33,6 +35,7 @@ std::unique_ptr<FOCUSER_STATE> make_focuser(
 void simulateFocuser( 
   FOCUSER_STATE* focuser,
   NetMockSimpleTimed* wifiAlias,
+  HWMockTimed* hwMockAlias,
   unsigned int endTime
 )
 {
@@ -43,6 +46,7 @@ void simulateFocuser(
     time = time + focuser->loop();
     unsigned int mockAdvanceTime = time/1000;
     wifiAlias->advanceTime( mockAdvanceTime - lastMockAdvanceTime );
+    hwMockAlias->advanceTime( mockAdvanceTime - lastMockAdvanceTime );
     lastMockAdvanceTime = mockAdvanceTime;
   }
 }
@@ -57,8 +61,9 @@ TEST( COMMAND_PARSER, init_Focuser )
   };
 
   NetMockSimpleTimed* wifiAlias;
-  auto focuser = make_focuser( input, wifiAlias ); 
-  simulateFocuser( focuser.get(), wifiAlias, 1000 );
+  HWMockTimed* hwMockAlias;
+  auto focuser = make_focuser( input, wifiAlias, hwMockAlias ); 
+  simulateFocuser( focuser.get(), wifiAlias, hwMockAlias, 1000 );
 
   NetMockSimpleTimed::TimedStringEvents golden = {
     {  0, "# Got: status" },
@@ -68,7 +73,15 @@ TEST( COMMAND_PARSER, init_Focuser )
     { 50, "Position: 0" }
   };
 
-  ASSERT_EQ( golden, wifiAlias->getOutput() );
+  HWOutTimedEvents goldenHW = {
+    {  0, { HWI::Pin::STEP,       HWI::PinIOMode::M_OUTPUT } },
+    {  0, { HWI::Pin::DIR,        HWI::PinIOMode::M_OUTPUT } },
+    {  0, { HWI::Pin::MOTOR_ENA,  HWI::PinIOMode::M_OUTPUT } },
+    {  0, { HWI::Pin::MOTOR_ENA,  HWI::PinState::MOTOR_ON} },
+    {  0, { HWI::Pin::HOME,       HWI::PinIOMode::M_INPUT} }
+  };
 
+  ASSERT_EQ( golden, wifiAlias->getOutput() );
+  ASSERT_EQ( goldenHW, hwMockAlias->getOutEvents() );
 }
 
