@@ -6,6 +6,7 @@
 #include "command_parser.h"
 #include "wifi_debug_ostream.h"
 #include "focuser_state.h"
+#include "stdexcept"
 
 constexpr int steps_per_rotation = 200;
 constexpr int max_rotations_per_second = 2;
@@ -91,19 +92,17 @@ FOCUSER_STATE::COMMAND_PACKET& FOCUSER_STATE::get_current_command( void )
 }
 
 
-void FOCUSER_STATE::check_for_commands( bool accept_only_abort )
+void FOCUSER_STATE::processCommand( CommandParser::CommandPacket cp )
 {
   DebugInterface& log = *debugLog;
-
-  STATE state = get_current_command().state;
-  int arg0 = get_current_command().arg0;
-
-  auto cp = CommandParser::checkForCommands( log, *net );
 
   // Status was originally before abort.  TODO, refactor this mess.
 
   if ( cp.command == CommandParser::Command::Status )
   {
+    STATE state = get_current_command().state;
+    int arg0 = get_current_command().arg0;
+
     log << "Processing pstatus request\n";
     *net << "Position: " << focuser_position << "\n";
     *net << "State: " << state_names[state] << " " << arg0 << "\n";
@@ -119,6 +118,9 @@ void FOCUSER_STATE::check_for_commands( bool accept_only_abort )
 
   if ( cp.command == CommandParser::Command::SStatus )
   {
+    STATE state = get_current_command().state;
+    int arg0 = get_current_command().arg0;
+
     log << "Processing sstatus request\n";
     *net << "State: " << state_names[state] << " " << arg0 << "\n";
     return;
@@ -127,14 +129,6 @@ void FOCUSER_STATE::check_for_commands( bool accept_only_abort )
   if ( cp.command == CommandParser::Command::Abort ) {
     // Abort command, unroll the state stack and start accepting commands.
     hard_reset_state( E_ACCEPT_COMMANDS, 0 );
-    return;
-  }
-
-  if ( accept_only_abort )
-  {
-    // for now, return.  refactor when
-    // https://github.com/glowmouse/beefocus/issues/5
-    // is resolved.
     return;
   }
 
@@ -159,7 +153,7 @@ void FOCUSER_STATE::check_for_commands( bool accept_only_abort )
   if ( cp.command == CommandParser::Command::Sleep ) {
     push_state( E_LOW_POWER, 0 );
 	}
-  if ( cp.command == CommandParser::Command::Wake && state == E_LOW_POWER )
+  if ( cp.command == CommandParser::Command::Wake )
   {
     hard_reset_state( E_ACCEPT_COMMANDS, 0 );
     push_state( E_AWAKEN );
@@ -168,26 +162,49 @@ void FOCUSER_STATE::check_for_commands( bool accept_only_abort )
 
 unsigned int FOCUSER_STATE::state_check_for_abort() 
 {
-  // An abort check is always a one off
-  state_stack.pop_back();
+  DebugInterface& log = *debugLog;
 
-  bool accept_only_abort = true;
-  check_for_commands( accept_only_abort );
-  return 10*1000;
+  state_stack.pop_back();
+  auto cp = CommandParser::checkForCommands( log, *net );
+
+  if ( cp.command != CommandParser::Command::NoCommand )
+  {
+    processCommand( cp );
+    return 0;
+  }
+  return 0;
 }
   
 unsigned int FOCUSER_STATE::state_accept_commands()
 {
-  bool dont_accept_only_abort = false;
-  check_for_commands( dont_accept_only_abort );
+  DebugInterface& log = *debugLog;
+  auto cp = CommandParser::checkForCommands( log, *net );
+
+  if ( cp.command != CommandParser::Command::NoCommand )
+  {
+    processCommand( cp );
+    return 0;
+  }
   return 10*1000;
 }
 
-unsigned int FOCUSER_STATE::state_error()
+unsigned int FOCUSER_STATE::state_low_power()
 {
-  bool accept_only_abort = true;  
-  check_for_commands( accept_only_abort );
-  return 10*1000;
+  if ( motorState != MotorState::OFF )
+  {
+    hardware->DigitalWrite( HWI::Pin::MOTOR_ENA, HWI::PinState::MOTOR_OFF ); 
+    motorState = MotorState::OFF;
+  }
+       
+  DebugInterface& log = *debugLog;
+  auto cp = CommandParser::checkForCommands( log, *net );
+
+  if ( cp.command != CommandParser::Command::NoCommand )
+  {
+    processCommand( cp );
+    return 0;
+  }
+  return 100*1000;
 }
 
 unsigned int FOCUSER_STATE::state_set_dir()
@@ -305,14 +322,6 @@ unsigned int FOCUSER_STATE::state_stop_at_home()
   return 0;        
 }
 
-unsigned int FOCUSER_STATE::state_low_power()
-{
-  hardware->DigitalWrite( HWI::Pin::MOTOR_ENA, HWI::PinState::MOTOR_OFF );        
-  bool dont_accept_only_abort = false;
-  check_for_commands( dont_accept_only_abort );
-  return 100*1000;
-}
-
 unsigned int FOCUSER_STATE::state_awaken()
 {
   hardware->DigitalWrite( HWI::Pin::MOTOR_ENA, HWI::PinState::MOTOR_ON );        
@@ -329,8 +338,7 @@ unsigned int FOCUSER_STATE::loop(void)
       return state_check_for_abort();
       break;
     case E_ACCEPT_COMMANDS:
-      state_accept_commands();
-      return 10*1000;   // 10 microseconds
+      return state_accept_commands();
       break;
     case E_DO_STEPS:
       return state_doing_steps();
@@ -356,10 +364,8 @@ unsigned int FOCUSER_STATE::loop(void)
     case E_STEPPER_HIGH_AND_WAIT:      
       return state_step_high_and_wait();
       break;
-    case E_ERROR_STATE:
-    default:    
-      state_error();
-      break;
+    default: 
+      throw std::out_of_range("bad case value");
   }
   return 10*1000;   // 10 microseconds
 }

@@ -1,5 +1,5 @@
 #ifndef __COMMAND_PARSER_H__
-#define __COMAMND_PARSER_H__
+#define __COMMAND_PARSER_H__
 
 #include "basic_types.h"
 #include "hardware_interface.h"

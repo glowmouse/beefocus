@@ -5,6 +5,7 @@
 #include <memory>
 #include "net_interface.h"
 #include "hardware_interface.h"
+#include "command_parser.h"
 
 class FOCUSER_STATE 
 {
@@ -55,11 +56,10 @@ class FOCUSER_STATE
 
   void hard_reset_state( STATE, int argument );
   void push_state( STATE new_state, int arg0 = -1,  int arg1 = -1 );
-  void check_for_commands( bool accept_only_abort );
+  void processCommand( CommandParser::CommandPacket cp );
 
   unsigned int state_check_for_abort( void );
   unsigned int state_accept_commands( void );  
-  unsigned int state_error( void );
   unsigned int state_moving( void );
   unsigned int state_doing_steps( void );
   unsigned int state_set_dir( void );

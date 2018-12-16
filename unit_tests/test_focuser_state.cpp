@@ -120,12 +120,12 @@ TEST( COMMAND_PARSER, run_abs_pos )
   NetMockSimpleTimed::TimedStringEvents goldenNet;
 
   HWOutTimedEvents goldenHW = {
-    { 20, { HWI::Pin::STEP,       HWI::PinState::STEP_LOW} },
-    { 21, { HWI::Pin::STEP,       HWI::PinState::STEP_HIGH} },
-    { 22, { HWI::Pin::STEP,       HWI::PinState::STEP_LOW} },
-    { 23, { HWI::Pin::STEP,       HWI::PinState::STEP_HIGH} },
-    { 25, { HWI::Pin::STEP,       HWI::PinState::STEP_LOW} },
-    { 26, { HWI::Pin::STEP,       HWI::PinState::STEP_HIGH} },
+    { 10, { HWI::Pin::STEP,       HWI::PinState::STEP_LOW} },
+    { 11, { HWI::Pin::STEP,       HWI::PinState::STEP_HIGH} },
+    { 12, { HWI::Pin::STEP,       HWI::PinState::STEP_LOW} },
+    { 13, { HWI::Pin::STEP,       HWI::PinState::STEP_HIGH} },
+    { 15, { HWI::Pin::STEP,       HWI::PinState::STEP_LOW} },
+    { 16, { HWI::Pin::STEP,       HWI::PinState::STEP_HIGH} },
   };
   goldenHW.insert( goldenHW.begin(), goldenHWStart.begin(), goldenHWStart.end());
 
