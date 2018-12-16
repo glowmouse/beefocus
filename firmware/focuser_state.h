@@ -34,8 +34,8 @@ class FOCUSER_STATE
     E_ACCEPT_COMMANDS,
     E_ERROR_STATE,  
     E_DO_STEPS,
-    E_STEPPER_LOW_AND_WAIT,
-    E_STEPPER_HIGH_AND_WAIT,
+    E_STEPPER_INACTIVE_AND_WAIT,
+    E_STEPPER_ACTIVE_AND_WAIT,
     E_SET_DIR,
     E_MOVING,
     E_STOP_AT_HOME,
@@ -66,8 +66,8 @@ class FOCUSER_STATE
   unsigned int state_stop_at_home( void );
   unsigned int state_low_power( void );
   unsigned int state_awaken( void );
-  unsigned int state_step_high_and_wait( void );
-  unsigned int state_step_low_and_wait( void );
+  unsigned int state_step_active_and_wait( void );
+  unsigned int state_step_inactive_and_wait( void );
 
   COMMAND_PACKET& get_current_command( void );
 

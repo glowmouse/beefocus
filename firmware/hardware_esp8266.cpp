@@ -9,8 +9,8 @@ const std::unordered_map<HWI::Pin, int, EnumHash > HardwareESP8266::pinMap = {
 };
 
 const std::unordered_map<HWI::PinState, int, EnumHash > HardwareESP8266::pinStateMap = {
-  { PinState::STEP_HIGH,      HIGH },
-  { PinState::STEP_LOW,       LOW  },
+  { PinState::STEP_ACTIVE,    HIGH },
+  { PinState::STEP_INACTIVE,  LOW  },
   { PinState::DIR_BACKWARD,   LOW  },
   { PinState::DIR_FORWARD,    HIGH },
   { PinState::MOTOR_OFF,      HIGH },    // Active low

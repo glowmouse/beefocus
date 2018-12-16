@@ -67,7 +67,7 @@ FOCUSER_STATE::FOCUSER_STATE(
   dir = Dir::FORWARD;
   hardware->DigitalWrite( HWI::Pin::DIR, HWI::PinState::DIR_FORWARD); 
        
-  hardware->DigitalWrite( HWI::Pin::STEP, HWI::PinState::STEP_LOW );
+  hardware->DigitalWrite( HWI::Pin::STEP, HWI::PinState::STEP_INACTIVE );
 
   log << "FOCUSER_STATE is up\n";
 }
@@ -211,6 +211,9 @@ unsigned int FOCUSER_STATE::state_set_dir()
 {
   FOCUSER_STATE::COMMAND_PACKET& state = get_current_command();
   Dir desiredDir = state.arg0 ? Dir::FORWARD : Dir::REVERSE;
+
+  state_stack.pop_back();
+
   if ( desiredDir != dir )
   {
     dir = desiredDir;
@@ -218,24 +221,26 @@ unsigned int FOCUSER_STATE::state_set_dir()
       hardware->DigitalWrite( HWI::Pin::DIR, HWI::PinState::DIR_FORWARD); 
     if ( dir == Dir::REVERSE )       
       hardware->DigitalWrite( HWI::Pin::DIR, HWI::PinState::DIR_BACKWARD );
+    // Trigger a 1ms pause so the stepper motor controller sees the
+    // state change before we try to do anything.
+    return 1000;
   }    
 
-  state_stack.pop_back();
   return 0;
 }
 
-unsigned int FOCUSER_STATE::state_step_low_and_wait()
+unsigned int FOCUSER_STATE::state_step_inactive_and_wait()
 {
   int delay = 1000000 / focuser_speed / 2;
-  hardware->DigitalWrite( HWI::Pin::STEP, HWI::PinState::STEP_LOW );
+  hardware->DigitalWrite( HWI::Pin::STEP, HWI::PinState::STEP_INACTIVE );
   state_stack.pop_back();
   return delay;
 }
 
-unsigned int FOCUSER_STATE::state_step_high_and_wait()
+unsigned int FOCUSER_STATE::state_step_active_and_wait()
 {
   int delay = 1000000 / focuser_speed / 2;
-  hardware->DigitalWrite( HWI::Pin::STEP, HWI::PinState::STEP_HIGH );
+  hardware->DigitalWrite( HWI::Pin::STEP, HWI::PinState::STEP_ACTIVE );
   state_stack.pop_back();
   return delay;
 }
@@ -251,8 +256,8 @@ unsigned int FOCUSER_STATE::state_doing_steps()
     return 0;
   }
 
-  push_state( E_STEPPER_HIGH_AND_WAIT );
-  push_state( E_STEPPER_LOW_AND_WAIT );
+  push_state( E_STEPPER_INACTIVE_AND_WAIT );
+  push_state( E_STEPPER_ACTIVE_AND_WAIT );
 
   state.arg0--;
   return 0;  
@@ -358,14 +363,17 @@ unsigned int FOCUSER_STATE::loop(void)
     case E_AWAKEN:
       return state_awaken();
       break;
-    case E_STEPPER_LOW_AND_WAIT:      
-      return state_step_low_and_wait();
+    case E_STEPPER_ACTIVE_AND_WAIT:      
+      return state_step_active_and_wait();
       break;
-    case E_STEPPER_HIGH_AND_WAIT:      
-      return state_step_high_and_wait();
+    case E_STEPPER_INACTIVE_AND_WAIT:      
+      return state_step_inactive_and_wait();
       break;
     default: 
-      throw std::out_of_range("bad case value");
+      // should never happen.
+      WifiDebugOstream log( debugLog.get(), net.get() );
+      log << "hep hep hep - Unhandled case statement in focuser_state";
+      return 1000*1000; // 1 second.
   }
   return 10*1000;   // 10 microseconds
 }

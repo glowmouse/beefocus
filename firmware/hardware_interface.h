@@ -29,8 +29,8 @@ class HWI
 
   enum class PinState {
     START_OF_PIN_STATES = 0,
-    STEP_HIGH = 0,
-    STEP_LOW,
+    STEP_ACTIVE = 0,
+    STEP_INACTIVE,
     DIR_FORWARD,
     DIR_BACKWARD,
     MOTOR_ON,       // 0 on the nema build

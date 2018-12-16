@@ -8,8 +8,8 @@ const std::unordered_map<HWI::Pin,std::string,EnumHash> HWI::pinNames = {
 };
 
 const std::unordered_map<HWI::PinState,std::string,EnumHash> HWI::pinStateNames = {
-    { PinState::STEP_HIGH,       "Step High" },
-    { PinState::STEP_LOW,        "Step Low" },
+    { PinState::STEP_ACTIVE,     "Step Active" },
+    { PinState::STEP_INACTIVE,   "Step Inactive" },
     { PinState::DIR_FORWARD,     "Dir Firward" },
     { PinState::DIR_BACKWARD,    "Dir Backward" },
     { PinState::MOTOR_ON,        "Motor On" },
