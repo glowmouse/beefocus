@@ -75,10 +75,26 @@ class FOCUSER_STATE
   std::unique_ptr<HWI> hardware;
   std::unique_ptr<DebugInterface> debugLog;
   
+  enum class Dir {
+    FORWARD,
+    REVERSE
+  };
+
+  /// @brief What direction are we going? FORWARD = counting up.
+  Dir dir;
+
+  enum class MotorState {
+    ON,
+    OFF
+  };
+
+  /// @brief Is the Stepper Motor On or Off. 
+  MotorState motorState;
+
   int focuser_position;       // Stepper Motor Position
   int focuser_speed;          // For the time being, Stepper Motor Positions/ Second
-  bool dir;                   // Direction,  true = up,  false = down
-  
+  bool motor_on;              // Is the stepper motor powered
+
   std::vector< COMMAND_PACKET > state_stack;
   const char *state_names[ E_END ];  
 

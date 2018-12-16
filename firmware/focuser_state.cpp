@@ -34,10 +34,6 @@ FOCUSER_STATE::FOCUSER_STATE(
   
   focuser_speed = steps_per_rotation * 2;  
 
-  // increase count when we rotate
-
-  dir = true;
-  
   // No setup right now,  so accept commands
   
   hard_reset_state( E_ACCEPT_COMMANDS, 0 );  
@@ -53,13 +49,24 @@ FOCUSER_STATE::FOCUSER_STATE(
   state_names[ E_MOVING ] = "MOVING";
   state_names[ E_ERROR_STATE ] = "ERROR";
 
-
-  
+  //
+  // Set the pin modes 
+  //
   hardware->PinMode(HWI::Pin::STEP, HWI::PinIOMode::M_OUTPUT );  
   hardware->PinMode(HWI::Pin::DIR,  HWI::PinIOMode::M_OUTPUT );  
   hardware->PinMode(HWI::Pin::MOTOR_ENA,  HWI::PinIOMode::M_OUTPUT );  
-  hardware->DigitalWrite( HWI::Pin::MOTOR_ENA, HWI::PinState::MOTOR_ON );        
-  hardware->PinMode(HWI::Pin::HOME, HWI::PinIOMode::M_INPUT );  
+  hardware->PinMode(HWI::Pin::HOME, HWI::PinIOMode::M_INPUT ); 
+ 
+  //
+  // Set the output pin defaults and internal state
+  //
+  motorState = MotorState::ON;
+  hardware->DigitalWrite( HWI::Pin::MOTOR_ENA, HWI::PinState::MOTOR_ON );
+        
+  dir = Dir::FORWARD;
+  hardware->DigitalWrite( HWI::Pin::DIR, HWI::PinState::DIR_FORWARD); 
+       
+  hardware->DigitalWrite( HWI::Pin::STEP, HWI::PinState::STEP_LOW );
 
   log << "FOCUSER_STATE is up\n";
 }
@@ -185,14 +192,15 @@ unsigned int FOCUSER_STATE::state_error()
 
 unsigned int FOCUSER_STATE::state_set_dir()
 {
-  FOCUSER_STATE::COMMAND_PACKET& state = get_current_command();  
-  if ( state.arg0 ) {
-    dir = true;
-    hardware->DigitalWrite( HWI::Pin::DIR, HWI::PinState::DIR_FORWARD);        
-  }
-  else {
-    dir = false;
-    hardware->DigitalWrite( HWI::Pin::DIR, HWI::PinState::DIR_BACKWARD );        
+  FOCUSER_STATE::COMMAND_PACKET& state = get_current_command();
+  Dir desiredDir = state.arg0 ? Dir::FORWARD : Dir::REVERSE;
+  if ( desiredDir != dir )
+  {
+    dir = desiredDir;
+    if ( dir == Dir::FORWARD )
+      hardware->DigitalWrite( HWI::Pin::DIR, HWI::PinState::DIR_FORWARD); 
+    if ( dir == Dir::REVERSE )       
+      hardware->DigitalWrite( HWI::Pin::DIR, HWI::PinState::DIR_BACKWARD );
   }    
 
   state_stack.pop_back();
@@ -235,8 +243,11 @@ unsigned int FOCUSER_STATE::state_doing_steps()
 
 unsigned int FOCUSER_STATE::state_moving()
 {
-  hardware->DigitalWrite( HWI::Pin::MOTOR_ENA, HWI::PinState::MOTOR_ON );
-        
+  if ( motorState != MotorState::ON )
+  {
+    hardware->DigitalWrite( HWI::Pin::MOTOR_ENA, HWI::PinState::MOTOR_ON );
+  }
+          
   WifiDebugOstream log( debugLog.get(), net.get() );
   log << "Moving " << focuser_position << "\n";
   
