@@ -14,7 +14,7 @@ HWOutTimedEvents goldenHWStart = {
   {  0, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE } },
 };
 
-std::unique_ptr<FOCUSER_STATE> make_focuser( 
+std::unique_ptr<FocuserState> make_focuser( 
   const NetMockSimpleTimed::TimedStringEvents& wifiIn,
   NetMockSimpleTimed* &net_interface,
   HWMockTimed* &hw_interface
@@ -27,8 +27,8 @@ std::unique_ptr<FOCUSER_STATE> make_focuser(
   net_interface = wifi.get();
   hw_interface = hardware.get();
 
-  auto focuser = std::unique_ptr<FOCUSER_STATE>(
-     new FOCUSER_STATE(
+  auto focuser = std::unique_ptr<FocuserState>(
+     new FocuserState(
         std::move(wifi),
         std::move(hardware),
         std::move(debug) )
@@ -44,7 +44,7 @@ std::unique_ptr<FOCUSER_STATE> make_focuser(
 /// @param[in] end_time  - How long (in MS) to run the focuser for.
 /// 
 void simulateFocuser( 
-  FOCUSER_STATE* focuser,
+  FocuserState* focuser,
   NetMockSimpleTimed* wifiAlias,
   HWMockTimed* hwMockAlias,
   unsigned int endTime

@@ -6,7 +6,7 @@
 #include "focuser_state.h"
 #include "hardware_interface.h"
 
-std::unique_ptr<FOCUSER_STATE> focuser;
+std::unique_ptr<FocuserState> focuser;
 
 class NetInterfaceSim: public NetInterface {
   public:
@@ -83,8 +83,8 @@ void setup() {
   std::unique_ptr<NetInterface> wifi( new NetInterfaceSim );
   std::unique_ptr<HWI> hardware( new HWISim );
   std::unique_ptr<DebugInterface> debug( new DebugInterfaceSim );
-  focuser = std::unique_ptr<FOCUSER_STATE>(
-     new FOCUSER_STATE( 
+  focuser = std::unique_ptr<FocuserState>(
+     new FocuserState( 
         std::move(wifi), 
         std::move(hardware),
 				std::move(debug) )

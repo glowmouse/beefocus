@@ -1,22 +1,25 @@
-#ifndef __FOCUSER_STATE__
-#define __FOCUSER_STATE__
+#ifndef __FOCUSER_STATE_H__
+#define __FOCUSER_STATE_H__
 
 #include <vector>
 #include <memory>
+#include <string>
+#include <unordered_map>
 #include "net_interface.h"
 #include "hardware_interface.h"
 #include "command_parser.h"
 
-class FOCUSER_STATE 
+class FocuserState 
 {
   public:
  
-  FOCUSER_STATE( 
+  FocuserState( 
 		std::unique_ptr<NetInterface> netArg,
 		std::unique_ptr<HWI> hardwareArg,
 		std::unique_ptr<DebugInterface> debugArg
 	);
-  FOCUSER_STATE( const FOCUSER_STATE& other ) = delete;
+  FocuserState( const FocuserState& other ) = delete;
+  FocuserState() = delete;
 
   // @brief Update State
   //
@@ -24,38 +27,38 @@ class FOCUSER_STATE
   //         before calling loop again.
   unsigned int loop();
 
-  private:
-
   // The focuser state's expressed as a set of state machines.  There's a simple
   // stack that can be used to push and pop state.
   
-  typedef enum {
-    E_CHECK_FOR_ABORT,
-    E_ACCEPT_COMMANDS,
-    E_ERROR_STATE,  
-    E_DO_STEPS,
-    E_STEPPER_INACTIVE_AND_WAIT,
-    E_STEPPER_ACTIVE_AND_WAIT,
-    E_SET_DIR,
-    E_MOVING,
-    E_STOP_AT_HOME,
-    E_LOW_POWER,
-    E_AWAKEN,
-    E_END          
-  } STATE;
+  enum class State {
+    ACCEPT_COMMANDS = 0,
+    DO_STEPS,
+    STEPPER_INACTIVE_AND_WAIT,
+    STEPPER_ACTIVE_AND_WAIT,
+    SET_DIR,
+    MOVING,
+    STOP_AT_HOME,
+    LOW_POWER,
+    AWAKEN,
+    ERROR_STATE,
+    END          
+  };
+
+  const static std::unordered_map< State, const std::string, EnumHash > stateNames;
+
+  private:
 
   class COMMAND_PACKET {
     public:
-    COMMAND_PACKET( STATE arg_state, int arg_arg0, int arg_arg1 ) : state{ arg_state }, arg0{ arg_arg0 }, arg1{ arg_arg1} {}
-    COMMAND_PACKET( STATE arg_state, int arg_arg0 ) : state{ arg_state }, arg0{ arg_arg0 }, arg1{ -1 } {}
-    COMMAND_PACKET() : state{ E_ERROR_STATE}, arg0{ __LINE__ }, arg1{ -1 } {}
-    STATE state;   
+    COMMAND_PACKET( State arg_state, int arg_arg0, int arg_arg1 ) : state{ arg_state }, arg0{ arg_arg0 }, arg1{ arg_arg1} {}
+    COMMAND_PACKET( State arg_state, int arg_arg0 ) : state{ arg_state }, arg0{ arg_arg0 }, arg1{ -1 } {}
+    State state;   
     int arg0; 
     int arg1;
   };
 
-  void hard_reset_state( STATE, int argument );
-  void push_state( STATE new_state, int arg0 = -1,  int arg1 = -1 );
+  void hard_reset_state( State, int argument );
+  void push_state( State new_state, int arg0 = -1,  int arg1 = -1 );
   void processCommand( CommandParser::CommandPacket cp );
 
   unsigned int state_check_for_abort( void );
@@ -69,7 +72,7 @@ class FOCUSER_STATE
   unsigned int state_step_active_and_wait( void );
   unsigned int state_step_inactive_and_wait( void );
 
-  COMMAND_PACKET& get_current_command( void );
+  COMMAND_PACKET& top( void );
 
   std::unique_ptr<NetInterface> net;
   std::unique_ptr<HWI> hardware;
@@ -96,7 +99,7 @@ class FOCUSER_STATE
   bool motor_on;              // Is the stepper motor powered
 
   std::vector< COMMAND_PACKET > state_stack;
-  const char *state_names[ E_END ];  
+
 
   const int steps_per_rotation = 200;
   const int max_rotations_per_second = 2;
