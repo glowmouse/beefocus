@@ -12,7 +12,8 @@ namespace CommandParser {
   int process_int( const std::string& string,  size_t pos );
 
   enum class Command {
-    Ping,
+    StartOfCommands = 0,
+    Ping = 0,
     Abort,
     Home,
     Status,
@@ -21,7 +22,8 @@ namespace CommandParser {
     ABSPos,
     Sleep,
     Wake,
-    NoCommand
+    NoCommand,
+    EndOfCommands
   };
 
   constexpr int NoArg = -1;
@@ -66,6 +68,12 @@ namespace CommandParser {
 
 };
 
+/// @brief Increment operator for Command enum
+///
+inline CommandParser::Command& operator++( CommandParser::Command &c )
+{
+  return BeeFocus::advance< CommandParser::Command, CommandParser::Command::EndOfCommands >(c);
+}
 
 #endif
 

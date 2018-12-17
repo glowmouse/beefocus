@@ -12,17 +12,33 @@ constexpr int max_rotations_per_second = 2;
 constexpr int NO_VALUE = -1;
 
 const std::unordered_map<FocuserState::State,const std::string,EnumHash> 
-FocuserState::stateNames = {
-  { State::ACCEPT_COMMANDS,           "ACCEPTING_COMMANDS" },
-  { State::DO_STEPS,                  "DO_STEPS"           },
-  { State::STEPPER_INACTIVE_AND_WAIT, "STEPPER_INACTIVE"   },
-  { State::STEPPER_ACTIVE_AND_WAIT,   "STEPPER_ACTIVE"     },
-  { State::SET_DIR,                   "SET_DIR"            },
-  { State::MOVING,                    "MOVING"             },
-  { State::STOP_AT_HOME,              "STOP_AT_HOME"       },
-  { State::LOW_POWER,                 "LOW_POWER"          },
-  { State::AWAKEN,                    "AWAKEN"             },
-  { State::ERROR_STATE,               "ERROR ERROR ERROR"  },
+  FocuserState::stateNames = 
+{
+  { State::ACCEPT_COMMANDS,               "ACCEPTING_COMMANDS" },
+  { State::DO_STEPS,                      "DO_STEPS"           },
+  { State::STEPPER_INACTIVE_AND_WAIT,     "STEPPER_INACTIVE"   },
+  { State::STEPPER_ACTIVE_AND_WAIT,       "STEPPER_ACTIVE"     },
+  { State::SET_DIR,                       "SET_DIR"            },
+  { State::MOVING,                        "MOVING"             },
+  { State::STOP_AT_HOME,                  "STOP_AT_HOME"       },
+  { State::LOW_POWER,                     "LOW_POWER"          },
+  { State::AWAKEN,                        "AWAKEN"             },
+  { State::ERROR_STATE,                   "ERROR ERROR ERROR"  },
+};
+
+const std::unordered_map<CommandParser::Command,bool,EnumHash> 
+  FocuserState::doesCommandInterrupt= 
+{
+  { CommandParser::Command::Ping,          false  },
+  { CommandParser::Command::Abort,         true   },
+  { CommandParser::Command::Home,          true   },
+  { CommandParser::Command::Status,        false  },
+  { CommandParser::Command::PStatus,       false  },
+  { CommandParser::Command::SStatus,       false  },
+  { CommandParser::Command::ABSPos,        true   },
+  { CommandParser::Command::Sleep,         true   },
+  { CommandParser::Command::Wake,          true   },
+  { CommandParser::Command::NoCommand,     false  },
 };
 
 FocuserState::FocuserState(
@@ -216,18 +232,16 @@ unsigned int FocuserState::state_set_dir()
 
 unsigned int FocuserState::state_step_inactive_and_wait()
 {
-  int delay = 1000000 / focuser_speed / 2;
   hardware->DigitalWrite( HWI::Pin::STEP, HWI::PinState::STEP_INACTIVE );
   state_stack.pop_back();
-  return delay;
+  return 1000;
 }
 
 unsigned int FocuserState::state_step_active_and_wait()
 {
-  int delay = 1000000 / focuser_speed / 2;
   hardware->DigitalWrite( HWI::Pin::STEP, HWI::PinState::STEP_ACTIVE );
   state_stack.pop_back();
-  return delay;
+  return 1000;
 }
 
 unsigned int FocuserState::state_doing_steps()
@@ -242,6 +256,8 @@ unsigned int FocuserState::state_doing_steps()
 
   push_state( State::STEPPER_INACTIVE_AND_WAIT );
   push_state( State::STEPPER_ACTIVE_AND_WAIT );
+
+  focuser_position += (dir == Dir::FORWARD) ? 1 : -1;
 
   return 0;  
 }
@@ -263,26 +279,13 @@ unsigned int FocuserState::state_moving()
     return 0;    
   }
 
-  bool next_dir;
-  int steps = top().arg0 - focuser_position;
+  const int  steps        = top().arg0 - focuser_position;
+  const bool nextDir      = steps > 0;    // TODO, enum, !bool
+  const int  absSteps     = steps > 0 ? steps : -steps;
+  const int  clippedSteps = absSteps > 50 ? 50 : absSteps;
 
-  if (  steps > focuser_speed / 2 )
-    steps = focuser_speed / 2;
-  if (  steps < -focuser_speed / 2 )
-    steps = -focuser_speed / 2;
-
-  focuser_position = focuser_position + steps;
-
-  if ( steps < 0 ) {
-    next_dir = false;
-    steps = -steps;
-  }
-  else {
-    next_dir = true;
-  }
-  
-  push_state( State::DO_STEPS, steps );
-  push_state( State::SET_DIR, next_dir );
+  push_state( State::DO_STEPS, clippedSteps );
+  push_state( State::SET_DIR,  nextDir );
   return 0;        
 }
 

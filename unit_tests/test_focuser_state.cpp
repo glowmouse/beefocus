@@ -62,9 +62,34 @@ void simulateFocuser(
   }
 }
 
+TEST( FOCUSER_STATE, allCommandsHaveInterruptStatus)
+{
+  for ( CommandParser::Command c = CommandParser::Command::StartOfCommands;
+        c < CommandParser::Command::EndOfCommands; ++c )
+  {
+    ASSERT_NE( 
+      FocuserState::doesCommandInterrupt.find( c ),
+      FocuserState::doesCommandInterrupt.end());
+  }
+} 
+
+TEST( FOCUSER_STATE, allStatesHaveDebugNames )
+{
+  for ( FocuserState::State s = FocuserState::State::START_OF_STATES;
+        s < FocuserState::State::END_OF_STATES; ++s )
+  {
+    ASSERT_NE( 
+      FocuserState::stateNames.find( s ),
+      FocuserState::stateNames.end());
+  }
+} 
+
+
+/// @brief Init the focuser
+
 /// @brief Init the focuser
 ///
-TEST( COMMAND_PARSER, init_Focuser )
+TEST( FOCUSER_STATE, init_Focuser )
 {
   NetMockSimpleTimed::TimedStringEvents input;
 
@@ -82,7 +107,7 @@ TEST( COMMAND_PARSER, init_Focuser )
 
 /// @brief Init the focuser and pass in some status commands
 ///
-TEST( COMMAND_PARSER, run_status)
+TEST( FOCUSER_STATE, run_status)
 {
   NetMockSimpleTimed::TimedStringEvents input = {
     { 0, "status" },      // status  @ Time 0
@@ -106,7 +131,7 @@ TEST( COMMAND_PARSER, run_status)
   ASSERT_EQ( goldenHWStart, hwMockAlias->getOutEvents() );
 }
 
-TEST( COMMAND_PARSER, run_abs_pos )
+TEST( FOCUSER_STATE, run_abs_pos )
 {
   NetMockSimpleTimed::TimedStringEvents input = {
     { 10, "abs_pos=3" },      // status  @ Time 0
@@ -124,8 +149,8 @@ TEST( COMMAND_PARSER, run_abs_pos )
     { 11, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
     { 12, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
     { 13, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 15, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 16, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 14, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 15, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
   };
   goldenHW.insert( goldenHW.begin(), goldenHWStart.begin(), goldenHWStart.end());
 
@@ -142,7 +167,7 @@ TEST( COMMAND_PARSER, run_abs_pos )
 /// TODO - modify accept for commands so it tries to sync up with
 ///        10ms epochs to make unit testing easier.
 ///
-TEST( COMMAND_PARSER, run_abs_pos_double_forward )
+TEST( FOCUSER_STATE, run_abs_pos_double_forward )
 {
   NetMockSimpleTimed::TimedStringEvents input = {
     { 10, "abs_pos=3" },      // status  @ Time 0
@@ -161,12 +186,12 @@ TEST( COMMAND_PARSER, run_abs_pos_double_forward )
     { 11, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
     { 12, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
     { 13, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 15, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 16, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 57, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 58, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 60, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 61, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 14, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 15, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 56, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 57, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 58, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 59, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
   };
   goldenHW.insert( goldenHW.begin(), goldenHWStart.begin(), goldenHWStart.end());
 
@@ -181,7 +206,7 @@ TEST( COMMAND_PARSER, run_abs_pos_double_forward )
 /// 'accept commands' tick after 50ms.  The rewind will got 0
 /// 0 to try to clear backlash and then forward to 2.
 ///
-TEST( COMMAND_PARSER, run_abs_pos_with_backlash_correction )
+TEST( FOCUSER_STATE, run_abs_pos_with_backlash_correction )
 {
   NetMockSimpleTimed::TimedStringEvents input = {
     { 10, "abs_pos=3" },      // status  @ Time 0
@@ -200,20 +225,20 @@ TEST( COMMAND_PARSER, run_abs_pos_with_backlash_correction )
     { 11, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
     { 12, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
     { 13, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 15, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 16, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 57, { HWI::Pin::DIR,        HWI::PinState::DIR_BACKWARD } },
-    { 58, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 59, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 14, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 15, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 56, { HWI::Pin::DIR,        HWI::PinState::DIR_BACKWARD } },
+    { 57, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 58, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 59, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 60, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
     { 61, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
     { 62, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 63, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 64, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 66, { HWI::Pin::DIR,        HWI::PinState::DIR_FORWARD } },
-    { 67, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 68, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 69, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 70, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 63, { HWI::Pin::DIR,        HWI::PinState::DIR_FORWARD } },
+    { 64, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 65, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 66, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 67, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
   };
   goldenHW.insert( goldenHW.begin(), goldenHWStart.begin(), goldenHWStart.end());
 

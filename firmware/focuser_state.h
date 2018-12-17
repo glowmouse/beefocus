@@ -31,6 +31,7 @@ class FocuserState
   // stack that can be used to push and pop state.
   
   enum class State {
+    START_OF_STATES = 0,
     ACCEPT_COMMANDS = 0,
     DO_STEPS,
     STEPPER_INACTIVE_AND_WAIT,
@@ -41,10 +42,11 @@ class FocuserState
     LOW_POWER,
     AWAKEN,
     ERROR_STATE,
-    END          
+    END_OF_STATES
   };
 
   const static std::unordered_map< State, const std::string, EnumHash > stateNames;
+  const static std::unordered_map< CommandParser::Command, bool, EnumHash > doesCommandInterrupt;
 
   private:
 
@@ -106,6 +108,13 @@ class FocuserState
   const int NO_VALUE = -1;
 
 };
+
+/// @brief Increment operator for State enum
+inline FocuserState::State& operator++( FocuserState::State &s )
+{
+  return BeeFocus::advance< FocuserState::State, FocuserState::State::END_OF_STATES>(s);
+}
+
 
 #endif
 

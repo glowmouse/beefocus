@@ -3,6 +3,7 @@
 
 #include <unordered_map>
 #include <string>
+#include "basic_types.h"
 
 struct EnumHash
 {
@@ -58,17 +59,6 @@ class HWI
   virtual PinState DigitalRead( Pin pin) = 0;
 };
 
-template< typename PIN_ENUM, PIN_ENUM MAX_VAL >
-PIN_ENUM& advance(PIN_ENUM& pin )
-{
-  if ( pin != MAX_VAL )
-  {
-    // wee hacky
-    pin = static_cast<PIN_ENUM>( static_cast<int>(pin) + 1 );
-  }
-  return pin;
-}
-
 // @brief Increment operator for Hardware Interface Pin
 //
 // @param[in] pin - The pin to increment. 
@@ -76,7 +66,7 @@ PIN_ENUM& advance(PIN_ENUM& pin )
 //
 inline HWI::Pin& operator++( HWI::Pin &pin ) 
 {
-  return advance< HWI::Pin, HWI::Pin::END_OF_PINS >( pin );
+  return BeeFocus::advance< HWI::Pin, HWI::Pin::END_OF_PINS >( pin );
 }
 
 // @brief Increment operator for Hardware Interface Pin State
@@ -86,7 +76,7 @@ inline HWI::Pin& operator++( HWI::Pin &pin )
 // 
 inline HWI::PinState& operator++( HWI::PinState &pin ) 
 {
-  return advance< HWI::PinState, HWI::PinState::END_OF_PIN_STATES >( pin );
+  return BeeFocus::advance< HWI::PinState, HWI::PinState::END_OF_PIN_STATES >( pin );
 }
 
 // @brief Increment operator for Hardware Interface Pin IO Mode
@@ -96,7 +86,7 @@ inline HWI::PinState& operator++( HWI::PinState &pin )
 // 
 inline HWI::PinIOMode& operator++( HWI::PinIOMode &pin ) 
 {
-  return advance< HWI::PinIOMode, HWI::PinIOMode::END_OF_IO_MODES >( pin );
+  return BeeFocus::advance< HWI::PinIOMode, HWI::PinIOMode::END_OF_IO_MODES >( pin );
 }
 
 #endif
