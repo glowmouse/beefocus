@@ -56,7 +56,7 @@ int process_int( const std::string& string,  size_t pos )
     return 0;
 
   int result = 0;
-  for ( int iter = pos; iter != end; iter++ ) {
+  for ( size_t iter = pos; iter != end; iter++ ) {
     char current = string[ iter ];
     if ( current >= '0' && current <= '9' )
       result = result * 10 + ( current - '0' );

@@ -6,7 +6,7 @@
 #include "focuser_state.h"
 #include "hardware_interface.h"
 
-std::unique_ptr<FOCUSER_STATE> focuser;
+std::unique_ptr<FocuserState> focuser;
 
 class NetInterfaceSim: public NetInterface {
   public:
@@ -45,9 +45,9 @@ class HWISim: public HWI
 {
   public: 
 
-  void PinMode( Pin pin, int mode ) override
+  void PinMode( Pin pin, PinIOMode mode ) override
   {
-    std::cout << "Pin Mode (" << HWI::pinNames.at(pin) << ") = " << mode << "\n";
+    std::cout << "PM (" << HWI::pinNames.at(pin) << ") = " << HWI::pinIOModeNames.at(mode) << "\n";
   }
   void DigitalWrite( Pin pin, PinState state ) override
   {
@@ -83,13 +83,12 @@ void setup() {
   std::unique_ptr<NetInterface> wifi( new NetInterfaceSim );
   std::unique_ptr<HWI> hardware( new HWISim );
   std::unique_ptr<DebugInterface> debug( new DebugInterfaceSim );
-  focuser = std::unique_ptr<FOCUSER_STATE>(
-     new FOCUSER_STATE( 
+  focuser = std::unique_ptr<FocuserState>(
+     new FocuserState( 
         std::move(wifi), 
         std::move(hardware),
 				std::move(debug) )
   );
-  focuser->setup();
 }
 
 int main(int argc, char* argv[])

@@ -71,7 +71,36 @@ TEST( COMMAND_PARSER, checkForCommands)
   NetMockSimple wake("wake");
   ASSERT_EQ( checkForCommands(dbgmock, wake), CommandPacket( Command::Wake ));
 
+}
 
+TEST( COMMAND_PARSER, testGot)
+{
+  DebugInterfaceIgnoreMock dbgmock;
+
+  NetMockSimpleTimed::TimedStringEvents input = {
+    { 0, "sleep" },   // Sleep @ Time 0
+    { 2, "wake" }     // Wake @ Time 2;
+  };
+
+  // Time 0, should be a sleep
+  NetMockSimpleTimed netMock( input );
+  ASSERT_EQ( checkForCommands(dbgmock, netMock ), CommandPacket( Command::Sleep ));
+  // Time 1, should be nothing
+  netMock.advanceTime(1);
+  ASSERT_EQ( checkForCommands(dbgmock, netMock ), CommandPacket());
+  // Time 2, should be a wake.
+  netMock.advanceTime(1);
+  ASSERT_EQ( checkForCommands(dbgmock, netMock ), CommandPacket( Command::Wake ));
+ 
+  // Golden output - should have messages saying that the firmware
+  // got the sleep and wake command
+  NetMockSimpleTimed::TimedStringEvents golden = {
+    { 0, "# Got: sleep" }, 
+    { 2, "# Got: wake" } 
+  };
+
+  // Compare.
+  ASSERT_EQ( golden, netMock.getOutput() ); 
 }
 
 }

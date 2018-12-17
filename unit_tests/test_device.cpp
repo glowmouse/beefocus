@@ -32,4 +32,15 @@ TEST( DEVICE, should_have_complete_pin_state_names )
   }
 }
 
+/// @brief Every IO Mode should have a debug name
+TEST( DEVICE, should_have_complete_pin_io_modes )
+{
+  for( HWI::PinIOMode i= HWI::PinIOMode::START_OF_PIN_IO_MODES; 
+       i < HWI::PinIOMode::END_OF_IO_MODES;
+       ++i )
+  {
+    ASSERT_NE(HWI::pinIOModeNames.find( i ), HWI::pinIOModeNames.end() );
+  }
+}
+
 

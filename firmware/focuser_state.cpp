@@ -11,8 +11,30 @@ constexpr int steps_per_rotation = 200;
 constexpr int max_rotations_per_second = 2;
 constexpr int NO_VALUE = -1;
 
-void FOCUSER_STATE::setup()
-{  
+const std::unordered_map<FocuserState::State,const std::string,EnumHash> 
+FocuserState::stateNames = {
+  { State::ACCEPT_COMMANDS,           "ACCEPTING_COMMANDS" },
+  { State::DO_STEPS,                  "DO_STEPS"           },
+  { State::STEPPER_INACTIVE_AND_WAIT, "STEPPER_INACTIVE"   },
+  { State::STEPPER_ACTIVE_AND_WAIT,   "STEPPER_ACTIVE"     },
+  { State::SET_DIR,                   "SET_DIR"            },
+  { State::MOVING,                    "MOVING"             },
+  { State::STOP_AT_HOME,              "STOP_AT_HOME"       },
+  { State::LOW_POWER,                 "LOW_POWER"          },
+  { State::AWAKEN,                    "AWAKEN"             },
+  { State::ERROR_STATE,               "ERROR ERROR ERROR"  },
+};
+
+FocuserState::FocuserState(
+    std::unique_ptr<NetInterface> netArg,
+    std::unique_ptr<HWI> hardwareArg,
+    std::unique_ptr<DebugInterface> debugArg
+)
+{
+  std::swap( net, netArg );
+  std::swap( hardware, hardwareArg );
+  std::swap( debugLog, debugArg );
+  
   DebugInterface& log = *debugLog;
   log << "Bringing up net interface\n";
   
@@ -26,72 +48,65 @@ void FOCUSER_STATE::setup()
   
   focuser_speed = steps_per_rotation * 2;  
 
-  // increase count when we rotate
-
-  dir = true;
-  
   // No setup right now,  so accept commands
   
-  hard_reset_state( E_ACCEPT_COMMANDS, 0 );  
+  hard_reset_state( State::ACCEPT_COMMANDS, 0 );  
 
-  // Book keeping for the states.
+  //
+  // Set the pin modes 
+  //
+  hardware->PinMode(HWI::Pin::STEP, HWI::PinIOMode::M_OUTPUT );  
+  hardware->PinMode(HWI::Pin::DIR,  HWI::PinIOMode::M_OUTPUT );  
+  hardware->PinMode(HWI::Pin::MOTOR_ENA,  HWI::PinIOMode::M_OUTPUT );  
+  hardware->PinMode(HWI::Pin::HOME, HWI::PinIOMode::M_INPUT ); 
+ 
+  //
+  // Set the output pin defaults and internal state
+  //
+  motorState = MotorState::ON;
+  hardware->DigitalWrite( HWI::Pin::MOTOR_ENA, HWI::PinState::MOTOR_ON );
+        
+  dir = Dir::FORWARD;
+  hardware->DigitalWrite( HWI::Pin::DIR, HWI::PinState::DIR_FORWARD); 
+       
+  hardware->DigitalWrite( HWI::Pin::STEP, HWI::PinState::STEP_INACTIVE );
 
-  for ( int i = 0; i < E_END; ++i )
-    state_names[ i ] = "UNDEFINED";
-  state_names[ E_CHECK_FOR_ABORT ] = "CHECK_FOR_ABORT";
-  state_names[ E_ACCEPT_COMMANDS ] = "ACCEPTING_COMMANDS";  
-  state_names[ E_DO_STEPS ] = "DOING_STEPS";
-  state_names[ E_SET_DIR ] = "SET_DIRECTION";
-  state_names[ E_MOVING ] = "MOVING";
-  state_names[ E_ERROR_STATE ] = "ERROR";
-
-
-  
-  hardware->PinMode(HWI::Pin::STEP, HWI::output );  
-  hardware->PinMode(HWI::Pin::DIR,  HWI::output );  
-  hardware->PinMode(HWI::Pin::MOTOR_ENA,  HWI::output );  
-  hardware->DigitalWrite( HWI::Pin::MOTOR_ENA, HWI::PinState::MOTOR_ON );        
-  hardware->PinMode(HWI::Pin::HOME, HWI::input  );  
-
-  log << "FOCUSER_STATE is up\n";
+  log << "FocuserState is up\n";
 }
 
-void FOCUSER_STATE::hard_reset_state( STATE new_state, int arg )
+void FocuserState::hard_reset_state( State new_state, int arg )
 {
     while ( !state_stack.empty() )
       state_stack.pop_back();
     state_stack.push_back( COMMAND_PACKET(new_state, arg ) );
 }
 
-void FOCUSER_STATE::push_state( STATE new_state, int arg0,  int arg1 )
+void FocuserState::push_state( State new_state, int arg0,  int arg1 )
 {
     state_stack.push_back( COMMAND_PACKET(new_state, arg0,  arg1 ) );
 }
 
-FOCUSER_STATE::COMMAND_PACKET& FOCUSER_STATE::get_current_command( void ) 
+FocuserState::COMMAND_PACKET& FocuserState::top( void ) 
 {
   if ( state_stack.empty() )
-    hard_reset_state( E_ERROR_STATE, __LINE__ );   // bug,  should never happen :)  
+    hard_reset_state( State::ERROR_STATE, __LINE__ );   // bug,  should never happen :)  
   return state_stack.back();
 }
 
-
-void FOCUSER_STATE::check_for_commands( bool accept_only_abort )
+void FocuserState::processCommand( CommandParser::CommandPacket cp )
 {
   DebugInterface& log = *debugLog;
-
-  STATE state = get_current_command().state;
-  int arg0 = get_current_command().arg0;
-
-  auto cp = CommandParser::checkForCommands( log, *net );
 
   // Status was originally before abort.  TODO, refactor this mess.
 
   if ( cp.command == CommandParser::Command::Status )
   {
+    State state = top().state;
+    int arg0 = top().arg0;
+
     log << "Processing pstatus request\n";
     *net << "Position: " << focuser_position << "\n";
-    *net << "State: " << state_names[state] << " " << arg0 << "\n";
+    *net << "State: " << stateNames.at(state) << " " << arg0 << "\n";
     return;
   }
 
@@ -104,145 +119,153 @@ void FOCUSER_STATE::check_for_commands( bool accept_only_abort )
 
   if ( cp.command == CommandParser::Command::SStatus )
   {
+    State state = top().state;
+    int arg0 = top().arg0;
+
     log << "Processing sstatus request\n";
-    *net << "State: " << state_names[state] << " " << arg0 << "\n";
+    *net << "State: " << stateNames.at(state) << " " << arg0 << "\n";
     return;
   }
 
   if ( cp.command == CommandParser::Command::Abort ) {
     // Abort command, unroll the state stack and start accepting commands.
-    hard_reset_state( E_ACCEPT_COMMANDS, 0 );
-    return;
-  }
-
-  if ( accept_only_abort )
-  {
-    // for now, return.  refactor when
-    // https://github.com/glowmouse/beefocus/issues/5
-    // is resolved.
+    hard_reset_state( State::ACCEPT_COMMANDS, 0 );
     return;
   }
 
   if ( cp.command == CommandParser::Command::Home ) {
-    hard_reset_state( E_ACCEPT_COMMANDS, 0 );
-    push_state( E_STOP_AT_HOME );
+    hard_reset_state( State::ACCEPT_COMMANDS, 0 );
+    push_state( State::STOP_AT_HOME );
     return;
   }  
 
   if ( cp.command == CommandParser::Command::ABSPos ) {
-    push_state( E_MOVING, cp.optionalArg );
+    push_state( State::MOVING, cp.optionalArg );
     int new_position = cp.optionalArg;
 
     if ( new_position < focuser_position )
     {
       int backtrack = new_position - 500;
       backtrack = backtrack < 0 ? 0 : backtrack;
-      push_state( E_MOVING, backtrack );
+      push_state( State::MOVING, backtrack );
     }
   }
 
   if ( cp.command == CommandParser::Command::Sleep ) {
-    push_state( E_LOW_POWER, 0 );
+    push_state( State::LOW_POWER, 0 );
 	}
-  if ( cp.command == CommandParser::Command::Wake && state == E_LOW_POWER )
+  if ( cp.command == CommandParser::Command::Wake )
   {
-    hard_reset_state( E_ACCEPT_COMMANDS, 0 );
-    push_state( E_AWAKEN );
+    hard_reset_state( State::ACCEPT_COMMANDS, 0 );
+    push_state( State::AWAKEN );
   }
 }
 
-unsigned int FOCUSER_STATE::state_check_for_abort() 
+unsigned int FocuserState::state_accept_commands()
 {
-  // An abort check is always a one off
+  DebugInterface& log = *debugLog;
+  auto cp = CommandParser::checkForCommands( log, *net );
+
+  if ( cp.command != CommandParser::Command::NoCommand )
+  {
+    processCommand( cp );
+    return 0;
+  }
+  return 10*1000;
+}
+
+unsigned int FocuserState::state_low_power()
+{
+  if ( motorState != MotorState::OFF )
+  {
+    hardware->DigitalWrite( HWI::Pin::MOTOR_ENA, HWI::PinState::MOTOR_OFF ); 
+    motorState = MotorState::OFF;
+  }
+       
+  DebugInterface& log = *debugLog;
+  auto cp = CommandParser::checkForCommands( log, *net );
+
+  if ( cp.command != CommandParser::Command::NoCommand )
+  {
+    processCommand( cp );
+    return 0;
+  }
+  return 100*1000;
+}
+
+unsigned int FocuserState::state_set_dir()
+{
+  Dir desiredDir = top().arg0 ? Dir::FORWARD : Dir::REVERSE;
+
   state_stack.pop_back();
 
-  bool accept_only_abort = true;
-  check_for_commands( accept_only_abort );
-  return 10*1000;
-}
-  
-unsigned int FOCUSER_STATE::state_accept_commands()
-{
-  bool dont_accept_only_abort = false;
-  check_for_commands( dont_accept_only_abort );
-  return 10*1000;
-}
-
-unsigned int FOCUSER_STATE::state_error()
-{
-  bool accept_only_abort = true;  
-  check_for_commands( accept_only_abort );
-  return 10*1000;
-}
-
-unsigned int FOCUSER_STATE::state_set_dir()
-{
-  FOCUSER_STATE::COMMAND_PACKET& state = get_current_command();  
-  if ( state.arg0 ) {
-    dir = true;
-    hardware->DigitalWrite( HWI::Pin::DIR, HWI::PinState::DIR_FORWARD);        
-  }
-  else {
-    dir = false;
-    hardware->DigitalWrite( HWI::Pin::DIR, HWI::PinState::DIR_BACKWARD );        
+  if ( desiredDir != dir )
+  {
+    dir = desiredDir;
+    if ( dir == Dir::FORWARD )
+      hardware->DigitalWrite( HWI::Pin::DIR, HWI::PinState::DIR_FORWARD); 
+    if ( dir == Dir::REVERSE )       
+      hardware->DigitalWrite( HWI::Pin::DIR, HWI::PinState::DIR_BACKWARD );
+    // Trigger a 1ms pause so the stepper motor controller sees the
+    // state change before we try to do anything.
+    return 1000;
   }    
 
-  state_stack.pop_back();
   return 0;
 }
 
-unsigned int FOCUSER_STATE::state_step_low_and_wait()
+unsigned int FocuserState::state_step_inactive_and_wait()
 {
   int delay = 1000000 / focuser_speed / 2;
-  hardware->DigitalWrite( HWI::Pin::STEP, HWI::PinState::STEP_LOW );
+  hardware->DigitalWrite( HWI::Pin::STEP, HWI::PinState::STEP_INACTIVE );
   state_stack.pop_back();
   return delay;
 }
 
-unsigned int FOCUSER_STATE::state_step_high_and_wait()
+unsigned int FocuserState::state_step_active_and_wait()
 {
   int delay = 1000000 / focuser_speed / 2;
-  hardware->DigitalWrite( HWI::Pin::STEP, HWI::PinState::STEP_HIGH );
+  hardware->DigitalWrite( HWI::Pin::STEP, HWI::PinState::STEP_ACTIVE );
   state_stack.pop_back();
   return delay;
 }
 
-unsigned int FOCUSER_STATE::state_doing_steps()
+unsigned int FocuserState::state_doing_steps()
 {
-  FOCUSER_STATE::COMMAND_PACKET& state = get_current_command();
-    
-  if ( state.arg0 == 0 )
+  if ( top().arg0 == 0 )
   {
     // We're done at 0
     state_stack.pop_back();
     return 0;
   }
+  top().arg0--;
 
-  push_state( E_STEPPER_HIGH_AND_WAIT );
-  push_state( E_STEPPER_LOW_AND_WAIT );
+  push_state( State::STEPPER_INACTIVE_AND_WAIT );
+  push_state( State::STEPPER_ACTIVE_AND_WAIT );
 
-  state.arg0--;
   return 0;  
 }
 
-unsigned int FOCUSER_STATE::state_moving()
+unsigned int FocuserState::state_moving()
 {
-  hardware->DigitalWrite( HWI::Pin::MOTOR_ENA, HWI::PinState::MOTOR_ON );
-        
+  if ( motorState != MotorState::ON )
+  {
+    hardware->DigitalWrite( HWI::Pin::MOTOR_ENA, HWI::PinState::MOTOR_ON );
+    return 100000;    // .1s pause to power things up.
+  }
+          
   WifiDebugOstream log( debugLog.get(), net.get() );
   log << "Moving " << focuser_position << "\n";
   
-  FOCUSER_STATE::COMMAND_PACKET& state = get_current_command();
-
-  if ( state.arg0 == focuser_position ) {
+  if ( top().arg0 == focuser_position ) {
     // We're at the target,  exit
     state_stack.pop_back();
     return 0;    
   }
 
   bool next_dir;
-  int steps = state.arg0 - focuser_position;
-  
+  int steps = top().arg0 - focuser_position;
+
   if (  steps > focuser_speed / 2 )
     steps = focuser_speed / 2;
   if (  steps < -focuser_speed / 2 )
@@ -258,13 +281,12 @@ unsigned int FOCUSER_STATE::state_moving()
     next_dir = true;
   }
   
-  push_state( E_CHECK_FOR_ABORT );
-  push_state( E_DO_STEPS, steps );
-  push_state( E_SET_DIR, next_dir );
+  push_state( State::DO_STEPS, steps );
+  push_state( State::SET_DIR, next_dir );
   return 0;        
 }
 
-unsigned int FOCUSER_STATE::state_stop_at_home()
+unsigned int FocuserState::state_stop_at_home()
 {
   WifiDebugOstream log( debugLog.get(), net.get() );
 
@@ -280,67 +302,56 @@ unsigned int FOCUSER_STATE::state_stop_at_home()
     state_stack.pop_back();
     return 0;        
   }
-  push_state( E_DO_STEPS, 1 );
-  push_state( E_SET_DIR, 0 );
+  push_state( State::DO_STEPS, 1 );
+  push_state( State::SET_DIR, 0 );
   focuser_position--;
   return 0;        
 }
 
-unsigned int FOCUSER_STATE::state_low_power()
-{
-  hardware->DigitalWrite( HWI::Pin::MOTOR_ENA, HWI::PinState::MOTOR_OFF );        
-  bool dont_accept_only_abort = false;
-  check_for_commands( dont_accept_only_abort );
-  return 100*1000;
-}
-
-unsigned int FOCUSER_STATE::state_awaken()
+unsigned int FocuserState::state_awaken()
 {
   hardware->DigitalWrite( HWI::Pin::MOTOR_ENA, HWI::PinState::MOTOR_ON );        
   state_stack.pop_back();
   return 0;
 }
 
-unsigned int FOCUSER_STATE::loop(void)
+unsigned int FocuserState::loop(void)
 {
-  STATE next_state = get_current_command().state;
+  State next_state = top().state;
 
   switch ( next_state ) {
-    case E_CHECK_FOR_ABORT:
-      return state_check_for_abort();
+    case State::ACCEPT_COMMANDS:
+      return state_accept_commands();
       break;
-    case E_ACCEPT_COMMANDS:
-      state_accept_commands();
-      return 10*1000;   // 10 microseconds
-      break;
-    case E_DO_STEPS:
+    case State::DO_STEPS:
       return state_doing_steps();
       break;
-    case E_SET_DIR:
+    case State::SET_DIR:
       return state_set_dir();
       break;      
-    case E_MOVING:
+    case State::MOVING:
       return state_moving();
       break;
-    case E_STOP_AT_HOME:
+    case State::STOP_AT_HOME:
       return state_stop_at_home();
       break;      
-    case E_LOW_POWER:
+    case State::LOW_POWER:
       return state_low_power();
       break;      
-    case E_AWAKEN:
+    case State::AWAKEN:
       return state_awaken();
       break;
-    case E_STEPPER_LOW_AND_WAIT:      
-      return state_step_low_and_wait();
+    case State::STEPPER_ACTIVE_AND_WAIT:      
+      return state_step_active_and_wait();
       break;
-    case E_STEPPER_HIGH_AND_WAIT:      
-      return state_step_high_and_wait();
+    case State::STEPPER_INACTIVE_AND_WAIT:      
+      return state_step_inactive_and_wait();
       break;
-    case E_ERROR_STATE:
-    default:    
-      state_error();
-      break;
+    default: 
+      // should never happen.
+      WifiDebugOstream log( debugLog.get(), net.get() );
+      log << "hep hep hep - Unhandled case statement in focuser_state";
+      return 1000*1000; // 1 second.
   }
   return 10*1000;   // 10 microseconds
 }
