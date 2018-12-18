@@ -279,7 +279,7 @@ class HWMockTimed: public HWI
   HWTimedEvents inEvents;
   HWTimedEvents::iterator nextInputEvent;
 
-  std::unordered_map<Pin,PinState> inputStates;
+  std::unordered_map<Pin,PinState,EnumHash> inputStates;
 };
 
 
