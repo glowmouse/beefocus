@@ -37,6 +37,21 @@ const std::unordered_map<CommandParser::Command,bool,EnumHash>
   { CommandParser::Command::NoCommand,     false  },
 };
 
+const std::unordered_map<FocuserState::State,unsigned int (FocuserState::*)( void ),EnumHash>
+  FocuserState::stateImpl =
+{
+  { State::ACCEPT_COMMANDS,           &FocuserState::stateAcceptCommands },
+  { State::DO_STEPS,                  &FocuserState::stateDoingSteps },
+  { State::STEPPER_INACTIVE_AND_WAIT, &FocuserState::stateStepInactiveAndWait },
+  { State::STEPPER_ACTIVE_AND_WAIT,   &FocuserState::stateStepActiveAndWait },
+  { State::SET_DIR,                   &FocuserState::stateSetDir },
+  { State::MOVING,                    &FocuserState::stateMoving },
+  { State::STOP_AT_HOME,              &FocuserState::state_stop_at_home },
+  { State::LOW_POWER,                 &FocuserState::state_low_power },
+  { State::AWAKEN,                    &FocuserState::state_awaken },
+  { State::ERROR_STATE,               &FocuserState::stateError }
+};
+
 FocuserState::FocuserState(
     std::unique_ptr<NetInterface> netArg,
     std::unique_ptr<HWI> hardwareArg,
@@ -76,7 +91,6 @@ FocuserState::FocuserState(
         
   dir = Dir::FORWARD;
   hardware->DigitalWrite( HWI::Pin::DIR, HWI::PinState::DIR_FORWARD); 
-       
   hardware->DigitalWrite( HWI::Pin::STEP, HWI::PinState::STEP_INACTIVE );
 
   log << "FocuserState is up\n";
@@ -310,44 +324,16 @@ unsigned int FocuserState::state_awaken()
   return 0;
 }
 
+unsigned int FocuserState::stateError()
+{
+  WifiDebugOstream log( debugLog.get(), net.get() );
+  log << "hep hep hep error error error\n";
+  return 10*1000*1000; // 10 sec pause 
+}
+
 unsigned int FocuserState::loop(void)
 {
-  State next_state = top().state;
-
-  switch ( next_state ) {
-    case State::ACCEPT_COMMANDS:
-      return stateAcceptCommands();
-      break;
-    case State::DO_STEPS:
-      return stateDoingSteps();
-      break;
-    case State::SET_DIR:
-      return stateSetDir();
-      break;      
-    case State::MOVING:
-      return stateMoving();
-      break;
-    case State::STOP_AT_HOME:
-      return state_stop_at_home();
-      break;      
-    case State::LOW_POWER:
-      return state_low_power();
-      break;      
-    case State::AWAKEN:
-      return state_awaken();
-      break;
-    case State::STEPPER_ACTIVE_AND_WAIT:      
-      return stateStepActiveAndWait();
-      break;
-    case State::STEPPER_INACTIVE_AND_WAIT:      
-      return stateStepInactiveAndWait();
-      break;
-    default: 
-      // should never happen.
-      WifiDebugOstream log( debugLog.get(), net.get() );
-      log << "hep hep hep - Unhandled case statement in focuser_state";
-      return 1000*1000; // 1 second.
-  }
-  return 10*1000;   // 10 microseconds
+  ptrToMember function = stateImpl.at( top().state );
+  return (this->*function)();
 }
 

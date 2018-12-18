@@ -72,6 +72,10 @@ class FocuserState
   const static std::unordered_map< CommandParser::Command, bool, EnumHash > 
       doesCommandInterrupt;
 
+  using ptrToMember = unsigned int ( FocuserState::*) ( void );
+
+  static const std::unordered_map< State, ptrToMember, EnumHash > stateImpl;
+
   private:
 
   class COMMAND_PACKET {
@@ -86,7 +90,7 @@ class FocuserState
   void processCommand( CommandParser::CommandPacket cp );
 
   /// @brief Wait for commands from the network interface
-  unsigned int stateAcceptCommands( void );  
+  unsigned int stateAcceptCommands( void ); 
   /// @brief Move to position @arg0
   unsigned int stateMoving( void );
   /// @brief Move the stepper @arg0 steps 
@@ -102,6 +106,7 @@ class FocuserState
   unsigned int state_stop_at_home( void );
   unsigned int state_low_power( void );
   unsigned int state_awaken( void );
+  unsigned int stateError( void );
 
   COMMAND_PACKET& top( void );
 

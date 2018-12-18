@@ -71,7 +71,19 @@ TEST( FOCUSER_STATE, allCommandsHaveInterruptStatus)
       FocuserState::doesCommandInterrupt.find( c ),
       FocuserState::doesCommandInterrupt.end());
   }
+}
+ 
+TEST( FOCUSER_STATE, allCommandsHaveImplementations )
+{
+  for ( FocuserState::State s = FocuserState::State::START_OF_STATES;
+        s < FocuserState::State::END_OF_STATES; ++s )
+  {
+    ASSERT_NE( 
+      FocuserState::stateImpl.find( s ),
+      FocuserState::stateImpl.end());
+  }
 } 
+
 
 TEST( FOCUSER_STATE, allStatesHaveDebugNames )
 {
