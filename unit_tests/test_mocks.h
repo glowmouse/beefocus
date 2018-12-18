@@ -1,6 +1,7 @@
 #include <iostream>
 #include <memory>
 #include <unistd.h>
+#include <gtest/gtest.h>
 
 #include "focuser_state.h"
 #include "hardware_interface.h"
@@ -168,34 +169,34 @@ class DebugInterfaceIgnoreMock: public DebugInterface
   }
 };
 
-class HWOutEvent
+class HWEvent
 {
   public:
 
   enum class Type
   {
-    DIGITAL_WRITE,
+    DIGITAL_IO,
     PIN_MODE,
   };
 
-  HWOutEvent( HWI::Pin pinRHS, HWI::PinState stateRHS ) :
+  HWEvent( HWI::Pin pinRHS, HWI::PinState stateRHS ) :
     pin{ pinRHS },
     state{ stateRHS },
-    type{ Type::DIGITAL_WRITE }
+    type{ Type::DIGITAL_IO }
   {
   }
  
-  HWOutEvent( HWI::Pin pinRHS, HWI::PinIOMode modeRHS) :
+  HWEvent( HWI::Pin pinRHS, HWI::PinIOMode modeRHS) :
     pin{ pinRHS },
     mode{ modeRHS },
     type{ Type::PIN_MODE }
   {
   }
  
-  bool operator==( const HWOutEvent& rhs ) const 
+  bool operator==( const HWEvent& rhs ) const 
   {
     return ( pin == rhs.pin ) &&
-      type == Type::DIGITAL_WRITE ? ( state == rhs.state ) :
+      type == Type::DIGITAL_IO ? ( state == rhs.state ) :
         ( mode == rhs.mode ); 
   }
 
@@ -207,12 +208,12 @@ class HWOutEvent
   };
 };
 
-inline std::ostream& operator<<(std::ostream& stream, const HWOutEvent& event) 
+inline std::ostream& operator<<(std::ostream& stream, const HWEvent& event) 
 {
   stream << "{ PIN: " << HWI::pinNames.at( event.pin );
-  if ( event.type ==  HWOutEvent::Type::DIGITAL_WRITE )
+  if ( event.type ==  HWEvent::Type::DIGITAL_IO )
   {
-    stream << " WRITE: " << HWI::pinStateNames.at(event.state); 
+    stream << " IO:    " << HWI::pinStateNames.at(event.state); 
   }
   else
   {
@@ -222,42 +223,63 @@ inline std::ostream& operator<<(std::ostream& stream, const HWOutEvent& event)
   return stream;
 }
 
-using HWOutTimedEvent = TimedEvent<HWOutEvent>; 
-using HWOutTimedEvents = std::vector<HWOutTimedEvent>;
+using HWTimedEvent = TimedEvent<HWEvent>; 
+using HWTimedEvents = std::vector<HWTimedEvent>;
 
 class HWMockTimed: public HWI
 {
   public:
 
-  HWMockTimed() : time{ 0 }
+  HWMockTimed( const HWTimedEvents& hwIn ) : 
+      time{ 0 }, 
+      inEvents{ hwIn },
+      nextInputEvent{inEvents.begin()}
   {
+    advanceTime(0);
   }
+  HWMockTimed() = delete;
+  HWMockTimed( const HWMockTimed& ) = delete;
     
   void DigitalWrite( Pin pin, PinState state ) override
   {
-    outEvents.emplace_back( HWOutTimedEvent( time, HWOutEvent( pin, state ))); 
+    outEvents.emplace_back( HWTimedEvent( time, HWEvent( pin, state ))); 
   }
 
   void PinMode( Pin pin, PinIOMode mode ) override
   {
-    outEvents.emplace_back( HWOutTimedEvent( time, HWOutEvent( pin, mode ))); 
+    outEvents.emplace_back( HWTimedEvent( time, HWEvent( pin, mode ))); 
   }
 
   void advanceTime( int ticks )
   {
     time+=ticks;
+
+    while ( nextInputEvent != inEvents.end() && 
+            nextInputEvent->time <= time )
+    {
+      const HWEvent& event = nextInputEvent->event;
+      assert( event.type == HWEvent::Type::DIGITAL_IO );
+      inputStates[ event.pin ] = event.state;
+      ++nextInputEvent;
+    }
   }
 
   PinState DigitalRead( Pin pin ) override
   {
+    assert( inputStates.find( pin ) != inputStates.end() );
+    return inputStates.at( pin );
   }
 
-  const HWOutTimedEvents& getOutEvents() const { return outEvents; } 
+  const HWTimedEvents& getOutEvents() const { return outEvents; } 
 
   private:
 
   int time;
-  HWOutTimedEvents outEvents;
+  HWTimedEvents outEvents;
+  HWTimedEvents inEvents;
+  HWTimedEvents::iterator nextInputEvent;
+
+  std::unordered_map<Pin,PinState,EnumHash> inputStates;
 };
 
 
