@@ -25,7 +25,7 @@ class WifiConnectionEthernet: public NetConnection {
     reset();
   }
 
-  void reset( void ) override
+  void reset( void ) 
   { 
     m_currentIncomingBuffer=0;
     m_incomingBuffers[0].resize(0);
@@ -81,7 +81,7 @@ class WifiInterfaceEthernet: public NetInterface {
     reset();
   }
 
-  void reset( void ) override;
+  void reset( void );
   void setup( DebugInterface& debugLog ) override;
 
   bool getString( WifiDebugOstream &log, std::string& string ) override;
