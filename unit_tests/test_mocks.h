@@ -95,16 +95,6 @@ class NetMockSimpleTimed: public NetInterface
   int actualTime;
 };
 
-
-class DebugInterfaceIgnoreMock: public DebugInterface
-{
-  public:
-  void rawWrite( const char* bytes, std::size_t numBytes ) override
-  {
-    // Do Nothing;
-  }
-};
-
 class HWMockTimed: public HWI
 {
   public:
