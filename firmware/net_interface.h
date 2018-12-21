@@ -22,7 +22,6 @@ class NetInterface {
   {
   }
 
-  virtual void reset( void ) = 0;
   virtual void setup( DebugInterface &debugLog ) = 0;
 
   virtual bool getString( WifiDebugOstream &log, std::string& string ) = 0;

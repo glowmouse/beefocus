@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 
-#include "wifi_secrets.h"
 #include "hardware_interface.h"
+#include "wifi_secrets.h"
 
 /// @brief Keep developers from committing their passwords
 TEST( DEVICE, should_not_leak_wifi_secrets )

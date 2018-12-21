@@ -11,7 +11,6 @@ std::unique_ptr<FocuserState> focuser;
 class NetInterfaceSim: public NetInterface {
   public:
 
-  void reset() override {}
   void setup( DebugInterface& debugLog ) override
   {
     debugLog << "Simulator Net Interface Init\n";
