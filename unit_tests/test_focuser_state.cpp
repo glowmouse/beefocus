@@ -1,10 +1,10 @@
 #include <gtest/gtest.h>
 
+#include "test_mock_hardware.h"
 #include "test_mock_net.h"
 #include "test_mock_debug.h"
 #include "test_mock_event.h"
 #include "focuser_state.h"
-#include "test_mocks.h"
 
 HWTimedEvents goldenHWStart = {
   {  0, { HWI::Pin::STEP,       HWI::PinIOMode::M_OUTPUT     } },

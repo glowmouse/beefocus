@@ -1,10 +1,8 @@
-#include <iostream>
-#include <memory>
-#include <unistd.h>
-#include <gtest/gtest.h>
+#ifndef __TEST_MOCK_HARDWARE__
+#define __TEST_MOCK_HARDWARE__
 
-#include "focuser_state.h"
 #include "hardware_interface.h"
+#include "test_mock_event.h"
 
 class HWMockTimed: public HWI
 {
@@ -61,4 +59,5 @@ class HWMockTimed: public HWI
   std::unordered_map<Pin,PinState,EnumHash> inputStates;
 };
 
+#endif
 
