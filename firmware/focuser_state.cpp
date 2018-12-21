@@ -25,10 +25,8 @@ const std::unordered_map<FocuserState::State,const std::string,EnumHash>
 const std::unordered_map<CommandParser::Command,bool,EnumHash> 
   FocuserState::doesCommandInterrupt= 
 {
-  { CommandParser::Command::Ping,          false  },
   { CommandParser::Command::Abort,         true   },
   { CommandParser::Command::Home,          true   },
-  { CommandParser::Command::Status,        false  },
   { CommandParser::Command::PStatus,       false  },
   { CommandParser::Command::SStatus,       false  },
   { CommandParser::Command::ABSPos,        true   },
@@ -56,7 +54,8 @@ FocuserState::FocuserState(
     std::unique_ptr<NetInterface> netArg,
     std::unique_ptr<HWI> hardwareArg,
     std::unique_ptr<DebugInterface> debugArg
-)
+) : doStepsMax{ 50 },
+    focuserPosition{ 0 }
 {
   std::swap( net, netArg );
   std::swap( hardware, hardwareArg );
@@ -68,8 +67,6 @@ FocuserState::FocuserState(
   // Bring up the interface to the controlling computer
 
   net->setup( log );
-
-  focuserPosition = 0;
 
   // No setup right now,  so accept commands
   
@@ -118,19 +115,6 @@ FocuserState::COMMAND_PACKET& FocuserState::top( void )
 void FocuserState::processCommand( CommandParser::CommandPacket cp )
 {
   DebugInterface& log = *debugLog;
-
-  // Status was originally before abort.  TODO, refactor this mess.
-
-  if ( cp.command == CommandParser::Command::Status )
-  {
-    State state = top().state;
-    int arg0 = top().arg0;
-
-    log << "Processing pstatus request\n";
-    *net << "Position: " << focuserPosition << "\n";
-    *net << "State: " << stateNames.at(state) << " " << arg0 << "\n";
-    return;
-  }
 
   if ( cp.command == CommandParser::Command::PStatus )
   {
@@ -285,10 +269,23 @@ unsigned int FocuserState::stateMoving()
     return 0;    
   }
 
+  // Check for new commands
+  DebugInterface& debug= *debugLog;
+  auto cp = CommandParser::checkForCommands( debug, *net );
+
+  if ( cp.command != CommandParser::Command::NoCommand )
+  {
+    processCommand( cp );
+    if ( doesCommandInterrupt.at( cp.command ))
+    {
+      return 0;
+    }
+  }
+
   const int  steps        = top().arg0 - focuserPosition;
   const bool nextDir      = steps > 0;    // TODO, enum, !bool
   const int  absSteps     = steps > 0 ? steps : -steps;
-  const int  clippedSteps = absSteps > 50 ? 50 : absSteps;
+  const int  clippedSteps = absSteps > doStepsMax ? doStepsMax : absSteps;
 
   pushState( State::DO_STEPS, clippedSteps );
   pushState( State::SET_DIR,  nextDir );

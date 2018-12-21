@@ -28,10 +28,8 @@ class CommandTemplate
 
 const std::vector<CommandTemplate> commandTemplates =
 {
-  { "ping",       Command::Ping,     HasArg::No  },
   { "abort",      Command::Abort,    HasArg::No  },
   { "home",       Command::Home,     HasArg::No  },
-  { "status",     Command::Status,   HasArg::No  },
   { "pstatus",    Command::PStatus,  HasArg::No  },
   { "sstatus",    Command::SStatus,  HasArg::No  },
   { "abs_pos",    Command::ABSPos,   HasArg::Yes },

@@ -130,7 +130,7 @@ TEST( FOCUSER_STATE, init_Focuser )
 TEST( FOCUSER_STATE, run_status)
 {
   TimedStringEvents netInput = {
-    { 0, "status" },      // status  @ Time 0
+    { 0, "sstatus" },     // status  @ Time 0
     { 50, "pstatus" },    // pstatus @ Time 50 ms
     { 70, "sstatus" }     // sstatus @ Time 70 ms
   };
@@ -144,7 +144,6 @@ TEST( FOCUSER_STATE, run_status)
   simulateFocuser( focuser.get(), wifiAlias, hwMockAlias, 1000 );
 
   TimedStringEvents goldenNet = {
-    {  0, "Position: 0" },
     {  0, "State: ACCEPTING_COMMANDS 0"},
     { 50, "Position: 0" },
     { 70, "State: ACCEPTING_COMMANDS 0"},
@@ -319,5 +318,42 @@ TEST( FOCUSER_STATE, home_focuser )
   ASSERT_EQ( goldenHW, hwMockAlias->getOutEvents() );
 }
 
+TEST( FOCUSER_STATE, pstatus_while_moving )
+{
+  TimedStringEvents netInput = {
+    { 10, "abs_pos=5" },        // Start the focuser moving
+    { 13, "sstatus" },          // Ask for status while moving
+    { 15, "pstatus" },          // Ask for status while moving
+  };
 
+  HWTimedEvents hwInput;
+
+  NetMockSimpleTimed* wifiAlias;
+  HWMockTimed* hwMockAlias;
+  auto focuser = make_focuser( netInput, hwInput, wifiAlias, hwMockAlias ); 
+  focuser->setMaxStepsToDoAtOnce( 2 );
+  simulateFocuser( focuser.get(), wifiAlias, hwMockAlias, 1000 );
+
+  HWTimedEvents goldenHW = {
+    { 10, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 11, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 12, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 13, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 14, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 15, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 16, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 17, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 18, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 19, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+  };
+
+  goldenHW.insert( goldenHW.begin(), goldenHWStart.begin(), goldenHWStart.end());
+  TimedStringEvents goldenNet = {
+    { 14, "State: MOVING 5" },
+    { 18, "Position: 4" }
+  };
+
+  ASSERT_EQ( goldenNet, testFilterComments(wifiAlias->getOutput() ));
+  ASSERT_EQ( goldenHW, hwMockAlias->getOutEvents() );
+}
 

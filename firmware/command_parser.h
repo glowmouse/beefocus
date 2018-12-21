@@ -12,18 +12,16 @@ namespace CommandParser {
   int process_int( const std::string& string,  size_t pos );
 
   enum class Command {
-    StartOfCommands = 0,
-    Ping = 0,
-    Abort,
-    Home,
-    Status,
-    PStatus,
-    SStatus,
-    ABSPos,
-    Sleep,
-    Wake,
-    NoCommand,
-    EndOfCommands
+    StartOfCommands = 0,  ///<  Start of the command list
+    Abort = 0,            ///<  Abort a move
+    Home,                 ///<  Rewind until the home pin is active
+    PStatus,              ///<  Return Position to Caller
+    SStatus,              ///<  Return the State (i.e., "moving", "homing" )
+    ABSPos,               ///<  Move to an absolute position
+    Sleep,                ///<  Enter Sleep Mode
+    Wake,                 ///<  Wake from sleep mode
+    NoCommand,            ///<  No command was specified.
+    EndOfCommands         ///<  End of the comand list.
   };
 
   constexpr int NoArg = -1;
