@@ -28,9 +28,13 @@ Why start a new project?
   The goal is to make builds as inexpensive and easy as possible.
 - This project is a good personal learning experience.
 
+Code Documentation
+------------------
+
+Documentation can be found at https://glowmouse.github.io/beefocus/ 
+
 Status
 ------
-
 
 - I have a physical prototype. It's been field tested and
   it worked almost flawlessly.  The issues that I want to fix before
