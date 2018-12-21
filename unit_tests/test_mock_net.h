@@ -17,15 +17,16 @@ class NetMockSimpleTimed: public NetInterface
   }
 
   NetMockSimpleTimed( const char* string )
-    : actualTime{0},
+    : inputEvents{ TimedStringEvents( {{ 0, std::string( string ) }}) },
+      actualTime{0},
+      nextInputEvent{inputEvents.begin()},
       lastOutputEvent{outputEvents.end()}
   {
-    inputEvents.push_back( { 0, std::string( string ) } );
-    nextInputEvent = inputEvents.begin();
   }
 
   NetMockSimpleTimed()
-    : actualTime{0},
+    : inputEvents{},
+      actualTime{0},
       nextInputEvent{inputEvents.begin()},
       lastOutputEvent{outputEvents.end()}
   {
@@ -86,8 +87,8 @@ class NetMockSimpleTimed: public NetInterface
   }
 
   private:
-  TimedStringEvents inputEvents;
-  TimedStringEvents::iterator nextInputEvent;
+  const TimedStringEvents inputEvents;
+  TimedStringEvents::const_iterator nextInputEvent;
   TimedStringEvents outputEvents;
   TimedStringEvents::iterator lastOutputEvent; 
   int actualTime;
