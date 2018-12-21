@@ -1,0 +1,8 @@
+digraph "/home/andrew/src/beefocus/unit_tests" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  dir_e7c608ee7a349a990cecd74a7d13d4b1 [shape=box, label="unit_tests", style="filled", fillcolor="#eeeeff", pencolor="black", URL="dir_e7c608ee7a349a990cecd74a7d13d4b1.html"];
+  dir_d9edf6c004b4a7ff14fe9ae7a92214ee [shape=box label="firmware" URL="dir_d9edf6c004b4a7ff14fe9ae7a92214ee.html"];
+  dir_e7c608ee7a349a990cecd74a7d13d4b1->dir_d9edf6c004b4a7ff14fe9ae7a92214ee [headlabel="8", labeldistance=1.5 headhref="dir_000002_000000.html"];
+}

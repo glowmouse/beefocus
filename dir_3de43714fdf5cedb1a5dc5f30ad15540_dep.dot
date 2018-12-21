@@ -1,0 +1,8 @@
+digraph "/home/andrew/src/beefocus/firmware_sim" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  dir_3de43714fdf5cedb1a5dc5f30ad15540 [shape=box, label="firmware_sim", style="filled", fillcolor="#eeeeff", pencolor="black", URL="dir_3de43714fdf5cedb1a5dc5f30ad15540.html"];
+  dir_d9edf6c004b4a7ff14fe9ae7a92214ee [shape=box label="firmware" URL="dir_d9edf6c004b4a7ff14fe9ae7a92214ee.html"];
+  dir_3de43714fdf5cedb1a5dc5f30ad15540->dir_d9edf6c004b4a7ff14fe9ae7a92214ee [headlabel="2", labeldistance=1.5 headhref="dir_000001_000000.html"];
+}
