@@ -293,20 +293,20 @@ TEST( FOCUSER_STATE, home_focuser )
 
   HWTimedEvents hwInput= {
     { 0,  { HWI::Pin::HOME,        HWI::PinState::HOME_INACTIVE} },
-    { 16, { HWI::Pin::HOME,        HWI::PinState::HOME_ACTIVE } },
+    { 18, { HWI::Pin::HOME,        HWI::PinState::HOME_ACTIVE } },
   }; 
 
   NetMockSimpleTimed* wifiAlias;
   HWMockTimed* hwMockAlias;
   auto focuser = make_focuser( netInput, hwInput, wifiAlias, hwMockAlias ); 
-  focuser->setMaxStepsToDoAtOnce( 3 );
+  focuser->setMaxStepsToDoAtOnce( 2 );
   simulateFocuser( focuser.get(), wifiAlias, hwMockAlias, 1000 );
 
   TimedStringEvents goldenNet = {
     {  0, "Homed: NO" },
-    { 15, "Homed: NO" },
-    { 27, "Homed: YES" },
-    { 40, "Homed: YES" },
+    { 13, "Homed: NO" },
+    { 29, "Homed: YES" },
+    { 42, "Homed: YES" },
   };
 
   HWTimedEvents goldenHW = {
@@ -317,9 +317,11 @@ TEST( FOCUSER_STATE, home_focuser )
     { 14, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
     { 15, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
     { 16, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 37, { HWI::Pin::DIR,        HWI::PinState::DIR_FORWARD} },
-    { 38, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 39, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 17, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 18, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 39, { HWI::Pin::DIR,        HWI::PinState::DIR_FORWARD} },
+    { 40, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 41, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
   };
 
   goldenHW.insert( goldenHW.begin(), goldenHWStart.begin(), goldenHWStart.end());

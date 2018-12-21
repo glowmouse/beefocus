@@ -55,10 +55,12 @@ FocuserState::FocuserState(
     std::unique_ptr<NetInterface> netArg,
     std::unique_ptr<HWI> hardwareArg,
     std::unique_ptr<DebugInterface> debugArg
-) : doStepsMax{ 50 },
-    focuserPosition{ 0 },
-    isHomed{ false }
+)
 {
+  doStepsMax = 50; 
+  focuserPosition = 0;
+  isHomed = false;
+
   std::swap( net, netArg );
   std::swap( hardware, hardwareArg );
   std::swap( debugLog, debugArg );
@@ -137,9 +139,6 @@ void FocuserState::processCommand( CommandParser::CommandPacket cp )
 
   if ( cp.command == CommandParser::Command::HStatus )
   {
-    State state = top().state;
-    int arg0 = top().arg0;
-
     log << "Processing hstatus request\n";
     *net << "Homed: " << (isHomed ? "YES" : "NO" ) << "\n";
     return;

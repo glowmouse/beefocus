@@ -149,7 +149,7 @@ class FocuserState
   std::vector< COMMAND_PACKET > stateStack;
 
   /// @brief The number of steps to move before we check for new status
-  unsigned doStepsMax;
+  int doStepsMax;
 
   /// @brief Is the focuser homed?
   bool isHomed;
