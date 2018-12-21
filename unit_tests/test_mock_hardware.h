@@ -25,7 +25,7 @@
 ///     output matches a golden result.
 /// - Simulate Input.
 ///     On class construction, the caller can specify a series of input
-///     events and they time those events occur at.  i.e.,  the caller can
+///     events and the time those events occur at.  i.e.,  the caller can
 ///     see "at time 20ms the HOME input will change state to active"
 /// 
 class HWMockTimed: public HWI
@@ -141,7 +141,7 @@ class HWMockTimed: public HWI
   ///
   /// Example:
   ///
-  ///   @code
+  /// @code
   ///   HWTimedEvents hwInput;  // No input
   ///   HWMockTimed hw( hwInput ) : 
   ///   // Set Stepper Pin to Output
@@ -175,7 +175,7 @@ class HWMockTimed: public HWI
   int time;
   /// @brief  Recorded output events
   HWTimedEvents outEvents;
-  /// @brief  Recorded input events
+  /// @brief  Input events to be sent back to the caller
   const HWTimedEvents inEvents;
   /// @brief  Next input event that needs to be processed.
   HWTimedEvents::const_iterator nextInputEvent;

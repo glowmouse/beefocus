@@ -1,10 +1,10 @@
 #include <gtest/gtest.h>
 
-#include "test_mock_hardware.h"
-#include "test_mock_net.h"
+#include "focuser_state.h"
 #include "test_mock_debug.h"
 #include "test_mock_event.h"
-#include "focuser_state.h"
+#include "test_mock_hardware.h"
+#include "test_mock_net.h"
 
 HWTimedEvents goldenHWStart = {
   {  0, { HWI::Pin::STEP,       HWI::PinIOMode::M_OUTPUT     } },
@@ -150,7 +150,7 @@ TEST( FOCUSER_STATE, run_status)
     { 70, "State: ACCEPTING_COMMANDS 0"},
   };
 
-  ASSERT_EQ( goldenNet, wifiAlias->getFilteredOutput() );
+  ASSERT_EQ( goldenNet, testFilterComments(wifiAlias->getOutput() ));
   ASSERT_EQ( goldenHWStart, hwMockAlias->getOutEvents() );
 }
 
@@ -181,7 +181,7 @@ TEST( FOCUSER_STATE, run_abs_pos )
   };
   goldenHW.insert( goldenHW.begin(), goldenHWStart.begin(), goldenHWStart.end());
 
-  ASSERT_EQ( goldenNet, wifiAlias->getFilteredOutput() );
+  ASSERT_EQ( goldenNet, testFilterComments(wifiAlias->getOutput() ));
   ASSERT_EQ( goldenHW, hwMockAlias->getOutEvents() );
 }
 
@@ -226,7 +226,7 @@ TEST( FOCUSER_STATE, run_abs_pos_double_forward )
   };
   goldenHW.insert( goldenHW.begin(), goldenHWStart.begin(), goldenHWStart.end());
 
-  ASSERT_EQ( goldenNet, wifiAlias->getFilteredOutput() );
+  ASSERT_EQ( goldenNet, testFilterComments(wifiAlias->getOutput() ));
   ASSERT_EQ( goldenHW, hwMockAlias->getOutEvents() );
 }
 
@@ -277,7 +277,7 @@ TEST( FOCUSER_STATE, run_abs_pos_with_backlash_correction )
   };
   goldenHW.insert( goldenHW.begin(), goldenHWStart.begin(), goldenHWStart.end());
 
-  ASSERT_EQ( goldenNet, wifiAlias->getFilteredOutput() );
+  ASSERT_EQ( goldenNet, testFilterComments(wifiAlias->getOutput() ));
   ASSERT_EQ( goldenHW, hwMockAlias->getOutEvents() );
 }
 
@@ -315,7 +315,7 @@ TEST( FOCUSER_STATE, home_focuser )
 
   goldenHW.insert( goldenHW.begin(), goldenHWStart.begin(), goldenHWStart.end());
 
-  ASSERT_EQ( goldenNet, wifiAlias->getFilteredOutput() );
+  ASSERT_EQ( goldenNet, testFilterComments(wifiAlias->getOutput() ));
   ASSERT_EQ( goldenHW, hwMockAlias->getOutEvents() );
 }
 
