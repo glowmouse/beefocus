@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include "test_mock_event.h"
 #include "focuser_state.h"
 #include "test_mocks.h"
 

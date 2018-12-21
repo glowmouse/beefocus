@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include "test_mock_event.h"
 #include "command_parser.h"
 #include "test_mocks.h"
 
