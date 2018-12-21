@@ -29,6 +29,7 @@ const std::unordered_map<CommandParser::Command,bool,EnumHash>
   { CommandParser::Command::Home,          true   },
   { CommandParser::Command::PStatus,       false  },
   { CommandParser::Command::SStatus,       false  },
+  { CommandParser::Command::HStatus,       false  },
   { CommandParser::Command::ABSPos,        true   },
   { CommandParser::Command::Sleep,         true   },
   { CommandParser::Command::Wake,          true   },
@@ -55,7 +56,8 @@ FocuserState::FocuserState(
     std::unique_ptr<HWI> hardwareArg,
     std::unique_ptr<DebugInterface> debugArg
 ) : doStepsMax{ 50 },
-    focuserPosition{ 0 }
+    focuserPosition{ 0 },
+    isHomed{ false }
 {
   std::swap( net, netArg );
   std::swap( hardware, hardwareArg );
@@ -130,6 +132,16 @@ void FocuserState::processCommand( CommandParser::CommandPacket cp )
 
     log << "Processing sstatus request\n";
     *net << "State: " << stateNames.at(state) << " " << arg0 << "\n";
+    return;
+  }
+
+  if ( cp.command == CommandParser::Command::HStatus )
+  {
+    State state = top().state;
+    int arg0 = top().arg0;
+
+    log << "Processing hstatus request\n";
+    *net << "Homed: " << (isHomed ? "YES" : "NO" ) << "\n";
     return;
   }
 
@@ -296,18 +308,34 @@ unsigned int FocuserState::state_stop_at_home()
 {
   WifiDebugOstream log( debugLog.get(), net.get() );
 
-  if ( (focuserPosition % 100) == 0 )
-  {
-    log << "Homing " << focuserPosition << "\n";
-  }
   if ( hardware->DigitalRead( HWI::Pin::HOME ) == HWI::PinState::HOME_ACTIVE ) 
   {
     log << "Hit home at position " << focuserPosition << "\n";
     log << "Resetting position to 0\n";
     focuserPosition = 0;
+    isHomed = true;
     stateStack.pop_back();
     return 0;        
   }
+
+  if ( (focuserPosition % doStepsMax) == 0 )
+  {
+    log << "Homing " << focuserPosition << "\n";
+
+    // Check for new commands
+    DebugInterface& debug= *debugLog;
+    auto cp = CommandParser::checkForCommands( debug, *net );
+
+    if ( cp.command != CommandParser::Command::NoCommand )
+    {
+      processCommand( cp );
+      if ( doesCommandInterrupt.at( cp.command ))
+      {
+        return 0;
+      }
+    }
+  }
+
   pushState( State::DO_STEPS, 1 );
   pushState( State::SET_DIR, 0 );
   focuserPosition--;

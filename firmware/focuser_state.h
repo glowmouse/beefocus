@@ -148,8 +148,11 @@ class FocuserState
   /// @brief The focuser's state
   std::vector< COMMAND_PACKET > stateStack;
 
-  /// @brief 
+  /// @brief The number of steps to move before we check for new status
   unsigned doStepsMax;
+
+  /// @brief Is the focuser homed?
+  bool isHomed;
 };
 
 /// @brief Increment operator for State enum

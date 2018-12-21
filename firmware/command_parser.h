@@ -16,7 +16,8 @@ namespace CommandParser {
     Abort = 0,            ///<  Abort a move
     Home,                 ///<  Rewind until the home pin is active
     PStatus,              ///<  Return Position to Caller
-    SStatus,              ///<  Return the State (i.e., "moving", "homing" )
+    SStatus,              ///<  Return the State (i.e., "moving", "homing")
+    HStatus,              ///<  Return Home Status (i.e, "homed" or "!homed")
     ABSPos,               ///<  Move to an absolute position
     Sleep,                ///<  Enter Sleep Mode
     Wake,                 ///<  Wake from sleep mode

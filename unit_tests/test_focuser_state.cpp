@@ -283,8 +283,12 @@ TEST( FOCUSER_STATE, run_abs_pos_with_backlash_correction )
 TEST( FOCUSER_STATE, home_focuser )
 {
   TimedStringEvents netInput = {
+    { 0,  "hstatus" },        // Make sure we're not homed
     { 10, "home" },           // issue home command
-    { 30, "abs_pos=1" },           // issue home command
+    { 11, "hstatus" },        // Should not be homed during homing
+    { 20, "hstatus" },        // Should now be homed
+    { 30, "abs_pos=1" },      // Move back to 1
+    { 40, "hstatus" },        // Should still be homed.
   };
 
   HWTimedEvents hwInput= {
@@ -295,9 +299,15 @@ TEST( FOCUSER_STATE, home_focuser )
   NetMockSimpleTimed* wifiAlias;
   HWMockTimed* hwMockAlias;
   auto focuser = make_focuser( netInput, hwInput, wifiAlias, hwMockAlias ); 
+  focuser->setMaxStepsToDoAtOnce( 3 );
   simulateFocuser( focuser.get(), wifiAlias, hwMockAlias, 1000 );
 
-  TimedStringEvents goldenNet;
+  TimedStringEvents goldenNet = {
+    {  0, "Homed: NO" },
+    { 15, "Homed: NO" },
+    { 27, "Homed: YES" },
+    { 40, "Homed: YES" },
+  };
 
   HWTimedEvents goldenHW = {
     { 10, { HWI::Pin::DIR,        HWI::PinState::DIR_BACKWARD } },
