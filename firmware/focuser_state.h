@@ -9,14 +9,63 @@
 #include "hardware_interface.h"
 #include "command_parser.h"
 
+///
+/// @brief Focuser Namespace
+/// 
+/// This is a collection of code that has to do with the focuser's
+/// state.  The code in this namespace 
+///
+/// - Initializes the hardware
+/// - Moves the stepper motor
+/// - Accepts input from the network
+///
+/// \b Concepts
+///
+/// - <b> Basic Flow: </b>
+///       Callers run the focuser by repeatly calling Focuser::loop; this 
+///       is simular to the basic Arduino loop.  Focuser::loop returns the 
+///       amount of time (in micro-seconds) it would like the caller to wait 
+///       before invoking Focuser::loop again.
+/// - <b> Net Interface: </b>
+///       The Net Interface (NetInterface) is where the focuser gets input 
+///       and sends output to.  Normally that's the WIFI connection to the 
+///       host computer, but there's a Mock Network Interface that's used 
+///       for testing.
+/// - <b> Hardware Interface: </b>
+///       The Hardware Interface (HWI) is how the focuser interacts with
+///       the actual hardware.  Normally this as the ESP8266 itself, but
+///       there's a Mock Hardware Interface that's used for testing.
+/// - <b> Debug Interface: </b>
+///       The Debug Interface (DebugInterface) can be used to send debug
+///       messages to a host computer.  It's a developer only interface.
+/// - <b> Commands: </b>
+///       A command is an instruction that comes from the the comes from the 
+///       the Net Interface.  i.e., "What is the focuser position",  
+///       "Move the focuser to this position".  The list of valid commands 
+///       is declared in CommandParser::Command
+/// - <b> Invidivual State: </b>
+///       The Focuser is most similar to a state machine.  Focuser::loop
+///       just runs the handler for the current state. For example, if the
+///       current state is "moving to a new position" the focuser might
+///       figure out where it is right now, what direction it has to move,
+///       and how many steps it needs to take to get to that positon.
+/// - <b> State Stack: </b>
+///       The Focuser actually has a stack of states.  The stack is useful
+///       because it's sometimes easier to describe a complex operation
+///       using simpler operations.  i.e., you can move the stepper motor
+///       one step by running State::STEPPER_ACTIVE_AND_WAIT and then
+///       State::STEPPER_INACTIVE_AND_WAIT.  A move can be done by setting
+///       a direction using State::SET_DIR and then using State::DO_STEPS
+///       to take multiple steps.
+///
 namespace FS {
 
 /// @brief Focuser's State Enum
 ///
-/// TODO - describe state machine operation in one place, probably
-///        in the Focuser class description
+/// @see FS Namespace for high level description.
 ///
-enum class State {
+enum class State 
+{
   START_OF_STATES = 0,        ///< Start of States
   ACCEPT_COMMANDS = 0,        ///< Accepting commands from the net interface
   DO_STEPS,                   ///< Doing n Stepper Motor Steps
@@ -29,66 +78,62 @@ enum class State {
   END_OF_STATES               ///< End of States
 };
 
-/// @brief Increment operator for State enum
-inline State& operator++( State &s )
-{
-  return BeeFocus::advance< State, State::END_OF_STATES>(s);
-}
-
-using StateToString = std::unordered_map< State, const std::string, EnumHash >;
-using CommandToBool = std::unordered_map< CommandParser::Command, bool, EnumHash >;
-
-extern const StateToString stateNames;
 ///
-/// @brief Does a particular incoming command interrupt the current state
+/// @brief Stack of FS:States.
 ///
-/// Example 1.  A "Status" Command will not interrupt a move sequence
-/// Example 2.  A "Home" Command will interrupt a focuser's move sequence
+/// Invariants:
 ///
-extern const CommandToBool doesCommandInterrupt;
-
-class CStack {
+/// - In normal operation, the stack's bottom is always an ACCEPT_COMMANDS state
+/// - After construction, the stack can never be empty
+/// - If a pop operation leaves the stack empty an ERROR_STATE is pushed
+/// 
+class StateStack {
   public:
 
-  CStack()
+  StateStack()
   {
-    reset();
-  }
-
-  void reset( void )
-  {
-    while ( !stateStack.empty() )
-    {  
-      pop();
-    }
     push( State::ACCEPT_COMMANDS, 0 );
   }
 
+  /// @brief Reset the stack to the newly initialized state.
+  void reset( void )
+  {
+    while ( stack.size() > 1 ) pop();
+  }
+
+  /// @brief Get the top state.
   State topState( void )
   {
-    if ( stateStack.empty() )
-    {
-      // bug, should never happen.
-      push( State::ERROR_STATE, __LINE__ ); 
-    }     
-    return stateStack.back().state;
+    return stack.back().state;
   }
-  int& topArg( void )
+
+  /// @brief Get the top state's argumment.
+  int topArg( void )
   {
-    if ( stateStack.empty() )
-    {
-      // bug, should never happen.
-      push( State::ERROR_STATE, __LINE__ ); 
-    }     
-    return stateStack.back().arg0;
+    return stack.back().arg0;
   }
+
+  /// @brief Set the top state's argumment.
+  void topArgSet( int newVal )
+  {
+    stack.back().arg0 = newVal;
+  }
+
+  /// @brief Pop the top entry on the stack.
   void pop( void )
   {
-    stateStack.pop_back();
+    stack.pop_back();
+    if ( stack.empty() ) 
+    {
+      // bug, should never happen.
+      push( State::ERROR_STATE, __LINE__ ); 
+    }
   }
+
+  /// @brief Push a new entry onto the stack
   void push( State new_state, int arg0 = -1  )
   {
-    stateStack.push_back( { new_state, arg0 } );
+    stack.push_back( { new_state, arg0 } );
   }  
   
   private:
@@ -99,7 +144,7 @@ class CStack {
     int arg0; 
   } CommandPacket;
 
-  std::vector< CommandPacket > stateStack;
+  std::vector< CommandPacket > stack;
 };
 
 class Focuser 
@@ -118,13 +163,6 @@ class Focuser
 		std::unique_ptr<DebugInterface> debugArg
 	);
 
-  /// @brief Deleted copy constructor
-  Focuser( const Focuser& other ) = delete;
-  /// @brief Deleted default constructor
-  Focuser() = delete;
-  /// @brief Deleted assignment operator
-  Focuser& operator=( const Focuser& ) = delete;
-  
   ///
   /// @brief Update the Focuser's State
   ///
@@ -136,6 +174,17 @@ class Focuser
   ///
   /// @brief Set the maximum number of steps we'll do at a time
   ///
+  /// @param[in] maxSteps - The maximum number of steps the focuser should
+  ///                       move before we check the network interface for
+  ///                       a new command.
+  ///
+  /// On the ESP8266 checking the network to see if there's anything new
+  /// is a realitively expensive operation - checking often hurts 
+  /// performance.
+  ///
+  /// In unit testing, we want to decrease this number so we'll check for
+  /// interrupts move frequently.
+  /// 
   void setMaxStepsToDoAtOnce( int maxSteps )
   {
     doStepsMax = maxSteps; 
@@ -145,14 +194,19 @@ class Focuser
     void (Focuser::*)( CommandParser::CommandPacket),EnumHash> 
     commandImpl;
 
-
   using ptrToMember = unsigned int ( Focuser::*) ( void );
-
   static const std::unordered_map< State, ptrToMember, EnumHash > stateImpl;
 
   private:
 
-  CStack stateStack;
+  /// @brief Deleted copy constructor
+  Focuser( const Focuser& other ) = delete;
+  /// @brief Deleted default constructor
+  Focuser() = delete;
+  /// @brief Deleted assignment operator
+  Focuser& operator=( const Focuser& ) = delete;
+  
+  StateStack stateStack;
 
   void processCommand( CommandParser::CommandPacket cp );
 
@@ -215,6 +269,28 @@ class Focuser
   /// @brief Is the focuser homed?
   bool isHomed;
 };
+
+/// @brief Increment operator for State enum
+///
+inline State& operator++( State &s )
+{
+  return BeeFocus::advance< State, State::END_OF_STATES>(s);
+}
+
+/// @brief State to std::string Unordered Map
+using StateToString = std::unordered_map< State, const std::string, EnumHash >;
+/// @brief Command to bool Unordered Map
+using CommandToBool = std::unordered_map< CommandParser::Command, bool, EnumHash >;
+
+extern const StateToString stateNames;
+///
+/// @brief Does a particular incoming command interrupt the current state
+///
+/// Example 1.  A "Status" Command will not interrupt a move sequence
+/// Example 2.  A "Home" Command will interrupt a focuser's move sequence
+///
+extern const CommandToBool doesCommandInterrupt;
+
 
 }
 

@@ -223,7 +223,7 @@ unsigned int Focuser::stateDoingSteps()
     stateStack.pop();
     return 0;
   }
-  stateStack.topArg()--;
+  stateStack.topArgSet( stateStack.topArg()-1 );
 
   stateStack.push( State::STEPPER_INACTIVE_AND_WAIT );
   stateStack.push( State::STEPPER_ACTIVE_AND_WAIT );
