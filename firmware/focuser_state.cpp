@@ -32,6 +32,19 @@ const std::unordered_map<CommandParser::Command,bool,EnumHash>
   { CommandParser::Command::NoCommand,     false  },
 };
 
+const std::unordered_map<CommandParser::Command,
+  void (FocuserState::*)( CommandParser::CommandPacket),EnumHash> 
+  FocuserState::commandImpl = 
+{
+  { CommandParser::Command::Abort,      &FocuserState::doAbort },
+  { CommandParser::Command::Home,       &FocuserState::doHome },
+  { CommandParser::Command::PStatus,    &FocuserState::doPStatus },
+  { CommandParser::Command::SStatus,    &FocuserState::doSStatus },
+  { CommandParser::Command::HStatus,    &FocuserState::doHStatus },
+  { CommandParser::Command::ABSPos,     &FocuserState::doABSPos },
+  { CommandParser::Command::NoCommand,  &FocuserState::doError },
+};
+
 const std::unordered_map<FocuserState::State,unsigned int (FocuserState::*)( void ),EnumHash>
   FocuserState::stateImpl =
 {
@@ -68,7 +81,7 @@ FocuserState::FocuserState(
 
   // No setup right now,  so accept commands
   
-  hard_reset_state( State::ACCEPT_COMMANDS, 0 );  
+  pushState( State::ACCEPT_COMMANDS, 0 );
 
   //
   // Set the pin modes 
@@ -91,13 +104,6 @@ FocuserState::FocuserState(
   log << "FocuserState is up\n";
 }
 
-void FocuserState::hard_reset_state( State new_state, int arg )
-{
-    while ( !stateStack.empty() )
-      stateStack.pop_back();
-    stateStack.push_back( COMMAND_PACKET(new_state, arg ) );
-}
-
 void FocuserState::pushState( State new_state, int arg0 )
 {
     stateStack.push_back( COMMAND_PACKET(new_state, arg0 ));
@@ -106,59 +112,73 @@ void FocuserState::pushState( State new_state, int arg0 )
 FocuserState::COMMAND_PACKET& FocuserState::top( void ) 
 {
   if ( stateStack.empty() )
-    hard_reset_state( State::ERROR_STATE, __LINE__ );   // bug,  should never happen :)  
+  {
+    // bug,  should never happen :)  
+    pushState( State::ERROR_STATE, __LINE__ );   
+  }
   return stateStack.back();
+}
+
+void FocuserState::doAbort( CommandParser::CommandPacket cp )
+{
+}
+
+void FocuserState::doHome( CommandParser::CommandPacket cp )
+{
+  pushState( State::STOP_AT_HOME );
+  return;
+}
+
+void FocuserState::doPStatus( CommandParser::CommandPacket cp )
+{
+  DebugInterface& log = *debugLog;
+  log << "Processing pstatus request\n";
+  *net << "Position: " << focuserPosition << "\n";
+}
+
+void FocuserState::doSStatus( CommandParser::CommandPacket cp )
+{
+  DebugInterface& log = *debugLog;
+
+  State state = top().state;
+  int arg0 = top().arg0;
+
+  log << "Processing sstatus request\n";
+  *net << "State: " << stateNames.at(state) << " " << arg0 << "\n";
+  return;
+}
+
+void FocuserState::doHStatus( CommandParser::CommandPacket cp )
+{
+  DebugInterface& log = *debugLog;
+
+  log << "Processing hstatus request\n";
+  *net << "Homed: " << (isHomed ? "YES" : "NO" ) << "\n";
+  return;
+}
+
+void FocuserState::doABSPos( CommandParser::CommandPacket cp )
+{
+  pushState( State::MOVING, cp.optionalArg );
+  int new_position = cp.optionalArg;
+
+  if ( new_position < focuserPosition )
+  {
+    int backtrack = new_position - 500;
+    backtrack = backtrack < 0 ? 0 : backtrack;
+    pushState( State::MOVING, backtrack );
+  }
+}
+
+void FocuserState::doError( CommandParser::CommandPacket cp )
+{
+  pushState( State::ERROR_STATE, __LINE__ );   
 }
 
 void FocuserState::processCommand( CommandParser::CommandPacket cp )
 {
-  DebugInterface& log = *debugLog;
-
-  if ( cp.command == CommandParser::Command::PStatus )
-  {
-    log << "Processing pstatus request\n";
-    *net << "Position: " << focuserPosition << "\n";
-    return;
-  }
-
-  if ( cp.command == CommandParser::Command::SStatus )
-  {
-    State state = top().state;
-    int arg0 = top().arg0;
-
-    log << "Processing sstatus request\n";
-    *net << "State: " << stateNames.at(state) << " " << arg0 << "\n";
-    return;
-  }
-
-  if ( cp.command == CommandParser::Command::HStatus )
-  {
-    log << "Processing hstatus request\n";
-    *net << "Homed: " << (isHomed ? "YES" : "NO" ) << "\n";
-    return;
-  }
-
-  if ( cp.command == CommandParser::Command::Abort ) {
-    // Caller is responsible for unwinding.
-    return;
-  }
-
-  if ( cp.command == CommandParser::Command::Home ) {
-    pushState( State::STOP_AT_HOME );
-    return;
-  }  
-
-  if ( cp.command == CommandParser::Command::ABSPos ) {
-    pushState( State::MOVING, cp.optionalArg );
-    int new_position = cp.optionalArg;
-
-    if ( new_position < focuserPosition )
-    {
-      int backtrack = new_position - 500;
-      backtrack = backtrack < 0 ? 0 : backtrack;
-      pushState( State::MOVING, backtrack );
-    }
-  }
+  auto function = commandImpl.at( cp.command );
+  (this->*function)( cp );
 }
 
 unsigned int FocuserState::stateAcceptCommands()

@@ -76,8 +76,20 @@ TEST( FOCUSER_STATE, allCommandsHaveInterruptStatus)
       FocuserState::doesCommandInterrupt.end());
   }
 }
- 
+
 TEST( FOCUSER_STATE, allCommandsHaveImplementations )
+{
+  for ( CommandParser::Command c = CommandParser::Command::StartOfCommands;
+        c < CommandParser::Command::EndOfCommands; ++c )
+  {
+    ASSERT_NE( 
+      FocuserState::commandImpl.find( c ),
+      FocuserState::commandImpl.end());
+  }
+}
+ 
+ 
+TEST( FOCUSER_STATE, allStatesHaveImplementations )
 {
   for ( FocuserState::State s = FocuserState::State::START_OF_STATES;
         s < FocuserState::State::END_OF_STATES; ++s )
@@ -100,8 +112,6 @@ TEST( FOCUSER_STATE, allStatesHaveDebugNames )
   }
 } 
 
-
-/// @brief Init the focuser
 
 /// @brief Init the focuser
 ///

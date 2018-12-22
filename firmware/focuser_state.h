@@ -78,6 +78,11 @@ class FocuserState
   const static std::unordered_map< CommandParser::Command, bool, EnumHash > 
       doesCommandInterrupt;
 
+  static const std::unordered_map<CommandParser::Command,
+    void (FocuserState::*)( CommandParser::CommandPacket),EnumHash> 
+    commandImpl;
+
+
   using ptrToMember = unsigned int ( FocuserState::*) ( void );
 
   static const std::unordered_map< State, ptrToMember, EnumHash > stateImpl;
@@ -91,7 +96,6 @@ class FocuserState
     int arg0; 
   };
 
-  void hard_reset_state( State, int argument );
   void pushState( State new_state, int arg0 = -1 );
   void processCommand( CommandParser::CommandPacket cp );
 
@@ -111,6 +115,14 @@ class FocuserState
   unsigned int stateStopAtHome( void );
   /// @brief If we land in this state, complain a lot.
   unsigned int stateError( void );
+
+  void doAbort( CommandParser::CommandPacket );
+  void doHome( CommandParser::CommandPacket );
+  void doPStatus( CommandParser::CommandPacket );
+  void doSStatus( CommandParser::CommandPacket );
+  void doHStatus( CommandParser::CommandPacket );
+  void doABSPos( CommandParser::CommandPacket );
+  void doError( CommandParser::CommandPacket );
 
   COMMAND_PACKET& top( void );
 
