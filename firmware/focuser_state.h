@@ -349,8 +349,12 @@ class Focuser
 
   /// @brief Focuser uptime in MS
   unsigned int time;
+
   /// @brief For computing time in Focuser::loop
   unsigned int uSecRemainder;
+
+  /// @brief Time the last command that could have caused an interrupt happened
+  unsigned int timeLastInterruptingCommandOccured;
 };
 
 /// @brief Increment operator for State enum

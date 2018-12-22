@@ -41,8 +41,11 @@ std::unique_ptr<FS::Focuser> make_focuser(
   // Create a standard set of timing parameters for unit tests.
 
   const FS::TimingParams testTimingParams( 
-    10,         // Epoch to check for new commands on 
-    2           // Maximum steps to take before checking for interrupts
+    10,         // 10ms Epoch to check for new commands on 
+    2,          // Maximum steps to take before checking for interrupts
+    1000,       // Go to sleep after 1 second
+    500,        // Check for new input in sleep every 500ms
+    200         // Take 200ms to power on the motor
   );
 
   focuser->setTimingParams( testTimingParams );
@@ -150,7 +153,8 @@ TEST( FOCUSER_STATE, run_status)
   TimedStringEvents netInput = {
     { 0, "sstatus" },     // status  @ Time 0
     { 50, "pstatus" },    // pstatus @ Time 50 ms
-    { 70, "sstatus" }     // sstatus @ Time 70 ms
+    { 75, "sstatus" },    // sstatus @ Time 70 (!epoch) ms
+    { 76, "pstatus" }     // check pstatus 1 ms later (!epoch)
   };
   HWTimedEvents hwInput= {
     { 0,  { HWI::Pin::HOME,        HWI::PinState::HOME_INACTIVE} },
@@ -164,7 +168,8 @@ TEST( FOCUSER_STATE, run_status)
   TimedStringEvents goldenNet = {
     {  0, "State: ACCEPTING_COMMANDS NoArg"},
     { 50, "Position: 0" },
-    { 70, "State: ACCEPTING_COMMANDS NoArg"},
+    { 80, "State: ACCEPTING_COMMANDS NoArg"},
+    { 80, "Position: 0" },
   };
 
   ASSERT_EQ( goldenNet, testFilterComments(wifiAlias->getOutput() ));
@@ -658,14 +663,6 @@ TEST( FOCUSER_STATE, new_home_while_homing )
   ASSERT_EQ( goldenHW, hwMockAlias->getOutEvents() );
 }
 
-
-///
-/// @brief Test double abs_pos command with backlash correct
-///
-/// Focuser should advance to 3, then rewind to 2 on the next
-/// 'accept commands' tick after 50ms.  The rewind will got 0
-/// 0 to try to clear backlash and then forward to 2.
-///
 TEST( FOCUSER_STATE, interrupt_during_backlash_correction )
 {
   TimedStringEvents netInput = {
@@ -707,5 +704,73 @@ TEST( FOCUSER_STATE, interrupt_during_backlash_correction )
   ASSERT_EQ( goldenNet, testFilterComments(wifiAlias->getOutput() ));
   ASSERT_EQ( goldenHW, hwMockAlias->getOutEvents() );
 }
+
+TEST( FOCUSER_STATE, enterSleepModeAndWake )
+{
+  TimedStringEvents netInput = {
+    { 50,   "abs_pos=1" },        // Forward to 1
+    { 50,   "sstatus" },          // What are we doing?
+    { 60,   "sstatus" },          // What are we doing now?
+    { 1059, "sstatus" },          // Right before sleep mode
+    { 1060, "sstatus" },          // Will process sstatus before sleeping
+    { 1061, "sstatus" },          // Now we'll be in sleep mode
+    { 1062, "pstatus" },          // Check timing, should happen at 1500
+    { 1500, "hstatus" },          // Should also happen at 1500
+    { 1501, "sstatus" },          // Should happen at 2000
+    { 2001, "abs_pos=2" },        // Should happen at 2500
+    { 2500, "sstatus" },
+    { 4200, "abort" },            // should cause a wake @ 4500
+    { 5600, "home" },             // should cause a wake @ 6000
+  };
+
+  HWTimedEvents hwInput= {
+    { 0,    { HWI::Pin::HOME,        HWI::PinState::HOME_INACTIVE} },
+    { 6206, { HWI::Pin::HOME,        HWI::PinState::HOME_ACTIVE} },
+  };
+
+  NetMockSimpleTimed* wifiAlias;
+  HWMockTimed* hwMockAlias;
+  auto focuser = make_focuser( netInput, hwInput, wifiAlias, hwMockAlias ); 
+  simulateFocuser( focuser.get(), wifiAlias, hwMockAlias, 10000 );
+
+  TimedStringEvents goldenNet = {
+    { 50,   "State: MOVING 1"},
+    { 60,   "State: ACCEPTING_COMMANDS NoArg" },
+    { 1060, "State: ACCEPTING_COMMANDS NoArg" },
+    { 1060, "State: ACCEPTING_COMMANDS NoArg" },
+    { 1500, "State: LOW_POWER NoArg" },
+    { 1500, "Position: 1" },
+    { 1500, "Homed: NO" },
+    { 2000, "State: LOW_POWER NoArg" },
+    { 2700, "State: MOVING 2" },
+  };
+
+  HWTimedEvents goldenHW = {
+    { 50,   { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 51,   { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 1060, { HWI::Pin::MOTOR_ENA,  HWI::PinState::MOTOR_OFF} },
+    { 2500, { HWI::Pin::MOTOR_ENA,  HWI::PinState::MOTOR_ON} },
+    { 2700, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 2701, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 3510, { HWI::Pin::MOTOR_ENA,  HWI::PinState::MOTOR_OFF} },
+    { 4500, { HWI::Pin::MOTOR_ENA,  HWI::PinState::MOTOR_ON} },
+    { 5510, { HWI::Pin::MOTOR_ENA,  HWI::PinState::MOTOR_OFF} },
+    { 6000, { HWI::Pin::MOTOR_ENA,  HWI::PinState::MOTOR_ON} },
+    { 6200, { HWI::Pin::DIR,        HWI::PinState::DIR_BACKWARD} },
+    { 6201, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 6202, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 6203, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 6204, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 6205, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 6206, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 7010, { HWI::Pin::MOTOR_ENA,  HWI::PinState::MOTOR_OFF} },
+  };
+  goldenHW.insert( goldenHW.begin(), goldenHWStart.begin(), goldenHWStart.end());
+
+  ASSERT_EQ( goldenHW, hwMockAlias->getOutEvents() );
+  ASSERT_EQ( goldenNet, testFilterComments(wifiAlias->getOutput() ));
+}
+
+
 
 

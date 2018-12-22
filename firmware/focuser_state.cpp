@@ -18,7 +18,7 @@ const StateToString FS::stateNames =
   { State::SET_DIR,                       "SET_DIR"            },
   { State::MOVING,                        "MOVING"             },
   { State::STOP_AT_HOME,                  "STOP_AT_HOME"       },
-  { State::SLEEP,                         "LOWER_POWER"        },
+  { State::SLEEP,                         "LOW_POWER"          },
   { State::ERROR_STATE,                   "ERROR ERROR ERROR"  },
 };
 
@@ -70,6 +70,7 @@ Focuser::Focuser(
   isHomed = false;
   time = 0;
   uSecRemainder = 0;
+  timeLastInterruptingCommandOccured = 0;
 
   std::swap( net, netArg );
   std::swap( hardware, hardwareArg );
@@ -166,6 +167,10 @@ void Focuser::doError( CommandParser::CommandPacket cp )
 
 void Focuser::processCommand( CommandParser::CommandPacket cp )
 {
+  if ( doesCommandInterrupt.at( cp.command ))
+  {
+    timeLastInterruptingCommandOccured = time;
+  }
   auto function = commandImpl.at( cp.command );
   (this->*function)( cp );
 }
@@ -180,7 +185,16 @@ unsigned int Focuser::stateAcceptCommands()
     processCommand( cp );
     return 0;
   }
-  int mSecToNextEpoch = timingParams.getEpochBetweenCommandChecks() - 
+  const unsigned int timeSinceLastInterrupt = 
+      time - timeLastInterruptingCommandOccured;
+
+  if ( timeSinceLastInterrupt > timingParams.getInactivityToSleep() )
+  {
+    stateStack.push( State::SLEEP );
+    return 0;
+  }
+
+  const int mSecToNextEpoch = timingParams.getEpochBetweenCommandChecks() - 
         (time % timingParams.getEpochBetweenCommandChecks());
 
   return mSecToNextEpoch * 1000;
@@ -345,18 +359,20 @@ unsigned int Focuser::stateSleep()
         motorState = MotorState::ON;
         return timingParams.getTimeToPowerStepper() * 1000;
       }
-      return 0;
     }
+    return 0;   // Go until we're out of commands.
   }
 
   if ( motorState != MotorState::OFF )
   {
     WifiDebugOstream log( debugLog.get(), net.get() );
-    log << "Powering down stepper motor";
     hardware->DigitalWrite( HWI::Pin::MOTOR_ENA, HWI::PinState::MOTOR_OFF );
     motorState = MotorState::OFF;
   }
-  return timingParams.getEpochForSleepCommandChecks() * 1000;
+  const int mSecToNextEpoch = timingParams.getEpochForSleepCommandChecks() - 
+        (time % timingParams.getEpochForSleepCommandChecks());
+
+  return mSecToNextEpoch * 1000;
 }
 
 unsigned int Focuser::stateError()
