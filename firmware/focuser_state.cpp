@@ -25,12 +25,11 @@ const std::unordered_map<FocuserState::State,const std::string,EnumHash>
 const std::unordered_map<CommandParser::Command,bool,EnumHash> 
   FocuserState::doesCommandInterrupt= 
 {
-  { CommandParser::Command::Ping,          false  },
   { CommandParser::Command::Abort,         true   },
   { CommandParser::Command::Home,          true   },
-  { CommandParser::Command::Status,        false  },
   { CommandParser::Command::PStatus,       false  },
   { CommandParser::Command::SStatus,       false  },
+  { CommandParser::Command::HStatus,       false  },
   { CommandParser::Command::ABSPos,        true   },
   { CommandParser::Command::Sleep,         true   },
   { CommandParser::Command::Wake,          true   },
@@ -58,6 +57,10 @@ FocuserState::FocuserState(
     std::unique_ptr<DebugInterface> debugArg
 )
 {
+  doStepsMax = 50; 
+  focuserPosition = 0;
+  isHomed = false;
+
   std::swap( net, netArg );
   std::swap( hardware, hardwareArg );
   std::swap( debugLog, debugArg );
@@ -68,8 +71,6 @@ FocuserState::FocuserState(
   // Bring up the interface to the controlling computer
 
   net->setup( log );
-
-  focuserPosition = 0;
 
   // No setup right now,  so accept commands
   
@@ -119,19 +120,6 @@ void FocuserState::processCommand( CommandParser::CommandPacket cp )
 {
   DebugInterface& log = *debugLog;
 
-  // Status was originally before abort.  TODO, refactor this mess.
-
-  if ( cp.command == CommandParser::Command::Status )
-  {
-    State state = top().state;
-    int arg0 = top().arg0;
-
-    log << "Processing pstatus request\n";
-    *net << "Position: " << focuserPosition << "\n";
-    *net << "State: " << stateNames.at(state) << " " << arg0 << "\n";
-    return;
-  }
-
   if ( cp.command == CommandParser::Command::PStatus )
   {
     log << "Processing pstatus request\n";
@@ -146,6 +134,13 @@ void FocuserState::processCommand( CommandParser::CommandPacket cp )
 
     log << "Processing sstatus request\n";
     *net << "State: " << stateNames.at(state) << " " << arg0 << "\n";
+    return;
+  }
+
+  if ( cp.command == CommandParser::Command::HStatus )
+  {
+    log << "Processing hstatus request\n";
+    *net << "Homed: " << (isHomed ? "YES" : "NO" ) << "\n";
     return;
   }
 
@@ -285,10 +280,23 @@ unsigned int FocuserState::stateMoving()
     return 0;    
   }
 
+  // Check for new commands
+  DebugInterface& debug= *debugLog;
+  auto cp = CommandParser::checkForCommands( debug, *net );
+
+  if ( cp.command != CommandParser::Command::NoCommand )
+  {
+    processCommand( cp );
+    if ( doesCommandInterrupt.at( cp.command ))
+    {
+      return 0;
+    }
+  }
+
   const int  steps        = top().arg0 - focuserPosition;
   const bool nextDir      = steps > 0;    // TODO, enum, !bool
   const int  absSteps     = steps > 0 ? steps : -steps;
-  const int  clippedSteps = absSteps > 50 ? 50 : absSteps;
+  const int  clippedSteps = absSteps > doStepsMax ? doStepsMax : absSteps;
 
   pushState( State::DO_STEPS, clippedSteps );
   pushState( State::SET_DIR,  nextDir );
@@ -299,18 +307,34 @@ unsigned int FocuserState::state_stop_at_home()
 {
   WifiDebugOstream log( debugLog.get(), net.get() );
 
-  if ( (focuserPosition % 100) == 0 )
-  {
-    log << "Homing " << focuserPosition << "\n";
-  }
   if ( hardware->DigitalRead( HWI::Pin::HOME ) == HWI::PinState::HOME_ACTIVE ) 
   {
     log << "Hit home at position " << focuserPosition << "\n";
     log << "Resetting position to 0\n";
     focuserPosition = 0;
+    isHomed = true;
     stateStack.pop_back();
     return 0;        
   }
+
+  if ( (focuserPosition % doStepsMax) == 0 )
+  {
+    log << "Homing " << focuserPosition << "\n";
+
+    // Check for new commands
+    DebugInterface& debug= *debugLog;
+    auto cp = CommandParser::checkForCommands( debug, *net );
+
+    if ( cp.command != CommandParser::Command::NoCommand )
+    {
+      processCommand( cp );
+      if ( doesCommandInterrupt.at( cp.command ))
+      {
+        return 0;
+      }
+    }
+  }
+
   pushState( State::DO_STEPS, 1 );
   pushState( State::SET_DIR, 0 );
   focuserPosition--;

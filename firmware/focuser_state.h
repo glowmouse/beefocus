@@ -40,24 +40,32 @@ class FocuserState
   ///
   unsigned int loop();
 
+  ///
+  /// @brief Set the maximum number of steps we'll do at a time
+  ///
+  void setMaxStepsToDoAtOnce( int maxSteps )
+  {
+    doStepsMax = maxSteps; 
+  }
+
   /// @brief Focuser's State Enum
   ///
   /// TODO - describe state machine operation in one place, probably
   ///        in the FocuserState class description
   ///
   enum class State {
-    START_OF_STATES = 0,
-    ACCEPT_COMMANDS = 0,
-    DO_STEPS,
-    STEPPER_INACTIVE_AND_WAIT,
-    STEPPER_ACTIVE_AND_WAIT,
-    SET_DIR,
-    MOVING,
-    STOP_AT_HOME,
-    LOW_POWER,
-    AWAKEN,
-    ERROR_STATE,
-    END_OF_STATES
+    START_OF_STATES = 0,        ///< Start of States
+    ACCEPT_COMMANDS = 0,        ///< Accepting commands from the net interface
+    DO_STEPS,                   ///< Doing n Stepper Motor Steps
+    STEPPER_INACTIVE_AND_WAIT,  ///< Set Stepper to Inactive and Pause
+    STEPPER_ACTIVE_AND_WAIT,    ///< Set Stepper to Active and Pause
+    SET_DIR,                    ///< Set the Direction Pin
+    MOVING,                     ///< Move to an absolute position
+    STOP_AT_HOME,               ///< Rewind until the Home input is active
+    LOW_POWER,                  ///< Enter Low Power Mode
+    AWAKEN,                     ///< Wake up form Low Power Mode
+    ERROR_STATE,                ///< Error Errror Error
+    END_OF_STATES               ///< End of States
   };
 
   /// @brief Debug names for each state
@@ -115,8 +123,8 @@ class FocuserState
   std::unique_ptr<DebugInterface> debugLog;
   
   enum class Dir {
-    FORWARD,
-    REVERSE
+    FORWARD,    ///< Go Forward
+    REVERSE     ///< Go Backward
   };
 
   /// @brief What direction are we going? 
@@ -139,6 +147,12 @@ class FocuserState
 
   /// @brief The focuser's state
   std::vector< COMMAND_PACKET > stateStack;
+
+  /// @brief The number of steps to move before we check for new status
+  int doStepsMax;
+
+  /// @brief Is the focuser homed?
+  bool isHomed;
 };
 
 /// @brief Increment operator for State enum

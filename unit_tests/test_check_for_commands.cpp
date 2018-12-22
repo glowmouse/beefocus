@@ -32,20 +32,18 @@ TEST( COMMAND_PARSER, checkForCommands)
   NetMockSimpleTimed junk("junk");
   ASSERT_EQ( checkForCommands(dbgmock, junk), CommandPacket());
 
-  NetMockSimpleTimed ping("PING");
-  ASSERT_EQ( checkForCommands(dbgmock, ping), CommandPacket( Command::Ping ));
-
   NetMockSimpleTimed abort("abort");
   ASSERT_EQ( checkForCommands(dbgmock, abort), CommandPacket( Command::Abort));
 
   NetMockSimpleTimed home("hOmE");
   ASSERT_EQ( checkForCommands(dbgmock, home), CommandPacket( Command::Home));
 
-  NetMockSimpleTimed status("status with trailing garbage");
-  ASSERT_EQ( checkForCommands(dbgmock, status), CommandPacket( Command::Status));
-
   NetMockSimpleTimed pstatus("PStatus");
   ASSERT_EQ( checkForCommands(dbgmock, pstatus), CommandPacket( Command::PStatus ));
+
+  NetMockSimpleTimed pstatus2("pStatus with training garbage");
+  ASSERT_EQ( checkForCommands(dbgmock, pstatus2), CommandPacket( Command::PStatus ));
+
 
   NetMockSimpleTimed sstatus("sstatus");
   ASSERT_EQ( checkForCommands(dbgmock, sstatus), CommandPacket( Command::SStatus ));
