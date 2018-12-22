@@ -78,6 +78,20 @@ enum class State
   END_OF_STATES               ///< End of States
 };
 
+class StateArg
+{
+  public: 
+
+  StateArg() : intArg{ -1 } {}
+  StateArg( int i ) : intArg{ i } {}
+  int getInt() { return intArg; }
+
+  private:
+  union {
+    int intArg;
+  };
+};
+
 ///
 /// @brief Stack of FS:States.
 ///
@@ -92,7 +106,7 @@ class StateStack {
 
   StateStack()
   {
-    push( State::ACCEPT_COMMANDS, 0 );
+    push( State::ACCEPT_COMMANDS, StateArg() );
   }
 
   /// @brief Reset the stack to the newly initialized state.
@@ -108,15 +122,15 @@ class StateStack {
   }
 
   /// @brief Get the top state's argumment.
-  int topArg( void )
+  StateArg topArg( void )
   {
-    return stack.back().arg0;
+    return stack.back().arg;
   }
 
   /// @brief Set the top state's argumment.
-  void topArgSet( int newVal )
+  void topArgSet( StateArg newVal )
   {
-    stack.back().arg0 = newVal;
+    stack.back().arg = newVal;
   }
 
   /// @brief Pop the top entry on the stack.
@@ -126,14 +140,14 @@ class StateStack {
     if ( stack.empty() ) 
     {
       // bug, should never happen.
-      push( State::ERROR_STATE, __LINE__ ); 
+      push( State::ERROR_STATE, StateArg(__LINE__) ); 
     }
   }
 
   /// @brief Push a new entry onto the stack
-  void push( State new_state, int arg0 = -1  )
+  void push( State newState, StateArg newArg = StateArg() )
   {
-    stack.push_back( { new_state, arg0 } );
+    stack.push_back( { newState , newArg } );
   }  
   
   private:
@@ -141,7 +155,7 @@ class StateStack {
   typedef struct 
   {
     State state;   
-    int arg0; 
+    StateArg arg; 
   } CommandPacket;
 
   std::vector< CommandPacket > stack;
@@ -212,9 +226,9 @@ class Focuser
 
   /// @brief Wait for commands from the network interface
   unsigned int stateAcceptCommands( void ); 
-  /// @brief Move to position @arg0
+  /// @brief Move to position @arg
   unsigned int stateMoving( void );
-  /// @brief Move the stepper @arg0 steps 
+  /// @brief Move the stepper @arg steps 
   unsigned int stateDoingSteps( void );
   /// @brief If needed, Change the state of the direction pin and pause
   unsigned int stateSetDir( void );
@@ -262,7 +276,6 @@ class Focuser
   /// @brief What is the focuser's position of record
   int focuserPosition;
 
-
   /// @brief The number of steps to move before we check for new status
   int doStepsMax;
 
@@ -290,6 +303,14 @@ extern const StateToString stateNames;
 /// Example 2.  A "Home" Command will interrupt a focuser's move sequence
 ///
 extern const CommandToBool doesCommandInterrupt;
+
+/// @brief Output StateArg
+template <class T,
+  typename = my_enable_if_t<is_beefocus_ostream<T>::value>>
+T& operator<<( T& ostream, StateArg sA )
+{
+  ostream << sA.getInt();
+}
 
 
 }

@@ -153,9 +153,9 @@ TEST( FOCUSER_STATE, run_status)
   simulateFocuser( focuser.get(), wifiAlias, hwMockAlias, 1000 );
 
   TimedStringEvents goldenNet = {
-    {  0, "State: ACCEPTING_COMMANDS 0"},
+    {  0, "State: ACCEPTING_COMMANDS -1"},
     { 50, "Position: 0" },
-    { 70, "State: ACCEPTING_COMMANDS 0"},
+    { 70, "State: ACCEPTING_COMMANDS -1"},
   };
 
   ASSERT_EQ( goldenNet, testFilterComments(wifiAlias->getOutput() ));
@@ -414,7 +414,7 @@ TEST( FOCUSER_STATE, abort_while_moving )
 
   goldenHW.insert( goldenHW.begin(), goldenHWStart.begin(), goldenHWStart.end());
   TimedStringEvents goldenNet = {
-    { 18, "State: ACCEPTING_COMMANDS 0" },
+    { 18, "State: ACCEPTING_COMMANDS -1" },
     { 28, "Position: 4" }
   };
 

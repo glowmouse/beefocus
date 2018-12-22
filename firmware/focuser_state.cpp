@@ -182,7 +182,7 @@ unsigned int Focuser::stateAcceptCommands()
 
 unsigned int Focuser::stateSetDir()
 {
-  Dir desiredDir = stateStack.topArg() ? Dir::FORWARD : Dir::REVERSE;
+  Dir desiredDir = stateStack.topArg().getInt() ? Dir::FORWARD : Dir::REVERSE;
 
   stateStack.pop();
 
@@ -217,13 +217,13 @@ unsigned int Focuser::stateStepActiveAndWait()
 
 unsigned int Focuser::stateDoingSteps()
 {
-  if ( stateStack.topArg() == 0 )
+  if ( stateStack.topArg().getInt() == 0 )
   {
     // We're done at 0
     stateStack.pop();
     return 0;
   }
-  stateStack.topArgSet( stateStack.topArg()-1 );
+  stateStack.topArgSet( stateStack.topArg().getInt()-1 );
 
   stateStack.push( State::STEPPER_INACTIVE_AND_WAIT );
   stateStack.push( State::STEPPER_ACTIVE_AND_WAIT );
@@ -245,7 +245,7 @@ unsigned int Focuser::stateMoving()
   WifiDebugOstream log( debugLog.get(), net.get() );
   log << "Moving " << focuserPosition << "\n";
   
-  if ( stateStack.topArg() == focuserPosition ) {
+  if ( stateStack.topArg().getInt() == focuserPosition ) {
     // We're at the target,  exit
     stateStack.pop();
     return 0;    
@@ -268,7 +268,7 @@ unsigned int Focuser::stateMoving()
     }
   }
 
-  const int  steps        = stateStack.topArg() - focuserPosition;
+  const int  steps        = stateStack.topArg().getInt() - focuserPosition;
   const bool nextDir      = steps > 0;    // TODO, enum, !bool
   const int  absSteps     = steps > 0 ? steps : -steps;
   const int  clippedSteps = absSteps > doStepsMax ? doStepsMax : absSteps;
