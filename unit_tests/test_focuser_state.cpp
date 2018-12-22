@@ -451,4 +451,57 @@ TEST( FOCUSER_STATE, new_move_while_moving )
   ASSERT_EQ( goldenHW, hwMockAlias->getOutEvents() );
 }
 
+TEST( FOCUSER_STATE, home_while_moving )
+{
+  TimedStringEvents netInput = {
+    {  0, "hstatus" },          // Are we homed?
+    { 10, "abs_pos=99" },        // Start the focuser moving
+    { 13, "pstatus" },          // Where are we?
+    { 15, "home" },             // On second thought, I forgot to home
+    { 17, "sstatus" },          // What are we doing now?
+    { 30, "pstatus" },          // Where did we land?
+    { 32, "hstatus" },          // Are we homed?
+  };
+
+  HWTimedEvents hwInput= {
+    { 0,  { HWI::Pin::HOME,        HWI::PinState::HOME_INACTIVE} },
+    { 22, { HWI::Pin::HOME,        HWI::PinState::HOME_ACTIVE } },
+  }; 
+
+  NetMockSimpleTimed* wifiAlias;
+  HWMockTimed* hwMockAlias;
+  auto focuser = make_focuser( netInput, hwInput, wifiAlias, hwMockAlias ); 
+  focuser->setMaxStepsToDoAtOnce( 2 );
+  simulateFocuser( focuser.get(), wifiAlias, hwMockAlias, 1000 );
+
+  HWTimedEvents goldenHW = {
+    { 10, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 11, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 12, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 13, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 14, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 15, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 16, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 17, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 18, { HWI::Pin::DIR,        HWI::PinState::DIR_BACKWARD } },
+    { 19, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 20, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 21, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 22, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+  };
+
+  goldenHW.insert( goldenHW.begin(), goldenHWStart.begin(), goldenHWStart.end());
+  TimedStringEvents goldenNet = {
+    {  0,  "Homed: NO" },
+    { 14,  "Position: 2" },
+    { 18,  "State: STOP_AT_HOME -1" },
+    { 33,  "Position: 0"},
+    { 33,  "Homed: YES"},
+  };
+
+  ASSERT_EQ( goldenNet, testFilterComments(wifiAlias->getOutput() ));
+  ASSERT_EQ( goldenHW, hwMockAlias->getOutEvents() );
+}
+
+
 

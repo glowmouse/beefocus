@@ -275,6 +275,14 @@ unsigned int FocuserState::stateStopAtHome()
 {
   WifiDebugOstream log( debugLog.get(), net.get() );
 
+  if ( motorState != MotorState::ON )
+  {
+    hardware->DigitalWrite( HWI::Pin::MOTOR_ENA, HWI::PinState::MOTOR_ON );
+    return 100000;    // .1s pause to power things up.
+  }
+
+
+          
   if ( hardware->DigitalRead( HWI::Pin::HOME ) == HWI::PinState::HOME_ACTIVE ) 
   {
     log << "Hit home at position " << focuserPosition << "\n";
