@@ -659,5 +659,54 @@ TEST( FOCUSER_STATE, new_home_while_homing )
 }
 
 
+///
+/// @brief Test double abs_pos command with backlash correct
+///
+/// Focuser should advance to 3, then rewind to 2 on the next
+/// 'accept commands' tick after 50ms.  The rewind will got 0
+/// 0 to try to clear backlash and then forward to 2.
+///
+TEST( FOCUSER_STATE, interrupt_during_backlash_correction )
+{
+  TimedStringEvents netInput = {
+    { 10, "abs_pos=5" },       // Forward to 5
+    { 50, "abs_pos=4" },       // Backwards, should trigger a rewind
+    { 53, "abort" },           // Nope!
+  };
+
+  HWTimedEvents hwInput= {
+    { 0,  { HWI::Pin::HOME,        HWI::PinState::HOME_INACTIVE} },
+  };
+
+  NetMockSimpleTimed* wifiAlias;
+  HWMockTimed* hwMockAlias;
+  auto focuser = make_focuser( netInput, hwInput, wifiAlias, hwMockAlias ); 
+  focuser->setMaxStepsToDoAtOnce( 2 );
+  simulateFocuser( focuser.get(), wifiAlias, hwMockAlias, 1000 );
+
+  TimedStringEvents goldenNet;
+
+  HWTimedEvents goldenHW = {
+    { 10, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 11, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 12, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 13, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 14, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 15, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 16, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 17, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 18, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 19, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 50, { HWI::Pin::DIR,        HWI::PinState::DIR_BACKWARD } },
+    { 51, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 52, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 53, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 54, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+  };
+  goldenHW.insert( goldenHW.begin(), goldenHWStart.begin(), goldenHWStart.end());
+
+  ASSERT_EQ( goldenNet, testFilterComments(wifiAlias->getOutput() ));
+  ASSERT_EQ( goldenHW, hwMockAlias->getOutEvents() );
+}
 
 

@@ -79,10 +79,6 @@ FocuserState::FocuserState(
 
   net->setup( log );
 
-  // No setup right now,  so accept commands
-  
-  pushState( State::ACCEPT_COMMANDS, 0 );
-
   //
   // Set the pin modes 
   //
@@ -104,33 +100,22 @@ FocuserState::FocuserState(
   log << "FocuserState is up\n";
 }
 
-void FocuserState::pushState( State new_state, int arg0 )
-{
-    stateStack.push_back( COMMAND_PACKET(new_state, arg0 ));
-}
-
-FocuserState::COMMAND_PACKET& FocuserState::top( void ) 
-{
-  if ( stateStack.empty() )
-  {
-    // bug,  should never happen :)  
-    pushState( State::ERROR_STATE, __LINE__ );   
-  }
-  return stateStack.back();
-}
-
 void FocuserState::doAbort( CommandParser::CommandPacket cp )
 {
+  (void) cp;
+  // Do nothing - command triggers a state interrupt.
 }
 
 void FocuserState::doHome( CommandParser::CommandPacket cp )
 {
-  pushState( State::STOP_AT_HOME );
+  (void) cp;
+  stateStack.push( State::STOP_AT_HOME );
   return;
 }
 
 void FocuserState::doPStatus( CommandParser::CommandPacket cp )
 {
+  (void) cp;
   DebugInterface& log = *debugLog;
   log << "Processing pstatus request\n";
   *net << "Position: " << focuserPosition << "\n";
@@ -138,18 +123,18 @@ void FocuserState::doPStatus( CommandParser::CommandPacket cp )
 
 void FocuserState::doSStatus( CommandParser::CommandPacket cp )
 {
+  (void) cp;
   DebugInterface& log = *debugLog;
 
-  State state = top().state;
-  int arg0 = top().arg0;
-
   log << "Processing sstatus request\n";
-  *net << "State: " << stateNames.at(state) << " " << arg0 << "\n";
+  *net << "State: " << stateNames.at(stateStack.top().state) << 
+                " " << stateStack.top().arg0 << "\n";
   return;
 }
 
 void FocuserState::doHStatus( CommandParser::CommandPacket cp )
 {
+  (void) cp;
   DebugInterface& log = *debugLog;
 
   log << "Processing hstatus request\n";
@@ -159,20 +144,21 @@ void FocuserState::doHStatus( CommandParser::CommandPacket cp )
 
 void FocuserState::doABSPos( CommandParser::CommandPacket cp )
 {
-  pushState( State::MOVING, cp.optionalArg );
+  stateStack.push( State::MOVING, cp.optionalArg );
   int new_position = cp.optionalArg;
 
   if ( new_position < focuserPosition )
   {
     int backtrack = new_position - 500;
     backtrack = backtrack < 0 ? 0 : backtrack;
-    pushState( State::MOVING, backtrack );
+    stateStack.push( State::MOVING, backtrack );
   }
 }
 
 void FocuserState::doError( CommandParser::CommandPacket cp )
 {
-  pushState( State::ERROR_STATE, __LINE__ );   
+  (void) cp;
+  stateStack.push( State::ERROR_STATE, __LINE__ );   
 }
 
 void FocuserState::processCommand( CommandParser::CommandPacket cp )
@@ -196,9 +182,9 @@ unsigned int FocuserState::stateAcceptCommands()
 
 unsigned int FocuserState::stateSetDir()
 {
-  Dir desiredDir = top().arg0 ? Dir::FORWARD : Dir::REVERSE;
+  Dir desiredDir = stateStack.top().arg0 ? Dir::FORWARD : Dir::REVERSE;
 
-  stateStack.pop_back();
+  stateStack.pop();
 
   if ( desiredDir != dir )
   {
@@ -218,29 +204,29 @@ unsigned int FocuserState::stateSetDir()
 unsigned int FocuserState::stateStepInactiveAndWait()
 {
   hardware->DigitalWrite( HWI::Pin::STEP, HWI::PinState::STEP_INACTIVE );
-  stateStack.pop_back();
+  stateStack.pop();
   return 1000;
 }
 
 unsigned int FocuserState::stateStepActiveAndWait()
 {
   hardware->DigitalWrite( HWI::Pin::STEP, HWI::PinState::STEP_ACTIVE );
-  stateStack.pop_back();
+  stateStack.pop();
   return 1000;
 }
 
 unsigned int FocuserState::stateDoingSteps()
 {
-  if ( top().arg0 == 0 )
+  if ( stateStack.top().arg0 == 0 )
   {
     // We're done at 0
-    stateStack.pop_back();
+    stateStack.pop();
     return 0;
   }
-  top().arg0--;
+  stateStack.top().arg0--;
 
-  pushState( State::STEPPER_INACTIVE_AND_WAIT );
-  pushState( State::STEPPER_ACTIVE_AND_WAIT );
+  stateStack.push( State::STEPPER_INACTIVE_AND_WAIT );
+  stateStack.push( State::STEPPER_ACTIVE_AND_WAIT );
 
   focuserPosition += (dir == Dir::FORWARD) ? 1 : -1;
   focuserPosition = focuserPosition >= 0 ? focuserPosition : 0;
@@ -259,9 +245,9 @@ unsigned int FocuserState::stateMoving()
   WifiDebugOstream log( debugLog.get(), net.get() );
   log << "Moving " << focuserPosition << "\n";
   
-  if ( top().arg0 == focuserPosition ) {
+  if ( stateStack.top().arg0 == focuserPosition ) {
     // We're at the target,  exit
-    stateStack.pop_back();
+    stateStack.pop();
     return 0;    
   }
 
@@ -273,7 +259,7 @@ unsigned int FocuserState::stateMoving()
   {
     if ( doesCommandInterrupt.at( cp.command ))
     {
-      stateStack.pop_back();
+      stateStack.reset();
     }
     processCommand( cp );
     if ( doesCommandInterrupt.at( cp.command ))
@@ -282,13 +268,13 @@ unsigned int FocuserState::stateMoving()
     }
   }
 
-  const int  steps        = top().arg0 - focuserPosition;
+  const int  steps        = stateStack.top().arg0 - focuserPosition;
   const bool nextDir      = steps > 0;    // TODO, enum, !bool
   const int  absSteps     = steps > 0 ? steps : -steps;
   const int  clippedSteps = absSteps > doStepsMax ? doStepsMax : absSteps;
 
-  pushState( State::DO_STEPS, clippedSteps );
-  pushState( State::SET_DIR,  nextDir );
+  stateStack.push( State::DO_STEPS, clippedSteps );
+  stateStack.push( State::SET_DIR,  nextDir );
   return 0;        
 }
 
@@ -308,7 +294,7 @@ unsigned int FocuserState::stateStopAtHome()
     log << "Resetting position to 0\n";
     focuserPosition = 0;
     isHomed = true;
-    stateStack.pop_back();
+    stateStack.pop();
     return 0;        
   }
 
@@ -324,7 +310,7 @@ unsigned int FocuserState::stateStopAtHome()
     {
       if ( doesCommandInterrupt.at( cp.command ))
       {
-        stateStack.pop_back();
+        stateStack.reset();
       }
       processCommand( cp );
       if ( doesCommandInterrupt.at( cp.command ))
@@ -334,8 +320,8 @@ unsigned int FocuserState::stateStopAtHome()
     }
   }
 
-  pushState( State::DO_STEPS, 1 );
-  pushState( State::SET_DIR, 0 );
+  stateStack.push( State::DO_STEPS, 1 );
+  stateStack.push( State::SET_DIR, 0 );
   return 0;        
 }
 
@@ -348,7 +334,7 @@ unsigned int FocuserState::stateError()
 
 unsigned int FocuserState::loop(void)
 {
-  ptrToMember function = stateImpl.at( top().state );
+  ptrToMember function = stateImpl.at( stateStack.top().state );
   return (this->*function)();
 }
 

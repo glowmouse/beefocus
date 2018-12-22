@@ -96,7 +96,46 @@ class FocuserState
     int arg0; 
   };
 
-  void pushState( State new_state, int arg0 = -1 );
+  class CStack {
+    public:
+
+    CStack()
+    {
+      reset();
+    }
+
+    void reset( void )
+    {
+      while ( !stateStack.empty() )
+      {  
+        pop();
+      }
+      push( State::ACCEPT_COMMANDS, 0 );
+    }
+
+    COMMAND_PACKET& top( void )
+    {
+      if ( stateStack.empty() )
+      {
+        // bug, should never happen.
+        push( State::ERROR_STATE, __LINE__ ); 
+      }     
+      return stateStack.back();
+    }
+    void pop( void )
+    {
+      stateStack.pop_back();
+    }
+    void push( State new_state, int arg0 = -1  )
+    {
+      stateStack.push_back( COMMAND_PACKET( new_state, arg0 ));
+    }  
+  
+    private:
+    std::vector< COMMAND_PACKET > stateStack;
+  };
+  CStack stateStack;
+
   void processCommand( CommandParser::CommandPacket cp );
 
   /// @brief Wait for commands from the network interface
@@ -123,8 +162,6 @@ class FocuserState
   void doHStatus( CommandParser::CommandPacket );
   void doABSPos( CommandParser::CommandPacket );
   void doError( CommandParser::CommandPacket );
-
-  COMMAND_PACKET& top( void );
 
   std::unique_ptr<NetInterface> net;
   std::unique_ptr<HWI> hardware;
@@ -153,8 +190,6 @@ class FocuserState
   /// @brief What is the focuser's position of record
   int focuserPosition;
 
-  /// @brief The focuser's state
-  std::vector< COMMAND_PACKET > stateStack;
 
   /// @brief The number of steps to move before we check for new status
   int doStepsMax;
