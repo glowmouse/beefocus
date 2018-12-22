@@ -66,12 +66,6 @@ TEST( COMMAND_PARSER, checkForCommands)
   NetMockSimpleTimed abs_pos4("ABS_POS -100");
   ASSERT_EQ( checkForCommands(dbgmock, abs_pos4), CommandPacket( Command::ABSPos, 0));
 
-  NetMockSimpleTimed sleep("sleep");
-  ASSERT_EQ( checkForCommands(dbgmock, sleep), CommandPacket( Command::Sleep ));
-
-  NetMockSimpleTimed wake("wake");
-  ASSERT_EQ( checkForCommands(dbgmock, wake), CommandPacket( Command::Wake ));
-
 }
 
 TEST( COMMAND_PARSER, testGot)
@@ -79,25 +73,25 @@ TEST( COMMAND_PARSER, testGot)
   DebugInterfaceIgnoreMock dbgmock;
 
   TimedStringEvents input = {
-    { 0, "sleep" },   // Sleep @ Time 0
-    { 2, "wake" }     // Wake @ Time 2;
+    { 0, "abort" },   // Sleep @ Time 0
+    { 2, "abs_pos=100" }     // Wake @ Time 2;
   };
 
   // Time 0, should be a sleep
   NetMockSimpleTimed netMock( input );
-  ASSERT_EQ( checkForCommands(dbgmock, netMock ), CommandPacket( Command::Sleep ));
+  ASSERT_EQ( checkForCommands(dbgmock, netMock ), CommandPacket( Command::Abort));
   // Time 1, should be nothing
   netMock.advanceTime(1);
   ASSERT_EQ( checkForCommands(dbgmock, netMock ), CommandPacket());
   // Time 2, should be a wake.
   netMock.advanceTime(1);
-  ASSERT_EQ( checkForCommands(dbgmock, netMock ), CommandPacket( Command::Wake ));
+  ASSERT_EQ( checkForCommands(dbgmock, netMock ), CommandPacket( Command::ABSPos, 100 ));
  
   // Golden output - should have messages saying that the firmware
   // got the sleep and wake command
   TimedStringEvents golden = {
-    { 0, "# Got: sleep" }, 
-    { 2, "# Got: wake" } 
+    { 0, "# Got: abort" }, 
+    { 2, "# Got: abs_pos=100" } 
   };
 
   // Compare.

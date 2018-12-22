@@ -19,8 +19,6 @@ namespace CommandParser {
     SStatus,              ///<  Return the State (i.e., "moving", "homing")
     HStatus,              ///<  Return Home Status (i.e, "homed" or "!homed")
     ABSPos,               ///<  Move to an absolute position
-    Sleep,                ///<  Enter Sleep Mode
-    Wake,                 ///<  Wake from sleep mode
     NoCommand,            ///<  No command was specified.
     EndOfCommands         ///<  End of the comand list.
   };

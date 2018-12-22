@@ -62,8 +62,6 @@ class FocuserState
     SET_DIR,                    ///< Set the Direction Pin
     MOVING,                     ///< Move to an absolute position
     STOP_AT_HOME,               ///< Rewind until the Home input is active
-    LOW_POWER,                  ///< Enter Low Power Mode
-    AWAKEN,                     ///< Wake up form Low Power Mode
     ERROR_STATE,                ///< Error Errror Error
     END_OF_STATES               ///< End of States
   };
@@ -109,11 +107,9 @@ class FocuserState
   unsigned int stateStepActiveAndWait( void );
   /// @brief Set the Stepper to inactive (i.e., finish step) and wait
   unsigned int stateStepInactiveAndWait( void );
-
-  unsigned int state_check_for_abort( void );
-  unsigned int state_stop_at_home( void );
-  unsigned int state_low_power( void );
-  unsigned int state_awaken( void );
+  /// @brief Rewind the focuser until the home input is active.
+  unsigned int stateStopAtHome( void );
+  /// @brief If we land in this state, complain a lot.
   unsigned int stateError( void );
 
   COMMAND_PACKET& top( void );

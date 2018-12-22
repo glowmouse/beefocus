@@ -17,8 +17,6 @@ const std::unordered_map<FocuserState::State,const std::string,EnumHash>
   { State::SET_DIR,                       "SET_DIR"            },
   { State::MOVING,                        "MOVING"             },
   { State::STOP_AT_HOME,                  "STOP_AT_HOME"       },
-  { State::LOW_POWER,                     "LOW_POWER"          },
-  { State::AWAKEN,                        "AWAKEN"             },
   { State::ERROR_STATE,                   "ERROR ERROR ERROR"  },
 };
 
@@ -31,8 +29,6 @@ const std::unordered_map<CommandParser::Command,bool,EnumHash>
   { CommandParser::Command::SStatus,       false  },
   { CommandParser::Command::HStatus,       false  },
   { CommandParser::Command::ABSPos,        true   },
-  { CommandParser::Command::Sleep,         true   },
-  { CommandParser::Command::Wake,          true   },
   { CommandParser::Command::NoCommand,     false  },
 };
 
@@ -45,9 +41,7 @@ const std::unordered_map<FocuserState::State,unsigned int (FocuserState::*)( voi
   { State::STEPPER_ACTIVE_AND_WAIT,   &FocuserState::stateStepActiveAndWait },
   { State::SET_DIR,                   &FocuserState::stateSetDir },
   { State::MOVING,                    &FocuserState::stateMoving },
-  { State::STOP_AT_HOME,              &FocuserState::state_stop_at_home },
-  { State::LOW_POWER,                 &FocuserState::state_low_power },
-  { State::AWAKEN,                    &FocuserState::state_awaken },
+  { State::STOP_AT_HOME,              &FocuserState::stateStopAtHome },
   { State::ERROR_STATE,               &FocuserState::stateError }
 };
 
@@ -145,13 +139,11 @@ void FocuserState::processCommand( CommandParser::CommandPacket cp )
   }
 
   if ( cp.command == CommandParser::Command::Abort ) {
-    // Abort command, unroll the state stack and start accepting commands.
-    hard_reset_state( State::ACCEPT_COMMANDS, 0 );
+    // Caller is responsible for unwinding.
     return;
   }
 
   if ( cp.command == CommandParser::Command::Home ) {
-    hard_reset_state( State::ACCEPT_COMMANDS, 0 );
     pushState( State::STOP_AT_HOME );
     return;
   }  
@@ -167,15 +159,6 @@ void FocuserState::processCommand( CommandParser::CommandPacket cp )
       pushState( State::MOVING, backtrack );
     }
   }
-
-  if ( cp.command == CommandParser::Command::Sleep ) {
-    pushState( State::LOW_POWER, 0 );
-	}
-  if ( cp.command == CommandParser::Command::Wake )
-  {
-    hard_reset_state( State::ACCEPT_COMMANDS, 0 );
-    pushState( State::AWAKEN );
-  }
 }
 
 unsigned int FocuserState::stateAcceptCommands()
@@ -189,25 +172,6 @@ unsigned int FocuserState::stateAcceptCommands()
     return 0;
   }
   return 10*1000;
-}
-
-unsigned int FocuserState::state_low_power()
-{
-  if ( motorState != MotorState::OFF )
-  {
-    hardware->DigitalWrite( HWI::Pin::MOTOR_ENA, HWI::PinState::MOTOR_OFF ); 
-    motorState = MotorState::OFF;
-  }
-       
-  DebugInterface& log = *debugLog;
-  auto cp = CommandParser::checkForCommands( log, *net );
-
-  if ( cp.command != CommandParser::Command::NoCommand )
-  {
-    processCommand( cp );
-    return 0;
-  }
-  return 100*1000;
 }
 
 unsigned int FocuserState::stateSetDir()
@@ -286,6 +250,10 @@ unsigned int FocuserState::stateMoving()
 
   if ( cp.command != CommandParser::Command::NoCommand )
   {
+    if ( doesCommandInterrupt.at( cp.command ))
+    {
+      stateStack.pop_back();
+    }
     processCommand( cp );
     if ( doesCommandInterrupt.at( cp.command ))
     {
@@ -303,7 +271,7 @@ unsigned int FocuserState::stateMoving()
   return 0;        
 }
 
-unsigned int FocuserState::state_stop_at_home()
+unsigned int FocuserState::stateStopAtHome()
 {
   WifiDebugOstream log( debugLog.get(), net.get() );
 
@@ -339,13 +307,6 @@ unsigned int FocuserState::state_stop_at_home()
   pushState( State::SET_DIR, 0 );
   focuserPosition--;
   return 0;        
-}
-
-unsigned int FocuserState::state_awaken()
-{
-  hardware->DigitalWrite( HWI::Pin::MOTOR_ENA, HWI::PinState::MOTOR_ON );        
-  stateStack.pop_back();
-  return 0;
 }
 
 unsigned int FocuserState::stateError()
