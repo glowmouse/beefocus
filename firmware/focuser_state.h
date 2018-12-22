@@ -9,7 +9,33 @@
 #include "hardware_interface.h"
 #include "command_parser.h"
 
-class FocuserState 
+namespace FS {
+
+  /// @brief Focuser's State Enum
+  ///
+  /// TODO - describe state machine operation in one place, probably
+  ///        in the Focuser class description
+  ///
+  enum class State {
+    START_OF_STATES = 0,        ///< Start of States
+    ACCEPT_COMMANDS = 0,        ///< Accepting commands from the net interface
+    DO_STEPS,                   ///< Doing n Stepper Motor Steps
+    STEPPER_INACTIVE_AND_WAIT,  ///< Set Stepper to Inactive and Pause
+    STEPPER_ACTIVE_AND_WAIT,    ///< Set Stepper to Active and Pause
+    SET_DIR,                    ///< Set the Direction Pin
+    MOVING,                     ///< Move to an absolute position
+    STOP_AT_HOME,               ///< Rewind until the Home input is active
+    ERROR_STATE,                ///< Error Errror Error
+    END_OF_STATES               ///< End of States
+  };
+
+/// @brief Increment operator for State enum
+inline State& operator++( State &s )
+{
+  return BeeFocus::advance< State, State::END_OF_STATES>(s);
+}
+
+class Focuser 
 {
   public:
  
@@ -19,18 +45,18 @@ class FocuserState
   /// @param[in] hardwareArg  - Interface to the Hardware
   /// @param[in] debugArg     - Interface to the debug logger.
   ///
-  FocuserState( 
+  Focuser( 
 		std::unique_ptr<NetInterface> netArg,
 		std::unique_ptr<HWI> hardwareArg,
 		std::unique_ptr<DebugInterface> debugArg
 	);
 
   /// @brief Deleted copy constructor
-  FocuserState( const FocuserState& other ) = delete;
+  Focuser( const Focuser& other ) = delete;
   /// @brief Deleted default constructor
-  FocuserState() = delete;
+  Focuser() = delete;
   /// @brief Deleted assignment operator
-  FocuserState& operator=( const FocuserState& ) = delete;
+  Focuser& operator=( const Focuser& ) = delete;
   
   ///
   /// @brief Update the Focuser's State
@@ -48,24 +74,6 @@ class FocuserState
     doStepsMax = maxSteps; 
   }
 
-  /// @brief Focuser's State Enum
-  ///
-  /// TODO - describe state machine operation in one place, probably
-  ///        in the FocuserState class description
-  ///
-  enum class State {
-    START_OF_STATES = 0,        ///< Start of States
-    ACCEPT_COMMANDS = 0,        ///< Accepting commands from the net interface
-    DO_STEPS,                   ///< Doing n Stepper Motor Steps
-    STEPPER_INACTIVE_AND_WAIT,  ///< Set Stepper to Inactive and Pause
-    STEPPER_ACTIVE_AND_WAIT,    ///< Set Stepper to Active and Pause
-    SET_DIR,                    ///< Set the Direction Pin
-    MOVING,                     ///< Move to an absolute position
-    STOP_AT_HOME,               ///< Rewind until the Home input is active
-    ERROR_STATE,                ///< Error Errror Error
-    END_OF_STATES               ///< End of States
-  };
-
   /// @brief Debug names for each state
   const static std::unordered_map< State, const std::string, EnumHash > stateNames;
 
@@ -79,11 +87,11 @@ class FocuserState
       doesCommandInterrupt;
 
   static const std::unordered_map<CommandParser::Command,
-    void (FocuserState::*)( CommandParser::CommandPacket),EnumHash> 
+    void (Focuser::*)( CommandParser::CommandPacket),EnumHash> 
     commandImpl;
 
 
-  using ptrToMember = unsigned int ( FocuserState::*) ( void );
+  using ptrToMember = unsigned int ( Focuser::*) ( void );
 
   static const std::unordered_map< State, ptrToMember, EnumHash > stateImpl;
 
@@ -207,12 +215,7 @@ class FocuserState
   bool isHomed;
 };
 
-/// @brief Increment operator for State enum
-inline FocuserState::State& operator++( FocuserState::State &s )
-{
-  return BeeFocus::advance< FocuserState::State, FocuserState::State::END_OF_STATES>(s);
 }
-
 
 #endif
 

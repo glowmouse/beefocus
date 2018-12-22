@@ -17,7 +17,7 @@ HWTimedEvents goldenHWStart = {
   {  0, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE } },
 };
 
-std::unique_ptr<FocuserState> make_focuser( 
+std::unique_ptr<FS::Focuser> make_focuser( 
   const TimedStringEvents& wifiIn,
   const HWTimedEvents& hwIn,
   NetMockSimpleTimed* &net_interface,
@@ -31,8 +31,8 @@ std::unique_ptr<FocuserState> make_focuser(
   net_interface = wifi.get();
   hw_interface = hardware.get();
 
-  auto focuser = std::unique_ptr<FocuserState>(
-     new FocuserState(
+  auto focuser = std::unique_ptr<FS::Focuser>(
+     new FS::Focuser(
         std::move(wifi),
         std::move(hardware),
         std::move(debug) )
@@ -48,7 +48,7 @@ std::unique_ptr<FocuserState> make_focuser(
 /// @param[in] end_time  - How long (in MS) to run the focuser for.
 /// 
 void simulateFocuser( 
-  FocuserState* focuser,
+  FS::Focuser* focuser,
   NetMockSimpleTimed* wifiAlias,
   HWMockTimed* hwMockAlias,
   unsigned int endTime
@@ -72,8 +72,8 @@ TEST( FOCUSER_STATE, allCommandsHaveInterruptStatus)
         c < CommandParser::Command::EndOfCommands; ++c )
   {
     ASSERT_NE( 
-      FocuserState::doesCommandInterrupt.find( c ),
-      FocuserState::doesCommandInterrupt.end());
+      FS::Focuser::doesCommandInterrupt.find( c ),
+      FS::Focuser::doesCommandInterrupt.end());
   }
 }
 
@@ -83,32 +83,32 @@ TEST( FOCUSER_STATE, allCommandsHaveImplementations )
         c < CommandParser::Command::EndOfCommands; ++c )
   {
     ASSERT_NE( 
-      FocuserState::commandImpl.find( c ),
-      FocuserState::commandImpl.end());
+      FS::Focuser::commandImpl.find( c ),
+      FS::Focuser::commandImpl.end());
   }
 }
  
  
 TEST( FOCUSER_STATE, allStatesHaveImplementations )
 {
-  for ( FocuserState::State s = FocuserState::State::START_OF_STATES;
-        s < FocuserState::State::END_OF_STATES; ++s )
+  for ( FS::State s = FS::State::START_OF_STATES;
+        s < FS::State::END_OF_STATES; ++s )
   {
     ASSERT_NE( 
-      FocuserState::stateImpl.find( s ),
-      FocuserState::stateImpl.end());
+      FS::Focuser::stateImpl.find( s ),
+      FS::Focuser::stateImpl.end());
   }
 } 
 
 
 TEST( FOCUSER_STATE, allStatesHaveDebugNames )
 {
-  for ( FocuserState::State s = FocuserState::State::START_OF_STATES;
-        s < FocuserState::State::END_OF_STATES; ++s )
+  for ( FS::State s = FS::State::START_OF_STATES;
+        s < FS::State::END_OF_STATES; ++s )
   {
     ASSERT_NE( 
-      FocuserState::stateNames.find( s ),
-      FocuserState::stateNames.end());
+      FS::Focuser::stateNames.find( s ),
+      FS::Focuser::stateNames.end());
   }
 } 
 

@@ -5,7 +5,7 @@
 #include "hardware_esp8266.h"
 #include "debug_esp8266.h"
 
-std::unique_ptr<FocuserState> focuser;
+std::unique_ptr<FS::Focuser> focuser;
 
 void loop() {
   unsigned int pause = focuser->loop();
@@ -19,11 +19,10 @@ void setup() {
   std::unique_ptr<NetInterface> wifi( new WifiInterfaceEthernet );
   std::unique_ptr<HWI> hardware( new HardwareESP8266 );
   std::unique_ptr<DebugInterface> debug( new DebugESP8266 );
-  focuser = std::unique_ptr<FocuserState>(
-     new FocuserState( 
+  focuser = std::unique_ptr<FS::Focuser>(
+     new FS::Focuser( 
         std::move(wifi), 
         std::move(hardware),
 				std::move(debug) )
   );
 }
-
