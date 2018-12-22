@@ -66,9 +66,10 @@ Focuser::Focuser(
     std::unique_ptr<DebugInterface> debugArg
 )
 {
-  doStepsMax = 50; 
   focuserPosition = 0;
   isHomed = false;
+  time = 0;
+  uSecRemainder = 0;
 
   std::swap( net, netArg );
   std::swap( hardware, hardwareArg );
@@ -179,7 +180,10 @@ unsigned int Focuser::stateAcceptCommands()
     processCommand( cp );
     return 0;
   }
-  return timingParams.msEpochBetweenCommandChecks*1000;
+  int mSecToNextEpoch = timingParams.getEpochBetweenCommandChecks() - 
+        (time % timingParams.getEpochBetweenCommandChecks());
+
+  return mSecToNextEpoch * 1000;
 }
 
 unsigned int Focuser::stateSetDir()
@@ -267,6 +271,7 @@ unsigned int Focuser::stateMoving()
   const int  steps        = stateStack.topArg().getInt() - focuserPosition;
   const Dir  nextDir      = steps > 0 ? Dir::FORWARD : Dir::REVERSE;
   const int  absSteps     = steps > 0 ? steps : -steps;
+  const int  doStepsMax   = timingParams.getMaxStepsBetweenChecks(); 
   const int  clippedSteps = absSteps > doStepsMax ? doStepsMax : absSteps;
 
   stateStack.push( State::DO_STEPS, clippedSteps );
@@ -289,6 +294,8 @@ unsigned int Focuser::stateStopAtHome()
     stateStack.pop();
     return 0;        
   }
+
+  const int  doStepsMax   = timingParams.getMaxStepsBetweenChecks(); 
 
   if ( (focuserPosition % doStepsMax) == 0 )
   {
@@ -336,7 +343,7 @@ unsigned int Focuser::stateSleep()
       {
         hardware->DigitalWrite( HWI::Pin::MOTOR_ENA, HWI::PinState::MOTOR_ON );
         motorState = MotorState::ON;
-        return timingParams.msToPowerStepper * 1000;
+        return timingParams.getTimeToPowerStepper() * 1000;
       }
       return 0;
     }
@@ -349,7 +356,7 @@ unsigned int Focuser::stateSleep()
     hardware->DigitalWrite( HWI::Pin::MOTOR_ENA, HWI::PinState::MOTOR_OFF );
     motorState = MotorState::OFF;
   }
-  return timingParams.msEpochForSleepCommandChecks * 1000;
+  return timingParams.getEpochForSleepCommandChecks() * 1000;
 }
 
 unsigned int Focuser::stateError()
@@ -362,6 +369,10 @@ unsigned int Focuser::stateError()
 unsigned int Focuser::loop(void)
 {
   ptrToMember function = stateImpl.at( stateStack.topState() );
-  return (this->*function)();
+  const unsigned uSecToNextCall = (this->*function)();
+  uSecRemainder += uSecToNextCall;
+  time += uSecRemainder / 1000;
+  uSecRemainder = uSecRemainder % 1000;
+  return uSecToNextCall;
 }
 

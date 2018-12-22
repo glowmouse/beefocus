@@ -118,22 +118,47 @@ class TimingParams
   public:
 
   TimingParams( 
-    int msEpochBetweenCommandChecksRHS    = 10,         // 10 ms
+    int msEpochBetweenCommandChecksRHS    = 100,        // 100 ms
+    int maxStepsBetweenChecksRHS          = 50,
     int msInactivityToSleepRHS            = 10*60*1000, // 10 minutes
     int msEpochForSleepCommandChecksRHS   = 5*1000,     // 5 seconds
     int msToPowerStepperRHS               = 1*1000      // 1 second
   ) :
     msEpochBetweenCommandChecks{ msEpochBetweenCommandChecksRHS },
+    maxStepsBetweenChecks{ maxStepsBetweenChecksRHS },
     msInactivityToSleep{ msInactivityToSleepRHS },
     msEpochForSleepCommandChecks{ msEpochForSleepCommandChecksRHS },
     msToPowerStepper{ msToPowerStepperRHS}
   {
   }
 
-  const int msEpochBetweenCommandChecks;
-  const int msInactivityToSleep;
-  const int msEpochForSleepCommandChecks;
-  const int msToPowerStepper;
+  int getEpochBetweenCommandChecks() const 
+  { 
+    return msEpochBetweenCommandChecks; 
+  }
+  int getMaxStepsBetweenChecks() const 
+  { 
+    return maxStepsBetweenChecks; 
+  }
+  int getInactivityToSleep() const 
+  { 
+    return msInactivityToSleep; 
+  }
+  int getEpochForSleepCommandChecks() const 
+  { 
+    return msEpochForSleepCommandChecks; 
+  }
+  int getTimeToPowerStepper() const 
+  { 
+    return msToPowerStepper;
+  }
+
+  private:
+  int msEpochBetweenCommandChecks;
+  int maxStepsBetweenChecks;
+  int msInactivityToSleep;
+  int msEpochForSleepCommandChecks;
+  int msToPowerStepper;
 };
 
 ///
@@ -243,9 +268,9 @@ class Focuser
   /// In unit testing, we want to decrease this number so we'll check for
   /// interrupts move frequently.
   /// 
-  void setMaxStepsToDoAtOnce( int maxSteps )
+  void setTimingParams( const TimingParams& tp )
   {
-    doStepsMax = maxSteps; 
+    timingParams = tp; 
   }
 
   static const std::unordered_map<CommandParser::Command,
@@ -319,11 +344,13 @@ class Focuser
   /// @brief What is the focuser's position of record
   int focuserPosition;
 
-  /// @brief The number of steps to move before we check for new status
-  int doStepsMax;
-
   /// @brief Is the focuser homed?
   bool isHomed;
+
+  /// @brief Focuser uptime in MS
+  unsigned int time;
+  /// @brief For computing time in Focuser::loop
+  unsigned int uSecRemainder;
 };
 
 /// @brief Increment operator for State enum
