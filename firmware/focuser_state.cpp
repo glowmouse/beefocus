@@ -18,6 +18,7 @@ const StateToString FS::stateNames =
   { State::SET_DIR,                       "SET_DIR"            },
   { State::MOVING,                        "MOVING"             },
   { State::STOP_AT_HOME,                  "STOP_AT_HOME"       },
+  { State::SLEEP,                         "LOWER_POWER"        },
   { State::ERROR_STATE,                   "ERROR ERROR ERROR"  },
 };
 
@@ -55,6 +56,7 @@ const std::unordered_map<State,unsigned int (Focuser::*)( void ),EnumHash>
   { State::SET_DIR,                   &Focuser::stateSetDir },
   { State::MOVING,                    &Focuser::stateMoving },
   { State::STOP_AT_HOME,              &Focuser::stateStopAtHome },
+  { State::SLEEP,                     &Focuser::stateSleep },
   { State::ERROR_STATE,               &Focuser::stateError }
 };
 
@@ -177,7 +179,7 @@ unsigned int Focuser::stateAcceptCommands()
     processCommand( cp );
     return 0;
   }
-  return 10*1000;
+  return timingParams.msEpochBetweenCommandChecks*1000;
 }
 
 unsigned int Focuser::stateSetDir()
@@ -236,12 +238,6 @@ unsigned int Focuser::stateDoingSteps()
 
 unsigned int Focuser::stateMoving()
 {
-  if ( motorState != MotorState::ON )
-  {
-    hardware->DigitalWrite( HWI::Pin::MOTOR_ENA, HWI::PinState::MOTOR_ON );
-    return 100000;    // .1s pause to power things up.
-  }
-          
   WifiDebugOstream log( debugLog.get(), net.get() );
   log << "Moving " << focuserPosition << "\n";
   
@@ -282,11 +278,7 @@ unsigned int Focuser::stateStopAtHome()
 {
   WifiDebugOstream log( debugLog.get(), net.get() );
 
-  if ( motorState != MotorState::ON )
-  {
-    hardware->DigitalWrite( HWI::Pin::MOTOR_ENA, HWI::PinState::MOTOR_ON );
-    return 100000;    // .1s pause to power things up.
-  }
+  assert ( motorState == MotorState::ON );
 
   if ( hardware->DigitalRead( HWI::Pin::HOME ) == HWI::PinState::HOME_ACTIVE ) 
   {
@@ -323,6 +315,41 @@ unsigned int Focuser::stateStopAtHome()
   stateStack.push( State::DO_STEPS, 1 );
   stateStack.push( State::SET_DIR, Dir::REVERSE );
   return 0;        
+}
+
+unsigned int Focuser::stateSleep()
+{
+  // Check for new commands
+  DebugInterface& debug= *debugLog;
+  auto cp = CommandParser::checkForCommands( debug, *net );
+
+  if ( cp.command != CommandParser::Command::NoCommand )
+  {
+    if ( doesCommandInterrupt.at( cp.command ))
+    {
+      stateStack.reset();
+    }
+    processCommand( cp );
+    if ( doesCommandInterrupt.at( cp.command ))
+    {
+      if ( motorState != MotorState::ON ) 
+      {
+        hardware->DigitalWrite( HWI::Pin::MOTOR_ENA, HWI::PinState::MOTOR_ON );
+        motorState = MotorState::ON;
+        return timingParams.msToPowerStepper * 1000;
+      }
+      return 0;
+    }
+  }
+
+  if ( motorState != MotorState::OFF )
+  {
+    WifiDebugOstream log( debugLog.get(), net.get() );
+    log << "Powering down stepper motor";
+    hardware->DigitalWrite( HWI::Pin::MOTOR_ENA, HWI::PinState::MOTOR_OFF );
+    motorState = MotorState::OFF;
+  }
+  return timingParams.msEpochForSleepCommandChecks * 1000;
 }
 
 unsigned int Focuser::stateError()

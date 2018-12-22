@@ -75,6 +75,7 @@ enum class State
   SET_DIR,                    ///< Set the Direction Pin
   MOVING,                     ///< Move to an absolute position
   STOP_AT_HOME,               ///< Rewind until the Home input is active
+  SLEEP,                      ///< Low Power State
   ERROR_STATE,                ///< Error Errror Error
   END_OF_STATES               ///< End of States
 };
@@ -84,7 +85,6 @@ enum class Dir {
   FORWARD,    ///< Go Forward
   REVERSE     ///< Go Backward
 };
-
 
 class StateArg
 {
@@ -111,6 +111,29 @@ class StateArg
     int intArg;
     Dir dirArg;
   };
+};
+
+class TimingParams
+{
+  public:
+
+  TimingParams( 
+    int msEpochBetweenCommandChecksRHS    = 10,         // 10 ms
+    int msInactivityToSleepRHS            = 10*60*1000, // 10 minutes
+    int msEpochForSleepCommandChecksRHS   = 5*1000,     // 5 seconds
+    int msToPowerStepperRHS               = 1*1000      // 1 second
+  ) :
+    msEpochBetweenCommandChecks{ msEpochBetweenCommandChecksRHS },
+    msInactivityToSleep{ msInactivityToSleepRHS },
+    msEpochForSleepCommandChecks{ msEpochForSleepCommandChecksRHS },
+    msToPowerStepper{ msToPowerStepperRHS}
+  {
+  }
+
+  const int msEpochBetweenCommandChecks;
+  const int msInactivityToSleep;
+  const int msEpochForSleepCommandChecks;
+  const int msToPowerStepper;
 };
 
 ///
@@ -259,6 +282,8 @@ class Focuser
   unsigned int stateStepInactiveAndWait( void );
   /// @brief Rewind the focuser until the home input is active.
   unsigned int stateStopAtHome( void );
+  /// @brief Low power mode
+  unsigned int stateSleep( void );
   /// @brief If we land in this state, complain a lot.
   unsigned int stateError( void );
 
@@ -274,6 +299,8 @@ class Focuser
   std::unique_ptr<HWI> hardware;
   std::unique_ptr<DebugInterface> debugLog;
   
+  TimingParams timingParams;
+
   /// @brief What direction are we going? 
   ///
   /// FORWARD = counting up.
