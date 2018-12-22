@@ -127,8 +127,8 @@ void FocuserState::doSStatus( CommandParser::CommandPacket cp )
   DebugInterface& log = *debugLog;
 
   log << "Processing sstatus request\n";
-  *net << "State: " << stateNames.at(stateStack.top().state) << 
-                " " << stateStack.top().arg0 << "\n";
+  *net << "State: " << stateNames.at(stateStack.topState()) << 
+                " " << stateStack.topArg() << "\n";
   return;
 }
 
@@ -182,7 +182,7 @@ unsigned int FocuserState::stateAcceptCommands()
 
 unsigned int FocuserState::stateSetDir()
 {
-  Dir desiredDir = stateStack.top().arg0 ? Dir::FORWARD : Dir::REVERSE;
+  Dir desiredDir = stateStack.topArg() ? Dir::FORWARD : Dir::REVERSE;
 
   stateStack.pop();
 
@@ -217,13 +217,13 @@ unsigned int FocuserState::stateStepActiveAndWait()
 
 unsigned int FocuserState::stateDoingSteps()
 {
-  if ( stateStack.top().arg0 == 0 )
+  if ( stateStack.topArg() == 0 )
   {
     // We're done at 0
     stateStack.pop();
     return 0;
   }
-  stateStack.top().arg0--;
+  stateStack.topArg()--;
 
   stateStack.push( State::STEPPER_INACTIVE_AND_WAIT );
   stateStack.push( State::STEPPER_ACTIVE_AND_WAIT );
@@ -245,7 +245,7 @@ unsigned int FocuserState::stateMoving()
   WifiDebugOstream log( debugLog.get(), net.get() );
   log << "Moving " << focuserPosition << "\n";
   
-  if ( stateStack.top().arg0 == focuserPosition ) {
+  if ( stateStack.topArg() == focuserPosition ) {
     // We're at the target,  exit
     stateStack.pop();
     return 0;    
@@ -268,7 +268,7 @@ unsigned int FocuserState::stateMoving()
     }
   }
 
-  const int  steps        = stateStack.top().arg0 - focuserPosition;
+  const int  steps        = stateStack.topArg() - focuserPosition;
   const bool nextDir      = steps > 0;    // TODO, enum, !bool
   const int  absSteps     = steps > 0 ? steps : -steps;
   const int  clippedSteps = absSteps > doStepsMax ? doStepsMax : absSteps;
@@ -334,7 +334,7 @@ unsigned int FocuserState::stateError()
 
 unsigned int FocuserState::loop(void)
 {
-  ptrToMember function = stateImpl.at( stateStack.top().state );
+  ptrToMember function = stateImpl.at( stateStack.topState() );
   return (this->*function)();
 }
 

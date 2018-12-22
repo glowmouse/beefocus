@@ -89,13 +89,6 @@ class FocuserState
 
   private:
 
-  class COMMAND_PACKET {
-    public:
-    COMMAND_PACKET( State arg_state, int arg_arg0 ) : state{ arg_state }, arg0{ arg_arg0 } {}
-    State state;   
-    int arg0; 
-  };
-
   class CStack {
     public:
 
@@ -113,14 +106,23 @@ class FocuserState
       push( State::ACCEPT_COMMANDS, 0 );
     }
 
-    COMMAND_PACKET& top( void )
+    State topState( void )
     {
       if ( stateStack.empty() )
       {
         // bug, should never happen.
         push( State::ERROR_STATE, __LINE__ ); 
       }     
-      return stateStack.back();
+      return stateStack.back().state;
+    }
+    int& topArg( void )
+    {
+      if ( stateStack.empty() )
+      {
+        // bug, should never happen.
+        push( State::ERROR_STATE, __LINE__ ); 
+      }     
+      return stateStack.back().arg0;
     }
     void pop( void )
     {
@@ -128,11 +130,18 @@ class FocuserState
     }
     void push( State new_state, int arg0 = -1  )
     {
-      stateStack.push_back( COMMAND_PACKET( new_state, arg0 ));
+      stateStack.push_back( { new_state, arg0 } );
     }  
   
     private:
-    std::vector< COMMAND_PACKET > stateStack;
+
+    typedef struct 
+    {
+        State state;   
+        int arg0; 
+    } CommandPacket;
+
+    std::vector< CommandPacket > stateStack;
   };
   CStack stateStack;
 
