@@ -71,9 +71,8 @@ TEST( FOCUSER_STATE, allCommandsHaveInterruptStatus)
   for ( CommandParser::Command c = CommandParser::Command::StartOfCommands;
         c < CommandParser::Command::EndOfCommands; ++c )
   {
-    ASSERT_NE( 
-      FS::Focuser::doesCommandInterrupt.find( c ),
-      FS::Focuser::doesCommandInterrupt.end());
+    ASSERT_NE( FS::doesCommandInterrupt.find( c ),
+               FS::doesCommandInterrupt.end());
   }
 }
 
@@ -107,8 +106,8 @@ TEST( FOCUSER_STATE, allStatesHaveDebugNames )
         s < FS::State::END_OF_STATES; ++s )
   {
     ASSERT_NE( 
-      FS::Focuser::stateNames.find( s ),
-      FS::Focuser::stateNames.end());
+      FS::stateNames.find( s ),
+      FS::stateNames.end());
   }
 } 
 

@@ -11,29 +11,96 @@
 
 namespace FS {
 
-  /// @brief Focuser's State Enum
-  ///
-  /// TODO - describe state machine operation in one place, probably
-  ///        in the Focuser class description
-  ///
-  enum class State {
-    START_OF_STATES = 0,        ///< Start of States
-    ACCEPT_COMMANDS = 0,        ///< Accepting commands from the net interface
-    DO_STEPS,                   ///< Doing n Stepper Motor Steps
-    STEPPER_INACTIVE_AND_WAIT,  ///< Set Stepper to Inactive and Pause
-    STEPPER_ACTIVE_AND_WAIT,    ///< Set Stepper to Active and Pause
-    SET_DIR,                    ///< Set the Direction Pin
-    MOVING,                     ///< Move to an absolute position
-    STOP_AT_HOME,               ///< Rewind until the Home input is active
-    ERROR_STATE,                ///< Error Errror Error
-    END_OF_STATES               ///< End of States
-  };
+/// @brief Focuser's State Enum
+///
+/// TODO - describe state machine operation in one place, probably
+///        in the Focuser class description
+///
+enum class State {
+  START_OF_STATES = 0,        ///< Start of States
+  ACCEPT_COMMANDS = 0,        ///< Accepting commands from the net interface
+  DO_STEPS,                   ///< Doing n Stepper Motor Steps
+  STEPPER_INACTIVE_AND_WAIT,  ///< Set Stepper to Inactive and Pause
+  STEPPER_ACTIVE_AND_WAIT,    ///< Set Stepper to Active and Pause
+  SET_DIR,                    ///< Set the Direction Pin
+  MOVING,                     ///< Move to an absolute position
+  STOP_AT_HOME,               ///< Rewind until the Home input is active
+  ERROR_STATE,                ///< Error Errror Error
+  END_OF_STATES               ///< End of States
+};
 
 /// @brief Increment operator for State enum
 inline State& operator++( State &s )
 {
   return BeeFocus::advance< State, State::END_OF_STATES>(s);
 }
+
+using StateToString = std::unordered_map< State, const std::string, EnumHash >;
+using CommandToBool = std::unordered_map< CommandParser::Command, bool, EnumHash >;
+
+extern const StateToString stateNames;
+///
+/// @brief Does a particular incoming command interrupt the current state
+///
+/// Example 1.  A "Status" Command will not interrupt a move sequence
+/// Example 2.  A "Home" Command will interrupt a focuser's move sequence
+///
+extern const CommandToBool doesCommandInterrupt;
+
+class CStack {
+  public:
+
+  CStack()
+  {
+    reset();
+  }
+
+  void reset( void )
+  {
+    while ( !stateStack.empty() )
+    {  
+      pop();
+    }
+    push( State::ACCEPT_COMMANDS, 0 );
+  }
+
+  State topState( void )
+  {
+    if ( stateStack.empty() )
+    {
+      // bug, should never happen.
+      push( State::ERROR_STATE, __LINE__ ); 
+    }     
+    return stateStack.back().state;
+  }
+  int& topArg( void )
+  {
+    if ( stateStack.empty() )
+    {
+      // bug, should never happen.
+      push( State::ERROR_STATE, __LINE__ ); 
+    }     
+    return stateStack.back().arg0;
+  }
+  void pop( void )
+  {
+    stateStack.pop_back();
+  }
+  void push( State new_state, int arg0 = -1  )
+  {
+    stateStack.push_back( { new_state, arg0 } );
+  }  
+  
+  private:
+
+  typedef struct 
+  {
+    State state;   
+    int arg0; 
+  } CommandPacket;
+
+  std::vector< CommandPacket > stateStack;
+};
 
 class Focuser 
 {
@@ -74,18 +141,6 @@ class Focuser
     doStepsMax = maxSteps; 
   }
 
-  /// @brief Debug names for each state
-  const static std::unordered_map< State, const std::string, EnumHash > stateNames;
-
-  ///
-  /// @brief Does a particular incoming command interrupt the current state
-  ///
-  /// Example 1.  A "Status" Command will not interrupt a move sequence
-  /// Example 2.  A "Home" Command will interrupt a focuser's move sequence
-  ///
-  const static std::unordered_map< CommandParser::Command, bool, EnumHash > 
-      doesCommandInterrupt;
-
   static const std::unordered_map<CommandParser::Command,
     void (Focuser::*)( CommandParser::CommandPacket),EnumHash> 
     commandImpl;
@@ -97,60 +152,6 @@ class Focuser
 
   private:
 
-  class CStack {
-    public:
-
-    CStack()
-    {
-      reset();
-    }
-
-    void reset( void )
-    {
-      while ( !stateStack.empty() )
-      {  
-        pop();
-      }
-      push( State::ACCEPT_COMMANDS, 0 );
-    }
-
-    State topState( void )
-    {
-      if ( stateStack.empty() )
-      {
-        // bug, should never happen.
-        push( State::ERROR_STATE, __LINE__ ); 
-      }     
-      return stateStack.back().state;
-    }
-    int& topArg( void )
-    {
-      if ( stateStack.empty() )
-      {
-        // bug, should never happen.
-        push( State::ERROR_STATE, __LINE__ ); 
-      }     
-      return stateStack.back().arg0;
-    }
-    void pop( void )
-    {
-      stateStack.pop_back();
-    }
-    void push( State new_state, int arg0 = -1  )
-    {
-      stateStack.push_back( { new_state, arg0 } );
-    }  
-  
-    private:
-
-    typedef struct 
-    {
-        State state;   
-        int arg0; 
-    } CommandPacket;
-
-    std::vector< CommandPacket > stateStack;
-  };
   CStack stateStack;
 
   void processCommand( CommandParser::CommandPacket cp );

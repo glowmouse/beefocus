@@ -9,8 +9,7 @@
 
 using namespace FS;
 
-const std::unordered_map<State,const std::string,EnumHash> 
-  Focuser::stateNames = 
+const StateToString FS::stateNames =
 {
   { State::ACCEPT_COMMANDS,               "ACCEPTING_COMMANDS" },
   { State::DO_STEPS,                      "DO_STEPS"           },
@@ -22,8 +21,7 @@ const std::unordered_map<State,const std::string,EnumHash>
   { State::ERROR_STATE,                   "ERROR ERROR ERROR"  },
 };
 
-const std::unordered_map<CommandParser::Command,bool,EnumHash> 
-  Focuser::doesCommandInterrupt= 
+const CommandToBool FS::doesCommandInterrupt= 
 {
   { CommandParser::Command::Abort,         true   },
   { CommandParser::Command::Home,          true   },
