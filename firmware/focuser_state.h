@@ -4,6 +4,7 @@
 #include <vector>
 #include <memory>
 #include <string>
+#include <assert.h>
 #include <unordered_map>
 #include "net_interface.h"
 #include "hardware_interface.h"
@@ -78,17 +79,37 @@ enum class State
   END_OF_STATES               ///< End of States
 };
 
+/// @brief What direction is the focuser going?
+enum class Dir {
+  FORWARD,    ///< Go Forward
+  REVERSE     ///< Go Backward
+};
+
+
 class StateArg
 {
   public: 
 
-  StateArg() : intArg{ -1 } {}
-  StateArg( int i ) : intArg{ i } {}
-  int getInt() { return intArg; }
+  enum class Type {
+    NONE,
+    INT,
+    DIR
+  };
+
+  StateArg() : type{ Type::NONE}  {}
+  StateArg( int i ) : type{Type::INT}, intArg{ i } {}
+  StateArg( Dir d ) : type{Type::DIR}, dirArg{ d } {}
+  Type getType() { return type; }
+  int getInt() { assert( type==Type::INT ); return intArg; }
+  Dir getDir() { assert( type==Type::DIR ); return dirArg; }
 
   private:
+
+  Type type;
+
   union {
     int intArg;
+    Dir dirArg;
   };
 };
 
@@ -253,11 +274,6 @@ class Focuser
   std::unique_ptr<HWI> hardware;
   std::unique_ptr<DebugInterface> debugLog;
   
-  enum class Dir {
-    FORWARD,    ///< Go Forward
-    REVERSE     ///< Go Backward
-  };
-
   /// @brief What direction are we going? 
   ///
   /// FORWARD = counting up.
@@ -309,9 +325,19 @@ template <class T,
   typename = my_enable_if_t<is_beefocus_ostream<T>::value>>
 T& operator<<( T& ostream, StateArg sA )
 {
-  ostream << sA.getInt();
+  switch (sA.getType() )
+  {
+    case StateArg::Type::NONE:
+      ostream << "NoArg";
+      break;
+    case StateArg::Type::INT:
+      ostream << sA.getInt();
+      break;
+    default:
+      assert(0);
+  }
+  return ostream; 
 }
-
 
 }
 

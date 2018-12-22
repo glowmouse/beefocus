@@ -182,7 +182,7 @@ unsigned int Focuser::stateAcceptCommands()
 
 unsigned int Focuser::stateSetDir()
 {
-  Dir desiredDir = stateStack.topArg().getInt() ? Dir::FORWARD : Dir::REVERSE;
+  Dir desiredDir = stateStack.topArg().getDir();
 
   stateStack.pop();
 
@@ -193,8 +193,8 @@ unsigned int Focuser::stateSetDir()
       hardware->DigitalWrite( HWI::Pin::DIR, HWI::PinState::DIR_FORWARD); 
     if ( dir == Dir::REVERSE )       
       hardware->DigitalWrite( HWI::Pin::DIR, HWI::PinState::DIR_BACKWARD );
-    // Trigger a 1ms pause so the stepper motor controller sees the
-    // state change before we try to do anything.
+      // Trigger a 1ms pause so the stepper motor controller sees the
+      // state change before we try to do anything.
     return 1000;
   }    
 
@@ -269,7 +269,7 @@ unsigned int Focuser::stateMoving()
   }
 
   const int  steps        = stateStack.topArg().getInt() - focuserPosition;
-  const bool nextDir      = steps > 0;    // TODO, enum, !bool
+  const Dir  nextDir      = steps > 0 ? Dir::FORWARD : Dir::REVERSE;
   const int  absSteps     = steps > 0 ? steps : -steps;
   const int  clippedSteps = absSteps > doStepsMax ? doStepsMax : absSteps;
 
@@ -321,7 +321,7 @@ unsigned int Focuser::stateStopAtHome()
   }
 
   stateStack.push( State::DO_STEPS, 1 );
-  stateStack.push( State::SET_DIR, 0 );
+  stateStack.push( State::SET_DIR, Dir::REVERSE );
   return 0;        
 }
 
