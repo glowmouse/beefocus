@@ -223,6 +223,7 @@ unsigned int FocuserState::stateDoingSteps()
   pushState( State::STEPPER_ACTIVE_AND_WAIT );
 
   focuserPosition += (dir == Dir::FORWARD) ? 1 : -1;
+  focuserPosition = focuserPosition >= 0 ? focuserPosition : 0;
 
   return 0;  
 }
@@ -281,8 +282,6 @@ unsigned int FocuserState::stateStopAtHome()
     return 100000;    // .1s pause to power things up.
   }
 
-
-          
   if ( hardware->DigitalRead( HWI::Pin::HOME ) == HWI::PinState::HOME_ACTIVE ) 
   {
     log << "Hit home at position " << focuserPosition << "\n";
@@ -303,6 +302,10 @@ unsigned int FocuserState::stateStopAtHome()
 
     if ( cp.command != CommandParser::Command::NoCommand )
     {
+      if ( doesCommandInterrupt.at( cp.command ))
+      {
+        stateStack.pop_back();
+      }
       processCommand( cp );
       if ( doesCommandInterrupt.at( cp.command ))
       {
@@ -313,7 +316,6 @@ unsigned int FocuserState::stateStopAtHome()
 
   pushState( State::DO_STEPS, 1 );
   pushState( State::SET_DIR, 0 );
-  focuserPosition--;
   return 0;        
 }
 

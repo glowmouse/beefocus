@@ -413,6 +413,50 @@ TEST( FOCUSER_STATE, abort_while_moving )
   ASSERT_EQ( goldenHW, hwMockAlias->getOutEvents() );
 }
 
+TEST( FOCUSER_STATE, abort_while_homing )
+{
+  TimedStringEvents netInput = {
+    { 0,  "hstatus" },        // Make sure we're not homed
+    { 10, "home" },           // issue home command
+    { 11, "hstatus" },        // Should not be homed during homing
+    { 16, "abort" },          // On second thought... 
+    { 40, "hstatus" },        // Should still be homed.
+  };
+
+  HWTimedEvents hwInput= {
+    { 0,  { HWI::Pin::HOME,        HWI::PinState::HOME_INACTIVE} },
+    { 25, { HWI::Pin::HOME,        HWI::PinState::HOME_ACTIVE } },
+  }; 
+
+  NetMockSimpleTimed* wifiAlias;
+  HWMockTimed* hwMockAlias;
+  auto focuser = make_focuser( netInput, hwInput, wifiAlias, hwMockAlias ); 
+  focuser->setMaxStepsToDoAtOnce( 2 );
+  simulateFocuser( focuser.get(), wifiAlias, hwMockAlias, 1000 );
+
+  TimedStringEvents goldenNet = {
+    {  0, "Homed: NO" },
+    { 13, "Homed: NO" },
+    { 47, "Homed: NO" },
+  };
+
+  HWTimedEvents goldenHW = {
+    { 10, { HWI::Pin::DIR,        HWI::PinState::DIR_BACKWARD } },
+    { 11, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 12, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 13, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 14, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 15, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 16, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+  };
+
+  goldenHW.insert( goldenHW.begin(), goldenHWStart.begin(), goldenHWStart.end());
+
+  ASSERT_EQ( goldenNet, testFilterComments(wifiAlias->getOutput() ));
+  ASSERT_EQ( goldenHW, hwMockAlias->getOutEvents() );
+}
+
+
 TEST( FOCUSER_STATE, new_move_while_moving )
 {
   TimedStringEvents netInput = {
@@ -451,11 +495,60 @@ TEST( FOCUSER_STATE, new_move_while_moving )
   ASSERT_EQ( goldenHW, hwMockAlias->getOutEvents() );
 }
 
-TEST( FOCUSER_STATE, home_while_moving )
+TEST( FOCUSER_STATE, new_move_while_homing )
+{
+  TimedStringEvents netInput = {
+    { 0,  "hstatus" },        // Make sure we're not homed
+    { 10, "home" },           // issue home command
+    { 11, "hstatus" },        // Should not be homed during homing
+    { 16, "abs_pos=1" },      // On second thought... 
+    { 40, "hstatus" },        // Should still be homed.
+    { 41, "pstatus" },        // Should still be homed.
+  };
+
+  HWTimedEvents hwInput= {
+    { 0,  { HWI::Pin::HOME,        HWI::PinState::HOME_INACTIVE} },
+    { 20, { HWI::Pin::HOME,        HWI::PinState::HOME_ACTIVE } },
+  }; 
+
+  NetMockSimpleTimed* wifiAlias;
+  HWMockTimed* hwMockAlias;
+  auto focuser = make_focuser( netInput, hwInput, wifiAlias, hwMockAlias ); 
+  focuser->setMaxStepsToDoAtOnce( 2 );
+  simulateFocuser( focuser.get(), wifiAlias, hwMockAlias, 1000 );
+
+  TimedStringEvents goldenNet = {
+    {  0, "Homed: NO" },
+    { 13, "Homed: NO" },
+    { 40, "Homed: NO" },
+    { 50, "Position: 1" },
+  };
+
+  HWTimedEvents goldenHW = {
+    { 10, { HWI::Pin::DIR,        HWI::PinState::DIR_BACKWARD } },
+    { 11, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 12, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 13, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 14, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 15, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 16, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 17, { HWI::Pin::DIR,        HWI::PinState::DIR_FORWARD } },
+    { 18, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 19, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+  };
+
+  goldenHW.insert( goldenHW.begin(), goldenHWStart.begin(), goldenHWStart.end());
+
+  ASSERT_EQ( goldenNet, testFilterComments(wifiAlias->getOutput() ));
+  ASSERT_EQ( goldenHW, hwMockAlias->getOutEvents() );
+}
+
+
+TEST( FOCUSER_STATE, new_home_while_moving )
 {
   TimedStringEvents netInput = {
     {  0, "hstatus" },          // Are we homed?
-    { 10, "abs_pos=99" },        // Start the focuser moving
+    { 10, "abs_pos=99" },       // Start the focuser moving
     { 13, "pstatus" },          // Where are we?
     { 15, "home" },             // On second thought, I forgot to home
     { 17, "sstatus" },          // What are we doing now?
@@ -502,6 +595,59 @@ TEST( FOCUSER_STATE, home_while_moving )
   ASSERT_EQ( goldenNet, testFilterComments(wifiAlias->getOutput() ));
   ASSERT_EQ( goldenHW, hwMockAlias->getOutEvents() );
 }
+
+TEST( FOCUSER_STATE, new_home_while_homing )
+{
+  TimedStringEvents netInput = {
+    {  0, "hstatus" },          // Are we homed?
+    { 10, "home" },             // Start the focuser moving
+    { 13, "pstatus" },          // Where are we?
+    { 15, "home" },             // On second thought, I forgot to home
+    { 17, "hstatus" },          // What are we doing now?
+    { 30, "pstatus" },          // Where did we land?
+    { 32, "hstatus" },          // Are we homed?
+  };
+
+  HWTimedEvents hwInput= {
+    { 0,  { HWI::Pin::HOME,        HWI::PinState::HOME_INACTIVE} },
+    { 22, { HWI::Pin::HOME,        HWI::PinState::HOME_ACTIVE } },
+  }; 
+
+  NetMockSimpleTimed* wifiAlias;
+  HWMockTimed* hwMockAlias;
+  auto focuser = make_focuser( netInput, hwInput, wifiAlias, hwMockAlias ); 
+  focuser->setMaxStepsToDoAtOnce( 2 );
+  simulateFocuser( focuser.get(), wifiAlias, hwMockAlias, 1000 );
+
+  HWTimedEvents goldenHW = {
+    { 10, { HWI::Pin::DIR,        HWI::PinState::DIR_BACKWARD } },
+    { 11, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 12, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 13, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 14, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 15, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 16, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 17, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 18, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 19, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 20, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 21, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 22, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+  };
+
+  goldenHW.insert( goldenHW.begin(), goldenHWStart.begin(), goldenHWStart.end());
+  TimedStringEvents goldenNet = {
+    {  0,  "Homed: NO" },
+    { 13,  "Position: 0" },
+    { 17,  "Homed: NO" },
+    { 33,  "Position: 0"},
+    { 33,  "Homed: YES"},
+  };
+
+  ASSERT_EQ( goldenNet, testFilterComments(wifiAlias->getOutput() ));
+  ASSERT_EQ( goldenHW, hwMockAlias->getOutEvents() );
+}
+
 
 
 
