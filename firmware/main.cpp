@@ -11,7 +11,10 @@ void loop() {
   unsigned int pause = focuser->loop();
   if ( pause != 0 )
   {
-    delayMicroseconds( pause );
+    int ms = pause / 1000;
+    int usRemainder = pause % 1000;
+    delay( ms );
+    delayMicroseconds( usRemainder );
   }
 }
 

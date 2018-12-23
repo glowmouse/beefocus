@@ -206,6 +206,10 @@ class StateStack {
   void pop( void )
   {
     stack.pop_back();
+    if ( stack.size() > 10 ) 
+    {
+      push( State::ERROR_STATE, StateArg(__LINE__) ); 
+    }
     if ( stack.empty() ) 
     {
       // bug, should never happen.
