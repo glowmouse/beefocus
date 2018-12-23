@@ -7,8 +7,9 @@
 #include "wifi_debug_ostream.h"
 #include "focuser_state.h"
 
-const std::unordered_map<FocuserState::State,const std::string,EnumHash> 
-  FocuserState::stateNames = 
+using namespace FS;
+
+const StateToString FS::stateNames =
 {
   { State::ACCEPT_COMMANDS,               "ACCEPTING_COMMANDS" },
   { State::DO_STEPS,                      "DO_STEPS"           },
@@ -17,11 +18,11 @@ const std::unordered_map<FocuserState::State,const std::string,EnumHash>
   { State::SET_DIR,                       "SET_DIR"            },
   { State::MOVING,                        "MOVING"             },
   { State::STOP_AT_HOME,                  "STOP_AT_HOME"       },
+  { State::SLEEP,                         "LOW_POWER"          },
   { State::ERROR_STATE,                   "ERROR ERROR ERROR"  },
 };
 
-const std::unordered_map<CommandParser::Command,bool,EnumHash> 
-  FocuserState::doesCommandInterrupt= 
+const CommandToBool FS::doesCommandInterrupt= 
 {
   { CommandParser::Command::Abort,         true   },
   { CommandParser::Command::Home,          true   },
@@ -32,28 +33,44 @@ const std::unordered_map<CommandParser::Command,bool,EnumHash>
   { CommandParser::Command::NoCommand,     false  },
 };
 
-const std::unordered_map<FocuserState::State,unsigned int (FocuserState::*)( void ),EnumHash>
-  FocuserState::stateImpl =
+const std::unordered_map<CommandParser::Command,
+  void (Focuser::*)( CommandParser::CommandPacket),EnumHash> 
+  Focuser::commandImpl = 
 {
-  { State::ACCEPT_COMMANDS,           &FocuserState::stateAcceptCommands },
-  { State::DO_STEPS,                  &FocuserState::stateDoingSteps },
-  { State::STEPPER_INACTIVE_AND_WAIT, &FocuserState::stateStepInactiveAndWait },
-  { State::STEPPER_ACTIVE_AND_WAIT,   &FocuserState::stateStepActiveAndWait },
-  { State::SET_DIR,                   &FocuserState::stateSetDir },
-  { State::MOVING,                    &FocuserState::stateMoving },
-  { State::STOP_AT_HOME,              &FocuserState::stateStopAtHome },
-  { State::ERROR_STATE,               &FocuserState::stateError }
+  { CommandParser::Command::Abort,      &Focuser::doAbort },
+  { CommandParser::Command::Home,       &Focuser::doHome },
+  { CommandParser::Command::PStatus,    &Focuser::doPStatus },
+  { CommandParser::Command::SStatus,    &Focuser::doSStatus },
+  { CommandParser::Command::HStatus,    &Focuser::doHStatus },
+  { CommandParser::Command::ABSPos,     &Focuser::doABSPos },
+  { CommandParser::Command::NoCommand,  &Focuser::doError },
 };
 
-FocuserState::FocuserState(
+const std::unordered_map<State,unsigned int (Focuser::*)( void ),EnumHash>
+  Focuser::stateImpl =
+{
+  { State::ACCEPT_COMMANDS,           &Focuser::stateAcceptCommands },
+  { State::DO_STEPS,                  &Focuser::stateDoingSteps },
+  { State::STEPPER_INACTIVE_AND_WAIT, &Focuser::stateStepInactiveAndWait },
+  { State::STEPPER_ACTIVE_AND_WAIT,   &Focuser::stateStepActiveAndWait },
+  { State::SET_DIR,                   &Focuser::stateSetDir },
+  { State::MOVING,                    &Focuser::stateMoving },
+  { State::STOP_AT_HOME,              &Focuser::stateStopAtHome },
+  { State::SLEEP,                     &Focuser::stateSleep },
+  { State::ERROR_STATE,               &Focuser::stateError }
+};
+
+Focuser::Focuser(
     std::unique_ptr<NetInterface> netArg,
     std::unique_ptr<HWI> hardwareArg,
     std::unique_ptr<DebugInterface> debugArg
 )
 {
-  doStepsMax = 50; 
   focuserPosition = 0;
   isHomed = false;
+  time = 0;
+  uSecRemainder = 0;
+  timeLastInterruptingCommandOccured = 0;
 
   std::swap( net, netArg );
   std::swap( hardware, hardwareArg );
@@ -65,10 +82,6 @@ FocuserState::FocuserState(
   // Bring up the interface to the controlling computer
 
   net->setup( log );
-
-  // No setup right now,  so accept commands
-  
-  hard_reset_state( State::ACCEPT_COMMANDS, 0 );  
 
   //
   // Set the pin modes 
@@ -88,80 +101,81 @@ FocuserState::FocuserState(
   hardware->DigitalWrite( HWI::Pin::DIR, HWI::PinState::DIR_FORWARD); 
   hardware->DigitalWrite( HWI::Pin::STEP, HWI::PinState::STEP_INACTIVE );
 
-  log << "FocuserState is up\n";
+  log << "Focuser is up\n";
 }
 
-void FocuserState::hard_reset_state( State new_state, int arg )
+void Focuser::doAbort( CommandParser::CommandPacket cp )
 {
-    while ( !stateStack.empty() )
-      stateStack.pop_back();
-    stateStack.push_back( COMMAND_PACKET(new_state, arg ) );
+  (void) cp;
+  // Do nothing - command triggers a state interrupt.
 }
 
-void FocuserState::pushState( State new_state, int arg0 )
+void Focuser::doHome( CommandParser::CommandPacket cp )
 {
-    stateStack.push_back( COMMAND_PACKET(new_state, arg0 ));
+  (void) cp;
+  stateStack.push( State::STOP_AT_HOME );
+  return;
 }
 
-FocuserState::COMMAND_PACKET& FocuserState::top( void ) 
+void Focuser::doPStatus( CommandParser::CommandPacket cp )
 {
-  if ( stateStack.empty() )
-    hard_reset_state( State::ERROR_STATE, __LINE__ );   // bug,  should never happen :)  
-  return stateStack.back();
+  (void) cp;
+  DebugInterface& log = *debugLog;
+  log << "Processing pstatus request\n";
+  *net << "Position: " << focuserPosition << "\n";
 }
 
-void FocuserState::processCommand( CommandParser::CommandPacket cp )
+void Focuser::doSStatus( CommandParser::CommandPacket cp )
 {
+  (void) cp;
   DebugInterface& log = *debugLog;
 
-  if ( cp.command == CommandParser::Command::PStatus )
+  log << "Processing sstatus request\n";
+  *net << "State: " << stateNames.at(stateStack.topState()) << 
+                " " << stateStack.topArg() << "\n";
+  return;
+}
+
+void Focuser::doHStatus( CommandParser::CommandPacket cp )
+{
+  (void) cp;
+  DebugInterface& log = *debugLog;
+
+  log << "Processing hstatus request\n";
+  *net << "Homed: " << (isHomed ? "YES" : "NO" ) << "\n";
+  return;
+}
+
+void Focuser::doABSPos( CommandParser::CommandPacket cp )
+{
+  stateStack.push( State::MOVING, cp.optionalArg );
+  int new_position = cp.optionalArg;
+
+  if ( new_position < focuserPosition )
   {
-    log << "Processing pstatus request\n";
-    *net << "Position: " << focuserPosition << "\n";
-    return;
-  }
-
-  if ( cp.command == CommandParser::Command::SStatus )
-  {
-    State state = top().state;
-    int arg0 = top().arg0;
-
-    log << "Processing sstatus request\n";
-    *net << "State: " << stateNames.at(state) << " " << arg0 << "\n";
-    return;
-  }
-
-  if ( cp.command == CommandParser::Command::HStatus )
-  {
-    log << "Processing hstatus request\n";
-    *net << "Homed: " << (isHomed ? "YES" : "NO" ) << "\n";
-    return;
-  }
-
-  if ( cp.command == CommandParser::Command::Abort ) {
-    // Caller is responsible for unwinding.
-    return;
-  }
-
-  if ( cp.command == CommandParser::Command::Home ) {
-    pushState( State::STOP_AT_HOME );
-    return;
-  }  
-
-  if ( cp.command == CommandParser::Command::ABSPos ) {
-    pushState( State::MOVING, cp.optionalArg );
-    int new_position = cp.optionalArg;
-
-    if ( new_position < focuserPosition )
-    {
-      int backtrack = new_position - 500;
-      backtrack = backtrack < 0 ? 0 : backtrack;
-      pushState( State::MOVING, backtrack );
-    }
+    int backtrack = new_position - 500;
+    backtrack = backtrack < 0 ? 0 : backtrack;
+    stateStack.push( State::MOVING, backtrack );
   }
 }
 
-unsigned int FocuserState::stateAcceptCommands()
+void Focuser::doError( CommandParser::CommandPacket cp )
+{
+  (void) cp;
+  stateStack.push( State::ERROR_STATE, __LINE__ );   
+}
+
+void Focuser::processCommand( CommandParser::CommandPacket cp )
+{
+  if ( doesCommandInterrupt.at( cp.command ))
+  {
+    timeLastInterruptingCommandOccured = time;
+  }
+  auto function = commandImpl.at( cp.command );
+  (this->*function)( cp );
+}
+
+unsigned int Focuser::stateAcceptCommands()
 {
   DebugInterface& log = *debugLog;
   auto cp = CommandParser::checkForCommands( log, *net );
@@ -171,14 +185,26 @@ unsigned int FocuserState::stateAcceptCommands()
     processCommand( cp );
     return 0;
   }
-  return 10*1000;
+  const unsigned int timeSinceLastInterrupt = 
+      time - timeLastInterruptingCommandOccured;
+
+  if ( timeSinceLastInterrupt > timingParams.getInactivityToSleep() )
+  {
+    stateStack.push( State::SLEEP );
+    return 0;
+  }
+
+  const int mSecToNextEpoch = timingParams.getEpochBetweenCommandChecks() - 
+        (time % timingParams.getEpochBetweenCommandChecks());
+
+  return mSecToNextEpoch * 1000;
 }
 
-unsigned int FocuserState::stateSetDir()
+unsigned int Focuser::stateSetDir()
 {
-  Dir desiredDir = top().arg0 ? Dir::FORWARD : Dir::REVERSE;
+  Dir desiredDir = stateStack.topArg().getDir();
 
-  stateStack.pop_back();
+  stateStack.pop();
 
   if ( desiredDir != dir )
   {
@@ -187,40 +213,40 @@ unsigned int FocuserState::stateSetDir()
       hardware->DigitalWrite( HWI::Pin::DIR, HWI::PinState::DIR_FORWARD); 
     if ( dir == Dir::REVERSE )       
       hardware->DigitalWrite( HWI::Pin::DIR, HWI::PinState::DIR_BACKWARD );
-    // Trigger a 1ms pause so the stepper motor controller sees the
-    // state change before we try to do anything.
+      // Trigger a 1ms pause so the stepper motor controller sees the
+      // state change before we try to do anything.
     return 1000;
   }    
 
   return 0;
 }
 
-unsigned int FocuserState::stateStepInactiveAndWait()
+unsigned int Focuser::stateStepInactiveAndWait()
 {
   hardware->DigitalWrite( HWI::Pin::STEP, HWI::PinState::STEP_INACTIVE );
-  stateStack.pop_back();
+  stateStack.pop();
   return 1000;
 }
 
-unsigned int FocuserState::stateStepActiveAndWait()
+unsigned int Focuser::stateStepActiveAndWait()
 {
   hardware->DigitalWrite( HWI::Pin::STEP, HWI::PinState::STEP_ACTIVE );
-  stateStack.pop_back();
+  stateStack.pop();
   return 1000;
 }
 
-unsigned int FocuserState::stateDoingSteps()
+unsigned int Focuser::stateDoingSteps()
 {
-  if ( top().arg0 == 0 )
+  if ( stateStack.topArg().getInt() == 0 )
   {
     // We're done at 0
-    stateStack.pop_back();
+    stateStack.pop();
     return 0;
   }
-  top().arg0--;
+  stateStack.topArgSet( stateStack.topArg().getInt()-1 );
 
-  pushState( State::STEPPER_INACTIVE_AND_WAIT );
-  pushState( State::STEPPER_ACTIVE_AND_WAIT );
+  stateStack.push( State::STEPPER_INACTIVE_AND_WAIT );
+  stateStack.push( State::STEPPER_ACTIVE_AND_WAIT );
 
   focuserPosition += (dir == Dir::FORWARD) ? 1 : -1;
   focuserPosition = focuserPosition >= 0 ? focuserPosition : 0;
@@ -228,20 +254,14 @@ unsigned int FocuserState::stateDoingSteps()
   return 0;  
 }
 
-unsigned int FocuserState::stateMoving()
+unsigned int Focuser::stateMoving()
 {
-  if ( motorState != MotorState::ON )
-  {
-    hardware->DigitalWrite( HWI::Pin::MOTOR_ENA, HWI::PinState::MOTOR_ON );
-    return 100000;    // .1s pause to power things up.
-  }
-          
   WifiDebugOstream log( debugLog.get(), net.get() );
   log << "Moving " << focuserPosition << "\n";
   
-  if ( top().arg0 == focuserPosition ) {
+  if ( stateStack.topArg().getInt() == focuserPosition ) {
     // We're at the target,  exit
-    stateStack.pop_back();
+    stateStack.pop();
     return 0;    
   }
 
@@ -253,7 +273,7 @@ unsigned int FocuserState::stateMoving()
   {
     if ( doesCommandInterrupt.at( cp.command ))
     {
-      stateStack.pop_back();
+      stateStack.reset();
     }
     processCommand( cp );
     if ( doesCommandInterrupt.at( cp.command ))
@@ -262,25 +282,22 @@ unsigned int FocuserState::stateMoving()
     }
   }
 
-  const int  steps        = top().arg0 - focuserPosition;
-  const bool nextDir      = steps > 0;    // TODO, enum, !bool
+  const int  steps        = stateStack.topArg().getInt() - focuserPosition;
+  const Dir  nextDir      = steps > 0 ? Dir::FORWARD : Dir::REVERSE;
   const int  absSteps     = steps > 0 ? steps : -steps;
+  const int  doStepsMax   = timingParams.getMaxStepsBetweenChecks(); 
   const int  clippedSteps = absSteps > doStepsMax ? doStepsMax : absSteps;
 
-  pushState( State::DO_STEPS, clippedSteps );
-  pushState( State::SET_DIR,  nextDir );
+  stateStack.push( State::DO_STEPS, clippedSteps );
+  stateStack.push( State::SET_DIR,  nextDir );
   return 0;        
 }
 
-unsigned int FocuserState::stateStopAtHome()
+unsigned int Focuser::stateStopAtHome()
 {
   WifiDebugOstream log( debugLog.get(), net.get() );
 
-  if ( motorState != MotorState::ON )
-  {
-    hardware->DigitalWrite( HWI::Pin::MOTOR_ENA, HWI::PinState::MOTOR_ON );
-    return 100000;    // .1s pause to power things up.
-  }
+  assert ( motorState == MotorState::ON );
 
   if ( hardware->DigitalRead( HWI::Pin::HOME ) == HWI::PinState::HOME_ACTIVE ) 
   {
@@ -288,9 +305,11 @@ unsigned int FocuserState::stateStopAtHome()
     log << "Resetting position to 0\n";
     focuserPosition = 0;
     isHomed = true;
-    stateStack.pop_back();
+    stateStack.pop();
     return 0;        
   }
+
+  const int  doStepsMax   = timingParams.getMaxStepsBetweenChecks(); 
 
   if ( (focuserPosition % doStepsMax) == 0 )
   {
@@ -304,7 +323,7 @@ unsigned int FocuserState::stateStopAtHome()
     {
       if ( doesCommandInterrupt.at( cp.command ))
       {
-        stateStack.pop_back();
+        stateStack.reset();
       }
       processCommand( cp );
       if ( doesCommandInterrupt.at( cp.command ))
@@ -314,21 +333,62 @@ unsigned int FocuserState::stateStopAtHome()
     }
   }
 
-  pushState( State::DO_STEPS, 1 );
-  pushState( State::SET_DIR, 0 );
+  stateStack.push( State::DO_STEPS, 1 );
+  stateStack.push( State::SET_DIR, Dir::REVERSE );
   return 0;        
 }
 
-unsigned int FocuserState::stateError()
+unsigned int Focuser::stateSleep()
+{
+  // Check for new commands
+  DebugInterface& debug= *debugLog;
+  auto cp = CommandParser::checkForCommands( debug, *net );
+
+  if ( cp.command != CommandParser::Command::NoCommand )
+  {
+    if ( doesCommandInterrupt.at( cp.command ))
+    {
+      stateStack.reset();
+    }
+    processCommand( cp );
+    if ( doesCommandInterrupt.at( cp.command ))
+    {
+      if ( motorState != MotorState::ON ) 
+      {
+        hardware->DigitalWrite( HWI::Pin::MOTOR_ENA, HWI::PinState::MOTOR_ON );
+        motorState = MotorState::ON;
+        return timingParams.getTimeToPowerStepper() * 1000;
+      }
+    }
+    return 0;   // Go until we're out of commands.
+  }
+
+  if ( motorState != MotorState::OFF )
+  {
+    WifiDebugOstream log( debugLog.get(), net.get() );
+    hardware->DigitalWrite( HWI::Pin::MOTOR_ENA, HWI::PinState::MOTOR_OFF );
+    motorState = MotorState::OFF;
+  }
+  const int mSecToNextEpoch = timingParams.getEpochForSleepCommandChecks() - 
+        (time % timingParams.getEpochForSleepCommandChecks());
+
+  return mSecToNextEpoch * 1000;
+}
+
+unsigned int Focuser::stateError()
 {
   WifiDebugOstream log( debugLog.get(), net.get() );
   log << "hep hep hep error error error\n";
   return 10*1000*1000; // 10 sec pause 
 }
 
-unsigned int FocuserState::loop(void)
+unsigned int Focuser::loop(void)
 {
-  ptrToMember function = stateImpl.at( top().state );
-  return (this->*function)();
+  ptrToMember function = stateImpl.at( stateStack.topState() );
+  const unsigned uSecToNextCall = (this->*function)();
+  uSecRemainder += uSecToNextCall;
+  time += uSecRemainder / 1000;
+  uSecRemainder = uSecRemainder % 1000;
+  return uSecToNextCall;
 }
 
