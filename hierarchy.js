@@ -1,6 +1,6 @@
 var hierarchy =
 [
-    [ "FocuserState::COMMAND_PACKET", "d1/df6/class_focuser_state_1_1_c_o_m_m_a_n_d___p_a_c_k_e_t.html", null ],
+    [ "FS::StateStack::CommandPacket", "d7/db2/struct_f_s_1_1_state_stack_1_1_command_packet.html", null ],
     [ "CommandParser::CommandPacket", "d2/d44/class_command_parser_1_1_command_packet.html", null ],
     [ "CommandParser::CommandTemplate", "dd/d61/class_command_parser_1_1_command_template.html", null ],
     [ "DebugInterface", "dd/d7d/class_debug_interface.html", [
@@ -9,7 +9,7 @@ var hierarchy =
       [ "DebugInterfaceSim", "d9/d91/class_debug_interface_sim.html", null ]
     ] ],
     [ "EnumHash", "d0/d34/struct_enum_hash.html", null ],
-    [ "FocuserState", "d0/d0e/class_focuser_state.html", null ],
+    [ "FS::Focuser", "d8/dd5/class_f_s_1_1_focuser.html", null ],
     [ "HWEvent", "d1/d2c/class_h_w_event.html", null ],
     [ "HWI", "d3/de6/class_h_w_i.html", [
       [ "HardwareESP8266", "df/dff/class_hardware_e_s_p8266.html", null ],
@@ -31,7 +31,10 @@ var hierarchy =
       [ "NetMockSimpleTimed", "d5/d11/class_net_mock_simple_timed.html", null ],
       [ "WifiInterfaceEthernet", "df/d42/class_wifi_interface_ethernet.html", null ]
     ] ],
+    [ "FS::StateArg", "d6/de6/class_f_s_1_1_state_arg.html", null ],
+    [ "FS::StateStack", "d9/dfa/class_f_s_1_1_state_stack.html", null ],
     [ "TimedEvent< Event >", "dd/dee/class_timed_event.html", null ],
+    [ "FS::TimingParams", "de/dd4/class_f_s_1_1_timing_params.html", null ],
     [ "WifiDebugOstream", "da/d81/class_wifi_debug_ostream.html", null ],
     [ "WifiOstream", "d4/d86/class_wifi_ostream.html", null ]
 ];

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.13"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>BeeFocus: /home/andrew/src/beefocus/firmware/focuser_state.h File Reference</title>
+<title>BeeFocus: /home/andrew/src/beefocus_gh/firmware/focuser_state.h File Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -69,7 +69,11 @@ $(document).ready(function(){initNavTree('d5/df5/focuser__state_8h.html','../../
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#namespaces">Namespaces</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
+<a href="#enum-members">Enumerations</a> &#124;
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">focuser_state.h File Reference</div>  </div>
 </div><!--header-->
@@ -77,6 +81,7 @@ $(document).ready(function(){initNavTree('d5/df5/focuser__state_8h.html','../../
 <div class="textblock"><code>#include &lt;vector&gt;</code><br />
 <code>#include &lt;memory&gt;</code><br />
 <code>#include &lt;string&gt;</code><br />
+<code>#include &lt;assert.h&gt;</code><br />
 <code>#include &lt;unordered_map&gt;</code><br />
 <code>#include &quot;<a class="el" href="../../d2/d6e/net__interface_8h_source.html">net_interface.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="../../d4/d91/hardware__interface_8h_source.html">hardware_interface.h</a>&quot;</code><br />
@@ -102,55 +107,84 @@ $(document).ready(function(){initNavTree('d5/df5/focuser__state_8h.html','../../
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d0e/class_focuser_state.html">FocuserState</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/de6/class_f_s_1_1_state_arg.html">FS::StateArg</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/df6/class_focuser_state_1_1_c_o_m_m_a_n_d___p_a_c_k_e_t.html">FocuserState::COMMAND_PACKET</a></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/dd4/class_f_s_1_1_timing_params.html">FS::TimingParams</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d9/dfa/class_f_s_1_1_state_stack.html">FS::StateStack</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stack of <a class="el" href="../../d2/dd3/namespace_f_s.html" title="Focuser Namespace. ">FS</a>:States.  <a href="../../d9/dfa/class_f_s_1_1_state_stack.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d7/db2/struct_f_s_1_1_state_stack_1_1_command_packet.html">FS::StateStack::CommandPacket</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/dd5/class_f_s_1_1_focuser.html">FS::Focuser</a></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="namespaces"></a>
+Namespaces</h2></td></tr>
+<tr class="memitem:d2/dd3/namespace_f_s"><td class="memItemLeft" align="right" valign="top"> &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dd3/namespace_f_s.html">FS</a></td></tr>
+<tr class="memdesc:d2/dd3/namespace_f_s"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../d8/dd5/class_f_s_1_1_focuser.html">Focuser</a> Namespace. <br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a9154dc4cdb36292f144caaca29a2b977"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dd3/namespace_f_s.html#a9154dc4cdb36292f144caaca29a2b977">FS::StateToString</a> = std::unordered_map&lt; State, const std::string, <a class="el" href="../../d0/d34/struct_enum_hash.html">EnumHash</a> &gt;</td></tr>
+<tr class="memdesc:a9154dc4cdb36292f144caaca29a2b977"><td class="mdescLeft">&#160;</td><td class="mdescRight">State to std::string Unordered Map.  <a href="../../d2/dd3/namespace_f_s.html#a9154dc4cdb36292f144caaca29a2b977">More...</a><br /></td></tr>
+<tr class="separator:a9154dc4cdb36292f144caaca29a2b977"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d66242c95a2dd36df065c567a965ae1"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dd3/namespace_f_s.html#a9d66242c95a2dd36df065c567a965ae1">FS::CommandToBool</a> = std::unordered_map&lt; <a class="el" href="../../df/d0c/namespace_command_parser.html#a94e1716f97857ac86f7b484204f6c8b6">CommandParser::Command</a>, bool, <a class="el" href="../../d0/d34/struct_enum_hash.html">EnumHash</a> &gt;</td></tr>
+<tr class="memdesc:a9d66242c95a2dd36df065c567a965ae1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Command to bool Unordered Map.  <a href="../../d2/dd3/namespace_f_s.html#a9d66242c95a2dd36df065c567a965ae1">More...</a><br /></td></tr>
+<tr class="separator:a9d66242c95a2dd36df065c567a965ae1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
+Enumerations</h2></td></tr>
+<tr class="memitem:a5e73fd7660c8fb74e5a3b27e12129a72"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dd3/namespace_f_s.html#a5e73fd7660c8fb74e5a3b27e12129a72">FS::State</a> { <br />
+&#160;&#160;<a class="el" href="../../d2/dd3/namespace_f_s.html#a5e73fd7660c8fb74e5a3b27e12129a72a7e39fd0630a209566d80791cc5877f59">FS::State::START_OF_STATES</a> = 0, 
+<a class="el" href="../../d2/dd3/namespace_f_s.html#a5e73fd7660c8fb74e5a3b27e12129a72a3a33739c8ae7ff464df830c520a89b91">FS::State::ACCEPT_COMMANDS</a> = 0, 
+<a class="el" href="../../d2/dd3/namespace_f_s.html#a5e73fd7660c8fb74e5a3b27e12129a72aae43493dd4bf69c2dc8de2139ee7154c">FS::State::DO_STEPS</a>, 
+<a class="el" href="../../d2/dd3/namespace_f_s.html#a5e73fd7660c8fb74e5a3b27e12129a72acba8a344ec948c4acd6a5eaabf0c337b">FS::State::STEPPER_INACTIVE_AND_WAIT</a>, 
+<br />
+&#160;&#160;<a class="el" href="../../d2/dd3/namespace_f_s.html#a5e73fd7660c8fb74e5a3b27e12129a72afa041ed75551c18b1d77d316a40f2bdf">FS::State::STEPPER_ACTIVE_AND_WAIT</a>, 
+<a class="el" href="../../d2/dd3/namespace_f_s.html#a5e73fd7660c8fb74e5a3b27e12129a72a7e054274694008fa9f13127b94e1bed9">FS::State::SET_DIR</a>, 
+<a class="el" href="../../d2/dd3/namespace_f_s.html#a5e73fd7660c8fb74e5a3b27e12129a72aaf5a690fd5ec6f789dbfc51ec6a891ba">FS::State::MOVING</a>, 
+<a class="el" href="../../d2/dd3/namespace_f_s.html#a5e73fd7660c8fb74e5a3b27e12129a72ac66c9addd6e7a35e92772a008a625817">FS::State::STOP_AT_HOME</a>, 
+<br />
+&#160;&#160;<a class="el" href="../../d2/dd3/namespace_f_s.html#a5e73fd7660c8fb74e5a3b27e12129a72ab32bd403b93dc6deffdab7af55e82596">FS::State::SLEEP</a>, 
+<a class="el" href="../../d2/dd3/namespace_f_s.html#a5e73fd7660c8fb74e5a3b27e12129a72a397d3e35d1fdce0886c277e2b6bdee58">FS::State::ERROR_STATE</a>, 
+<a class="el" href="../../d2/dd3/namespace_f_s.html#a5e73fd7660c8fb74e5a3b27e12129a72a19db1813733fd10c1b7747505700d20d">FS::State::END_OF_STATES</a>
+<br />
+ }<tr class="memdesc:a5e73fd7660c8fb74e5a3b27e12129a72"><td class="mdescLeft">&#160;</td><td class="mdescRight">Focuser's State Enum.  <a href="../../d2/dd3/namespace_f_s.html#a5e73fd7660c8fb74e5a3b27e12129a72">More...</a><br /></td></tr>
+</td></tr>
+<tr class="separator:a5e73fd7660c8fb74e5a3b27e12129a72"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43c9776981da1627ff0d8c6497d45740"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dd3/namespace_f_s.html#a43c9776981da1627ff0d8c6497d45740">FS::Dir</a> { <a class="el" href="../../d2/dd3/namespace_f_s.html#a43c9776981da1627ff0d8c6497d45740abfec72bb37910c61f36b6c29a1f7ec31">FS::Dir::FORWARD</a>, 
+<a class="el" href="../../d2/dd3/namespace_f_s.html#a43c9776981da1627ff0d8c6497d45740a642e0b6684e6165e142c074f1cd8d55c">FS::Dir::REVERSE</a>
+ }<tr class="memdesc:a43c9776981da1627ff0d8c6497d45740"><td class="mdescLeft">&#160;</td><td class="mdescRight">What direction is the focuser going?  <a href="../../d2/dd3/namespace_f_s.html#a43c9776981da1627ff0d8c6497d45740">More...</a><br /></td></tr>
+</td></tr>
+<tr class="separator:a43c9776981da1627ff0d8c6497d45740"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a8406c3747d749a92dfce46c10858612d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d0/d0e/class_focuser_state.html#a5cfe6d89c4f5572fa3cace70d0e67e5b">FocuserState::State</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/df5/focuser__state_8h.html#a8406c3747d749a92dfce46c10858612d">operator++</a> (<a class="el" href="../../d0/d0e/class_focuser_state.html#a5cfe6d89c4f5572fa3cace70d0e67e5b">FocuserState::State</a> &amp;s)</td></tr>
-<tr class="memdesc:a8406c3747d749a92dfce46c10858612d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Increment operator for State enum.  <a href="#a8406c3747d749a92dfce46c10858612d">More...</a><br /></td></tr>
-<tr class="separator:a8406c3747d749a92dfce46c10858612d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec332b1b77f1109eed7032b35f86cdc8"><td class="memItemLeft" align="right" valign="top">State &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dd3/namespace_f_s.html#aec332b1b77f1109eed7032b35f86cdc8">FS::operator++</a> (State &amp;s)</td></tr>
+<tr class="memdesc:aec332b1b77f1109eed7032b35f86cdc8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Increment operator for State enum.  <a href="../../d2/dd3/namespace_f_s.html#aec332b1b77f1109eed7032b35f86cdc8">More...</a><br /></td></tr>
+<tr class="separator:aec332b1b77f1109eed7032b35f86cdc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a54b61976919822b845cde725eec59f09"><td class="memTemplParams" colspan="2">template&lt;class T , typename  = my_enable_if_t&lt;is_beefocus_ostream&lt;T&gt;::value&gt;&gt; </td></tr>
+<tr class="memitem:a54b61976919822b845cde725eec59f09"><td class="memTemplItemLeft" align="right" valign="top">T &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d2/dd3/namespace_f_s.html#a54b61976919822b845cde725eec59f09">FS::operator&lt;&lt;</a> (T &amp;ostream, StateArg sA)</td></tr>
+<tr class="memdesc:a54b61976919822b845cde725eec59f09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Output <a class="el" href="../../d6/de6/class_f_s_1_1_state_arg.html">StateArg</a>.  <a href="../../d2/dd3/namespace_f_s.html#a54b61976919822b845cde725eec59f09">More...</a><br /></td></tr>
+<tr class="separator:a54b61976919822b845cde725eec59f09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:aaad6511c07897a9bcfdabe51e03bb4b2"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="../../d2/dd3/namespace_f_s.html#a9154dc4cdb36292f144caaca29a2b977">StateToString</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dd3/namespace_f_s.html#aaad6511c07897a9bcfdabe51e03bb4b2">FS::stateNames</a></td></tr>
+<tr class="separator:aaad6511c07897a9bcfdabe51e03bb4b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab45ba82f9b83ae533124906912dd6921"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="../../d2/dd3/namespace_f_s.html#a9d66242c95a2dd36df065c567a965ae1">CommandToBool</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dd3/namespace_f_s.html#ab45ba82f9b83ae533124906912dd6921">FS::doesCommandInterrupt</a></td></tr>
+<tr class="memdesc:ab45ba82f9b83ae533124906912dd6921"><td class="mdescLeft">&#160;</td><td class="mdescRight">Does a particular incoming command interrupt the current state.  <a href="../../d2/dd3/namespace_f_s.html#ab45ba82f9b83ae533124906912dd6921">More...</a><br /></td></tr>
+<tr class="separator:ab45ba82f9b83ae533124906912dd6921"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Function Documentation</h2>
-<a id="a8406c3747d749a92dfce46c10858612d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8406c3747d749a92dfce46c10858612d">&#9670;&nbsp;</a></span>operator++()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../d0/d0e/class_focuser_state.html#a5cfe6d89c4f5572fa3cace70d0e67e5b">FocuserState::State</a>&amp; operator++ </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d0/d0e/class_focuser_state.html#a5cfe6d89c4f5572fa3cace70d0e67e5b">FocuserState::State</a> &amp;&#160;</td>
-          <td class="paramname"><em>s</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Increment operator for State enum. </p>
-
-<p class="definition">Definition at line <a class="el" href="../../d5/df5/focuser__state_8h_source.html#l00145">145</a> of file <a class="el" href="../../d5/df5/focuser__state_8h_source.html">focuser_state.h</a>.</p>
-
-</div>
-</div>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="../../dir_d9edf6c004b4a7ff14fe9ae7a92214ee.html">firmware</a></li><li class="navelem"><a class="el" href="../../d5/df5/focuser__state_8h.html">focuser_state.h</a></li>
-    <li class="footer">Generated on Fri Dec 21 2018 13:54:07 for BeeFocus by
+    <li class="footer">Generated on Sun Dec 23 2018 11:45:30 for BeeFocus by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="../../doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

@@ -1,4 +1,4 @@
-digraph "/home/andrew/src/beefocus/firmware_sim" {
+digraph "/home/andrew/src/beefocus_gh/firmware_sim" {
   compound=true
   node [ fontsize="10", fontname="Helvetica"];
   edge [ labelfontsize="10", labelfontname="Helvetica"];

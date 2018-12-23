@@ -7,7 +7,7 @@ var class_wifi_connection_ethernet =
     [ "initConnection", "d2/df5/class_wifi_connection_ethernet.html#af3841232dc31c1cf279986cd78e36175", null ],
     [ "operator bool", "d2/df5/class_wifi_connection_ethernet.html#a2e5ab2ba61b5637a0420a0adc652a247", null ],
     [ "operator<<", "d2/df5/class_wifi_connection_ethernet.html#a79c36b44320e054ec6f24a3c07cd804a", null ],
-    [ "putchar", "d2/df5/class_wifi_connection_ethernet.html#a30e87e3074d9b5a442e2427f819ce700", null ],
+    [ "putChar", "d2/df5/class_wifi_connection_ethernet.html#ade9473779eda7a9f3de8920a6d7a1d1a", null ],
     [ "reset", "d2/df5/class_wifi_connection_ethernet.html#a575b3fff5973a2481f44e60bb359c743", null ],
     [ "m_connectedClient", "d2/df5/class_wifi_connection_ethernet.html#a5f17603c322ce841490931414ac3ba1e", null ],
     [ "m_currentIncomingBuffer", "d2/df5/class_wifi_connection_ethernet.html#ac7f3d8b776a342d589e6ac478b2a4e66", null ],

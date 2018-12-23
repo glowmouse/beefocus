@@ -3,232 +3,243 @@ warning: tag INCLUDE_PATH: include path `libmd5' does not exist
 warning: source qtools is not a readable file or directory... skipping.
 warning: source libmd5 is not a readable file or directory... skipping.
 error: Tag file `qtools_docs/qtools.tag' does not exist or is not a file. Skipping it...
-/home/andrew/src/beefocus/unit_tests/test_focuser_state.cpp:44: warning: argument 'Focuser' of command @param is not found in the argument list of simulateFocuser(FocuserState *focuser, NetMockSimpleTimed *wifiAlias, HWMockTimed *hwMockAlias, unsigned int endTime)
-/home/andrew/src/beefocus/unit_tests/test_focuser_state.cpp:44: warning: argument 'wifiAlisa' of command @param is not found in the argument list of simulateFocuser(FocuserState *focuser, NetMockSimpleTimed *wifiAlias, HWMockTimed *hwMockAlias, unsigned int endTime)
-/home/andrew/src/beefocus/unit_tests/test_focuser_state.cpp:44: warning: argument 'end_time' of command @param is not found in the argument list of simulateFocuser(FocuserState *focuser, NetMockSimpleTimed *wifiAlias, HWMockTimed *hwMockAlias, unsigned int endTime)
-/home/andrew/src/beefocus/unit_tests/test_focuser_state.cpp:50: warning: The following parameters of simulateFocuser(FocuserState *focuser, NetMockSimpleTimed *wifiAlias, HWMockTimed *hwMockAlias, unsigned int endTime) are not documented:
+/home/andrew/src/beefocus_gh/unit_tests/test_focuser_state.cpp:56: warning: argument 'Focuser' of command @param is not found in the argument list of simulateFocuser(FS::Focuser *focuser, NetMockSimpleTimed *wifiAlias, HWMockTimed *hwMockAlias, unsigned int endTime)
+/home/andrew/src/beefocus_gh/unit_tests/test_focuser_state.cpp:56: warning: argument 'wifiAlisa' of command @param is not found in the argument list of simulateFocuser(FS::Focuser *focuser, NetMockSimpleTimed *wifiAlias, HWMockTimed *hwMockAlias, unsigned int endTime)
+/home/andrew/src/beefocus_gh/unit_tests/test_focuser_state.cpp:56: warning: argument 'end_time' of command @param is not found in the argument list of simulateFocuser(FS::Focuser *focuser, NetMockSimpleTimed *wifiAlias, HWMockTimed *hwMockAlias, unsigned int endTime)
+/home/andrew/src/beefocus_gh/unit_tests/test_focuser_state.cpp:62: warning: The following parameters of simulateFocuser(FS::Focuser *focuser, NetMockSimpleTimed *wifiAlias, HWMockTimed *hwMockAlias, unsigned int endTime) are not documented:
   parameter 'focuser'
   parameter 'wifiAlias'
   parameter 'hwMockAlias'
   parameter 'endTime'
-/home/andrew/src/beefocus/unit_tests/test_mock_event.h:180: warning: argument 'event' of command @param is not found in the argument list of operator<<(std::ostream &stream, const TimedEvent< Event > &timedEvent)
-/home/andrew/src/beefocus/unit_tests/test_mock_event.h:187: warning: The following parameters of operator<<(std::ostream &stream, const TimedEvent< Event > &timedEvent) are not documented:
+/home/andrew/src/beefocus_gh/unit_tests/test_mock_event.h:180: warning: argument 'event' of command @param is not found in the argument list of operator<<(std::ostream &stream, const TimedEvent< Event > &timedEvent)
+/home/andrew/src/beefocus_gh/unit_tests/test_mock_event.h:187: warning: The following parameters of operator<<(std::ostream &stream, const TimedEvent< Event > &timedEvent) are not documented:
   parameter 'timedEvent'
-/home/andrew/src/beefocus/firmware/focuser_state.h:96: warning: Found unknown command `\arg0'
-/home/andrew/src/beefocus/firmware/focuser_state.h:94: warning: Found unknown command `\arg0'
-/home/andrew/src/beefocus/unit_tests/test_mock_event.h:40: warning: argument 'The' of command @param is not found in the argument list of HWEvent::HWEvent(HWI::Pin pinRHS, HWI::PinState stateRHS)
-/home/andrew/src/beefocus/unit_tests/test_mock_event.h:40: warning: argument 'The' of command @param is not found in the argument list of HWEvent::HWEvent(HWI::Pin pinRHS, HWI::PinState stateRHS)
-/home/andrew/src/beefocus/unit_tests/test_mock_event.h:46: warning: The following parameters of HWEvent::HWEvent(HWI::Pin pinRHS, HWI::PinState stateRHS) are not documented:
+/home/andrew/src/beefocus_gh/unit_tests/test_mock_event.h:40: warning: argument 'The' of command @param is not found in the argument list of HWEvent::HWEvent(HWI::Pin pinRHS, HWI::PinState stateRHS)
+/home/andrew/src/beefocus_gh/unit_tests/test_mock_event.h:40: warning: argument 'The' of command @param is not found in the argument list of HWEvent::HWEvent(HWI::Pin pinRHS, HWI::PinState stateRHS)
+/home/andrew/src/beefocus_gh/unit_tests/test_mock_event.h:46: warning: The following parameters of HWEvent::HWEvent(HWI::Pin pinRHS, HWI::PinState stateRHS) are not documented:
   parameter 'pinRHS'
   parameter 'stateRHS'
-/home/andrew/src/beefocus/unit_tests/test_mock_event.h:53: warning: argument 'The' of command @param is not found in the argument list of HWEvent::HWEvent(HWI::Pin pinRHS, HWI::PinIOMode modeRHS)
-/home/andrew/src/beefocus/unit_tests/test_mock_event.h:53: warning: argument 'The' of command @param is not found in the argument list of HWEvent::HWEvent(HWI::Pin pinRHS, HWI::PinIOMode modeRHS)
-/home/andrew/src/beefocus/unit_tests/test_mock_event.h:59: warning: The following parameters of HWEvent::HWEvent(HWI::Pin pinRHS, HWI::PinIOMode modeRHS) are not documented:
+/home/andrew/src/beefocus_gh/unit_tests/test_mock_event.h:53: warning: argument 'The' of command @param is not found in the argument list of HWEvent::HWEvent(HWI::Pin pinRHS, HWI::PinIOMode modeRHS)
+/home/andrew/src/beefocus_gh/unit_tests/test_mock_event.h:53: warning: argument 'The' of command @param is not found in the argument list of HWEvent::HWEvent(HWI::Pin pinRHS, HWI::PinIOMode modeRHS)
+/home/andrew/src/beefocus_gh/unit_tests/test_mock_event.h:59: warning: The following parameters of HWEvent::HWEvent(HWI::Pin pinRHS, HWI::PinIOMode modeRHS) are not documented:
   parameter 'pinRHS'
   parameter 'modeRHS'
-/home/andrew/src/beefocus/unit_tests/test_mock_hardware.h:35: warning: argument 'HWTimedEvents' of command @param is not found in the argument list of HWMockTimed::HWMockTimed(const HWTimedEvents &hwIn)
-/home/andrew/src/beefocus/unit_tests/test_mock_hardware.h:41: warning: The following parameters of HWMockTimed::HWMockTimed(const HWTimedEvents &hwIn) are not documented:
+/home/andrew/src/beefocus_gh/unit_tests/test_mock_hardware.h:35: warning: argument 'HWTimedEvents' of command @param is not found in the argument list of HWMockTimed::HWMockTimed(const HWTimedEvents &hwIn)
+/home/andrew/src/beefocus_gh/unit_tests/test_mock_hardware.h:41: warning: The following parameters of HWMockTimed::HWMockTimed(const HWTimedEvents &hwIn) are not documented:
   parameter 'hwIn'
-/home/andrew/src/beefocus/unit_tests/test_mock_hardware.h:56: warning: argument 'pinState' of command @param is not found in the argument list of HWMockTimed::DigitalWrite(Pin pin, PinState state)
-/home/andrew/src/beefocus/unit_tests/test_mock_hardware.h:64: warning: The following parameters of HWMockTimed::DigitalWrite(Pin pin, PinState state) are not documented:
+/home/andrew/src/beefocus_gh/unit_tests/test_mock_hardware.h:56: warning: argument 'pinState' of command @param is not found in the argument list of HWMockTimed::DigitalWrite(Pin pin, PinState state)
+/home/andrew/src/beefocus_gh/unit_tests/test_mock_hardware.h:64: warning: The following parameters of HWMockTimed::DigitalWrite(Pin pin, PinState state) are not documented:
   parameter 'state'
-/home/andrew/src/beefocus/unit_tests/test_mock_net.h:141: warning: argument 'The' of command @param is not found in the argument list of NetMockSimpleTimed::advanceTime(int ticks)
-/home/andrew/src/beefocus/unit_tests/test_mock_net.h:145: warning: The following parameters of NetMockSimpleTimed::advanceTime(int ticks) are not documented:
+/home/andrew/src/beefocus_gh/unit_tests/test_mock_net.h:141: warning: argument 'The' of command @param is not found in the argument list of NetMockSimpleTimed::advanceTime(int ticks)
+/home/andrew/src/beefocus_gh/unit_tests/test_mock_net.h:145: warning: The following parameters of NetMockSimpleTimed::advanceTime(int ticks) are not documented:
   parameter 'ticks'
-/home/andrew/src/beefocus/firmware/basic_types.h:11: warning: argument 'ENUM' of command @param is not found in the argument list of BeeFocus::advance(ENUM &e)
-/home/andrew/src/beefocus/firmware/basic_types.h:11: warning: argument 'MAX_VAL' of command @param is not found in the argument list of BeeFocus::advance(ENUM &e)
+/home/andrew/src/beefocus_gh/firmware/basic_types.h:11: warning: argument 'ENUM' of command @param is not found in the argument list of BeeFocus::advance(ENUM &e)
+/home/andrew/src/beefocus_gh/firmware/basic_types.h:11: warning: argument 'MAX_VAL' of command @param is not found in the argument list of BeeFocus::advance(ENUM &e)
+/home/andrew/src/beefocus_gh/firmware/focuser_state.h:261: warning: argument 'maxSteps' of command @param is not found in the argument list of FS::Focuser::setTimingParams(const TimingParams &tp)
+/home/andrew/src/beefocus_gh/firmware/focuser_state.h:275: warning: The following parameters of FS::Focuser::setTimingParams(const TimingParams &tp) are not documented:
+  parameter 'tp'
 sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d7/d45/basic__types_8h__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d7/d45/basic__types_8h__incl.svg"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d7/d45/basic__types_8h__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d7/d45/basic__types_8h__incl.svg"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/dc/d22/basic__types_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/dc/d22/basic__types_8h__dep__incl.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/dc/d22/basic__types_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/dc/d22/basic__types_8h__dep__incl.svg"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d9/d8a/command__parser_8cpp__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d9/d8a/command__parser_8cpp__incl.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d9/d8a/command__parser_8cpp__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d9/d8a/command__parser_8cpp__incl.svg"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/df/d23/command__parser_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/df/d23/command__parser_8h__dep__incl.svg"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/db/dea/command__parser_8h__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/db/dea/command__parser_8h__incl.svg"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d5/d00/debug__esp8266_8h__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d5/d00/debug__esp8266_8h__incl.svg"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d6/d24/debug__esp8266_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d6/d24/debug__esp8266_8h__dep__incl.svg"'
-sh: 1: dot: not found
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/df/df4/debug__interface_8h__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/df/df4/debug__interface_8h__incl.svg"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d2/df7/focuser__state_8cpp__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d2/df7/focuser__state_8cpp__incl.svg"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d2/d09/debug__esp8266_8cpp__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d2/d09/debug__esp8266_8cpp__incl.svg"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d1/dc9/debug__interface_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d1/dc9/debug__interface_8h__dep__incl.svg"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d9/d39/focuser__state_8h__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d9/d39/focuser__state_8h__incl.svg"'
-sh: 1: dot: not found
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/da/d2d/focuser__state_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/da/d2d/focuser__state_8h__dep__incl.svg"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d0/d15/hardware__esp8266_8cpp__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d0/d15/hardware__esp8266_8cpp__incl.svg"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d5/d11/hardware__esp8266_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d5/d11/hardware__esp8266_8h__dep__incl.svg"'
-sh: 1: dot: not found
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d7/dfa/hardware__esp8266_8h__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d7/dfa/hardware__esp8266_8h__incl.svg"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d1/df3/hardware__interface_8cpp__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d1/df3/hardware__interface_8cpp__incl.svg"'
-sh: 1: sh: 1: dot: not founddot: not found
-
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/da/dce/main_8cpp__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/da/dce/main_8cpp__incl.svg"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d4/d57/hardware__interface_8h__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d4/d57/hardware__interface_8h__incl.svg"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d9/d7f/hardware__interface_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d9/d7f/hardware__interface_8h__dep__incl.svg"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/da/d52/sim_2main_8cpp__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/da/d52/sim_2main_8cpp__incl.svg"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/db/daa/net__esp8266_8cpp__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/db/daa/net__esp8266_8cpp__incl.svg"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/da/dba/net__esp8266_8h__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/da/dba/net__esp8266_8h__incl.svg"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d5/d84/net__interface_8h__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d5/d84/net__interface_8h__incl.svg"'
-sh: 1: sh: 1: dot: not founddot: not found
-
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/df/d5e/net__esp8266_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/df/d5e/net__esp8266_8h__dep__incl.svg"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/db/dbd/net__interface_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/db/dbd/net__interface_8h__dep__incl.svg"'
-sh: 1: dot: not found
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d9/d63/simple__ostream_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d9/d63/simple__ostream_8h__dep__incl.svg"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d1/dc8/simple__ostream_8h__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d1/dc8/simple__ostream_8h__incl.svg"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d7/d47/wifi__debug__ostream_8h__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d7/d47/wifi__debug__ostream_8h__incl.svg"'
-sh: 1: dot: not found
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d5/d24/wifi__ostream_8h__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d5/d24/wifi__ostream_8h__incl.svg"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d1/d8a/wifi__debug__ostream_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d1/d8a/wifi__debug__ostream_8h__dep__incl.svg"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d9/df8/wifi__ostream_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d9/df8/wifi__ostream_8h__dep__incl.svg"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d5/d06/test__check__for__commands_8cpp__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d5/d06/test__check__for__commands_8cpp__incl.svg"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/dc/d3b/wifi__secrets_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/dc/d3b/wifi__secrets_8h__dep__incl.svg"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/de/dbb/test__device_8cpp__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/de/dbb/test__device_8cpp__incl.svg"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d1/d5d/test__mock__debug_8h__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d1/d5d/test__mock__debug_8h__incl.svg"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/dc/d89/test__mock__debug_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/dc/d89/test__mock__debug_8h__dep__incl.svg"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/da/dcf/test__focuser__state_8cpp__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/da/dcf/test__focuser__state_8cpp__incl.svg"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d1/db0/test__mock__event_8h__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d1/db0/test__mock__event_8h__incl.svg"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d5/d09/test__mock__event_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d5/d09/test__mock__event_8h__dep__incl.svg"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/df/d65/test__mock__hardware_8h__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/df/d65/test__mock__hardware_8h__incl.svg"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d7/d63/test__mock__hardware_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d7/d63/test__mock__hardware_8h__dep__incl.svg"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/dc/d69/test__mock__net_8h__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/dc/d69/test__mock__net_8h__incl.svg"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d8/d0f/test__mock__net_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d8/d0f/test__mock__net_8h__dep__incl.svg"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d0/daa/class_debug_e_s_p8266__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d0/daa/class_debug_e_s_p8266__inherit__graph.svg"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d7/d7d/class_debug_e_s_p8266__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d7/d7d/class_debug_e_s_p8266__coll__graph.svg"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d4/deb/class_debug_interface__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d4/deb/class_debug_interface__inherit__graph.svg"'
-sh: 1: dot: not found
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d9/d8f/class_debug_interface_ignore_mock__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d9/d8f/class_debug_interface_ignore_mock__coll__graph.svg"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/de/d4c/class_debug_interface_ignore_mock__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/de/d4c/class_debug_interface_ignore_mock__inherit__graph.svg"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d6/da6/class_debug_interface_sim__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d6/da6/class_debug_interface_sim__inherit__graph.svg"'
-sh: 1: dot: not found
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d3/d82/class_hardware_e_s_p8266__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d3/d82/class_hardware_e_s_p8266__inherit__graph.svg"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d0/d60/class_debug_interface_sim__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d0/d60/class_debug_interface_sim__coll__graph.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/db/dea/command__parser_8h__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/db/dea/command__parser_8h__incl.svg"'
 sh: 1: dot: not found
 sh: 1: dot: not found
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/dc/de0/class_hardware_e_s_p8266__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/dc/de0/class_hardware_e_s_p8266__coll__graph.svg"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/db/d6c/class_h_w_i_sim__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/db/d6c/class_h_w_i_sim__inherit__graph.svg"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d3/d73/class_h_w_i__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d3/d73/class_h_w_i__inherit__graph.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d2/d09/debug__esp8266_8cpp__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d2/d09/debug__esp8266_8cpp__incl.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/df/d23/command__parser_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/df/d23/command__parser_8h__dep__incl.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d5/d00/debug__esp8266_8h__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d5/d00/debug__esp8266_8h__incl.svg"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/da/d65/class_h_w_i_sim__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/da/d65/class_h_w_i_sim__coll__graph.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d6/d24/debug__esp8266_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d6/d24/debug__esp8266_8h__dep__incl.svg"'
 sh: 1: dot: not found
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/db/db6/class_h_w_mock_timed__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/db/db6/class_h_w_mock_timed__coll__graph.svg"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d2/da4/class_h_w_mock_timed__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d2/da4/class_h_w_mock_timed__inherit__graph.svg"'
-sh: 1: dot: not found
-sh: 1: error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/dc/d65/structis__beefocus__ostream__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/dc/d65/structis__beefocus__ostream__coll__graph.svg"'
+sh: 1: error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/df/df4/debug__interface_8h__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/df/df4/debug__interface_8h__incl.svg"'
 dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/dd/d3c/structis__beefocus__ostream__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/dd/d3c/structis__beefocus__ostream__inherit__graph.svg"'
 sh: 1: dot: not found
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d2/d40/structis__beefocus__ostream_3_01_debug_interface_01_4__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d2/d40/structis__beefocus__ostream_3_01_debug_interface_01_4__inherit__graph.svg"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/df/da3/structis__beefocus__ostream_3_01_net_interface_01_4__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/df/da3/structis__beefocus__ostream_3_01_net_interface_01_4__inherit__graph.svg"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d8/d06/structis__beefocus__ostream_3_01_debug_interface_01_4__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d8/d06/structis__beefocus__ostream_3_01_debug_interface_01_4__coll__graph.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d1/dc9/debug__interface_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d1/dc9/debug__interface_8h__dep__incl.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d2/df7/focuser__state_8cpp__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d2/df7/focuser__state_8cpp__incl.svg"'
 sh: 1: sh: 1: dot: not founddot: not found
 
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d3/df6/structis__beefocus__ostream_3_01_wifi_connection_ethernet_01_4__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d3/df6/structis__beefocus__ostream_3_01_wifi_connection_ethernet_01_4__inherit__graph.svg"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d1/dc8/structis__beefocus__ostream_3_01_net_interface_01_4__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d1/dc8/structis__beefocus__ostream_3_01_net_interface_01_4__coll__graph.svg"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/da/d2d/focuser__state_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/da/d2d/focuser__state_8h__dep__incl.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d0/d15/hardware__esp8266_8cpp__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d0/d15/hardware__esp8266_8cpp__incl.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d9/d39/focuser__state_8h__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d9/d39/focuser__state_8h__incl.svg"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d7/dfa/hardware__esp8266_8h__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d7/dfa/hardware__esp8266_8h__incl.svg"'
 sh: 1: dot: not found
 sh: 1: dot: not found
-sh: 1: error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/dc/dce/structis__beefocus__ostream_3_01_wifi_debug_ostream_01_4__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/dc/dce/structis__beefocus__ostream_3_01_wifi_debug_ostream_01_4__coll__graph.svg"'
-dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d3/dad/structis__beefocus__ostream_3_01_wifi_debug_ostream_01_4__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d3/dad/structis__beefocus__ostream_3_01_wifi_debug_ostream_01_4__inherit__graph.svg"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/dd/da0/structis__beefocus__ostream_3_01_wifi_connection_ethernet_01_4__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/dd/da0/structis__beefocus__ostream_3_01_wifi_connection_ethernet_01_4__coll__graph.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d1/df3/hardware__interface_8cpp__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d1/df3/hardware__interface_8cpp__incl.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d5/d11/hardware__esp8266_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d5/d11/hardware__esp8266_8h__dep__incl.svg"'
+sh: 1: dot: not found
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d9/d7f/hardware__interface_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d9/d7f/hardware__interface_8h__dep__incl.svg"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d4/d57/hardware__interface_8h__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d4/d57/hardware__interface_8h__incl.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/da/dce/main_8cpp__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/da/dce/main_8cpp__incl.svg"'
+sh: 1: dot: not found
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/db/daa/net__esp8266_8cpp__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/db/daa/net__esp8266_8cpp__incl.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/da/d52/sim_2main_8cpp__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/da/d52/sim_2main_8cpp__incl.svg"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/da/dba/net__esp8266_8h__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/da/dba/net__esp8266_8h__incl.svg"'
+sh: 1: dot: not found
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/df/d5e/net__esp8266_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/df/d5e/net__esp8266_8h__dep__incl.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/db/dbd/net__interface_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/db/dbd/net__interface_8h__dep__incl.svg"'
+sh: 1: dot: not found
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d5/d84/net__interface_8h__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d5/d84/net__interface_8h__incl.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d1/dc8/simple__ostream_8h__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d1/dc8/simple__ostream_8h__incl.svg"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d9/d63/simple__ostream_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d9/d63/simple__ostream_8h__dep__incl.svg"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d7/d47/wifi__debug__ostream_8h__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d7/d47/wifi__debug__ostream_8h__incl.svg"'
+sh: 1: dot: not found
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d9/df8/wifi__ostream_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d9/df8/wifi__ostream_8h__dep__incl.svg"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/dc/d3b/wifi__secrets_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/dc/d3b/wifi__secrets_8h__dep__incl.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d1/d8a/wifi__debug__ostream_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d1/d8a/wifi__debug__ostream_8h__dep__incl.svg"'
+sh: 1: dot: not found
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d5/d06/test__check__for__commands_8cpp__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d5/d06/test__check__for__commands_8cpp__incl.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d5/d24/wifi__ostream_8h__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d5/d24/wifi__ostream_8h__incl.svg"'
+sh: 1: dot: not found
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/de/dbb/test__device_8cpp__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/de/dbb/test__device_8cpp__incl.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/da/dcf/test__focuser__state_8cpp__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/da/dcf/test__focuser__state_8cpp__incl.svg"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d1/d5d/test__mock__debug_8h__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d1/d5d/test__mock__debug_8h__incl.svg"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/dc/d89/test__mock__debug_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/dc/d89/test__mock__debug_8h__dep__incl.svg"'
+sh: 1: dot: not found
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d1/db0/test__mock__event_8h__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d1/db0/test__mock__event_8h__incl.svg"'
+sh: 1: dot: not found
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d5/d09/test__mock__event_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d5/d09/test__mock__event_8h__dep__incl.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/df/d65/test__mock__hardware_8h__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/df/d65/test__mock__hardware_8h__incl.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d7/d63/test__mock__hardware_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d7/d63/test__mock__hardware_8h__dep__incl.svg"'
+sh: 1: dot: not found
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/dc/d69/test__mock__net_8h__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/dc/d69/test__mock__net_8h__incl.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d8/d0f/test__mock__net_8h__dep__incl.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d8/d0f/test__mock__net_8h__dep__incl.svg"'
 sh: 1: sh: 1: dot: not founddot: not found
 
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d5/de1/class_net_connection__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d5/de1/class_net_connection__inherit__graph.svg"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d3/d54/class_net_interface__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d3/d54/class_net_interface__inherit__graph.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d7/d7d/class_debug_e_s_p8266__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d7/d7d/class_debug_e_s_p8266__coll__graph.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d0/daa/class_debug_e_s_p8266__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d0/daa/class_debug_e_s_p8266__inherit__graph.svg"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/dd/db3/class_net_interface_sim__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/dd/db3/class_net_interface_sim__coll__graph.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d4/deb/class_debug_interface__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d4/deb/class_debug_interface__inherit__graph.svg"'
 sh: 1: dot: not found
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/de/d4c/class_debug_interface_ignore_mock__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/de/d4c/class_debug_interface_ignore_mock__inherit__graph.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d9/d8f/class_debug_interface_ignore_mock__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d9/d8f/class_debug_interface_ignore_mock__coll__graph.svg"'
+sh: 1: dot: not found
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d3/d82/class_hardware_e_s_p8266__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d3/d82/class_hardware_e_s_p8266__inherit__graph.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d6/da6/class_debug_interface_sim__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d6/da6/class_debug_interface_sim__inherit__graph.svg"'
 sh: 1: sh: 1: dot: not founddot: not found
 
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/df/d4b/class_wifi_connection_ethernet__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/df/d4b/class_wifi_connection_ethernet__inherit__graph.svg"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/db/dc2/class_net_mock_simple_timed__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/db/dc2/class_net_mock_simple_timed__coll__graph.svg"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d5/d04/class_net_interface_sim__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d5/d04/class_net_interface_sim__inherit__graph.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d0/d60/class_debug_interface_sim__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d0/d60/class_debug_interface_sim__coll__graph.svg"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/dc/de0/class_hardware_e_s_p8266__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/dc/de0/class_hardware_e_s_p8266__coll__graph.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/db/d6c/class_h_w_i_sim__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/db/d6c/class_h_w_i_sim__inherit__graph.svg"'
 sh: 1: sh: 1: dot: not founddot: not found
 
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/db/d0d/class_net_mock_simple_timed__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/db/d0d/class_net_mock_simple_timed__inherit__graph.svg"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d5/d90/class_wifi_connection_ethernet__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d5/d90/class_wifi_connection_ethernet__coll__graph.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/da/d65/class_h_w_i_sim__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/da/d65/class_h_w_i_sim__coll__graph.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d3/d73/class_h_w_i__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d3/d73/class_h_w_i__inherit__graph.svg"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d2/da4/class_h_w_mock_timed__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d2/da4/class_h_w_mock_timed__inherit__graph.svg"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/dd/d3c/structis__beefocus__ostream__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/dd/d3c/structis__beefocus__ostream__inherit__graph.svg"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/dc/d65/structis__beefocus__ostream__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/dc/d65/structis__beefocus__ostream__coll__graph.svg"'
 sh: 1: dot: not found
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d0/d84/class_wifi_interface_ethernet__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d0/d84/class_wifi_interface_ethernet__inherit__graph.svg"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d7/d47/class_wifi_debug_ostream__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d7/d47/class_wifi_debug_ostream__coll__graph.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/db/db6/class_h_w_mock_timed__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/db/db6/class_h_w_mock_timed__coll__graph.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d2/d40/structis__beefocus__ostream_3_01_debug_interface_01_4__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d2/d40/structis__beefocus__ostream_3_01_debug_interface_01_4__inherit__graph.svg"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d0/d57/class_wifi_interface_ethernet__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d0/d57/class_wifi_interface_ethernet__coll__graph.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d8/d06/structis__beefocus__ostream_3_01_debug_interface_01_4__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d8/d06/structis__beefocus__ostream_3_01_debug_interface_01_4__coll__graph.svg"'
 sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/df/da3/structis__beefocus__ostream_3_01_net_interface_01_4__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/df/da3/structis__beefocus__ostream_3_01_net_interface_01_4__inherit__graph.svg"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/d3/da7/class_wifi_ostream__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/d3/da7/class_wifi_ostream__coll__graph.svg"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/graph_legend.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/graph_legend.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d1/dc8/structis__beefocus__ostream_3_01_net_interface_01_4__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d1/dc8/structis__beefocus__ostream_3_01_net_interface_01_4__coll__graph.svg"'
 sh: 1: sh: 1: dot: not founddot: not found
 
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/dir_3de43714fdf5cedb1a5dc5f30ad15540_dep.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/dir_3de43714fdf5cedb1a5dc5f30ad15540_dep.svg"'
-sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/inherit_graph_1.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/inherit_graph_1.svg"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/dir_e7c608ee7a349a990cecd74a7d13d4b1_dep.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/dir_e7c608ee7a349a990cecd74a7d13d4b1_dep.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/dd/da0/structis__beefocus__ostream_3_01_wifi_connection_ethernet_01_4__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/dd/da0/structis__beefocus__ostream_3_01_wifi_connection_ethernet_01_4__coll__graph.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d3/df6/structis__beefocus__ostream_3_01_wifi_connection_ethernet_01_4__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d3/df6/structis__beefocus__ostream_3_01_wifi_connection_ethernet_01_4__inherit__graph.svg"'
 sh: 1: sh: 1: dot: not founddot: not found
 
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/inherit_graph_0.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/inherit_graph_0.svg"'
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/inherit_graph_2.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/inherit_graph_2.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/dc/dce/structis__beefocus__ostream_3_01_wifi_debug_ostream_01_4__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/dc/dce/structis__beefocus__ostream_3_01_wifi_debug_ostream_01_4__coll__graph.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d3/dad/structis__beefocus__ostream_3_01_wifi_debug_ostream_01_4__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d3/dad/structis__beefocus__ostream_3_01_wifi_debug_ostream_01_4__inherit__graph.svg"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/inherit_graph_3.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/inherit_graph_3.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d5/de1/class_net_connection__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d5/de1/class_net_connection__inherit__graph.svg"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/inherit_graph_4.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/inherit_graph_4.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d3/d54/class_net_interface__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d3/d54/class_net_interface__inherit__graph.svg"'
+sh: 1: sh: 1: dot: not founddot: not found
+
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/dd/db3/class_net_interface_sim__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/dd/db3/class_net_interface_sim__coll__graph.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d5/d04/class_net_interface_sim__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d5/d04/class_net_interface_sim__inherit__graph.svg"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/inherit_graph_5.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/inherit_graph_5.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/db/d0d/class_net_mock_simple_timed__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/db/d0d/class_net_mock_simple_timed__inherit__graph.svg"'
+sh: 1: sh: 1: dot: not founddot: not found
+
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/db/dc2/class_net_mock_simple_timed__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/db/dc2/class_net_mock_simple_timed__coll__graph.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/df/d4b/class_wifi_connection_ethernet__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/df/d4b/class_wifi_connection_ethernet__inherit__graph.svg"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/inherit_graph_6.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/inherit_graph_6.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d5/d90/class_wifi_connection_ethernet__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d5/d90/class_wifi_connection_ethernet__coll__graph.svg"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/inherit_graph_9.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/inherit_graph_9.svg"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/inherit_graph_8.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/inherit_graph_8.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d0/d57/class_wifi_interface_ethernet__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d0/d57/class_wifi_interface_ethernet__coll__graph.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d0/d84/class_wifi_interface_ethernet__inherit__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d0/d84/class_wifi_interface_ethernet__inherit__graph.svg"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/inherit_graph_7.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/inherit_graph_7.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d7/d47/class_wifi_debug_ostream__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d7/d47/class_wifi_debug_ostream__coll__graph.svg"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/inherit_graph_11.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/inherit_graph_11.svg"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/inherit_graph_12.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/inherit_graph_12.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/d3/da7/class_wifi_ostream__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/d3/da7/class_wifi_ostream__coll__graph.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/dd/d48/class_f_s_1_1_focuser__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/dd/d48/class_f_s_1_1_focuser__coll__graph.svg"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/inherit_graph_13.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/inherit_graph_13.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/da/df8/struct_f_s_1_1_state_stack_1_1_command_packet__coll__graph.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/da/df8/struct_f_s_1_1_state_stack_1_1_command_packet__coll__graph.svg"'
 sh: 1: dot: not found
-error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus/code_docs/html/inherit_graph_10.dot" -Tsvg -o "/home/andrew/src/beefocus/code_docs/html/inherit_graph_10.svg"'
-error: Failed to rename file /home/andrew/src/beefocus/code_docs/html/d7/d45/basic__types_8h__incl.svg to /home/andrew/src/beefocus/code_docs/html/d7/d45/basic__types_8h__incl.svg.tmp!
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/graph_legend.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/graph_legend.svg"'
+sh: 1: dot: not found
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/dir_e7c608ee7a349a990cecd74a7d13d4b1_dep.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/dir_e7c608ee7a349a990cecd74a7d13d4b1_dep.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/dir_3de43714fdf5cedb1a5dc5f30ad15540_dep.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/dir_3de43714fdf5cedb1a5dc5f30ad15540_dep.svg"'
+sh: 1: sh: 1: dot: not founddot: not found
+
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_2.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_2.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_1.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_1.svg"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_0.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_0.svg"'
+sh: 1: sh: 1: dot: not founddot: not found
+
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_3.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_3.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_4.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_4.svg"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_6.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_6.svg"'
+sh: 1: dot: not found
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_5.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_5.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_7.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_7.svg"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_8.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_8.svg"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_9.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_9.svg"'
+sh: 1: dot: not found
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_11.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_11.svg"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_12.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_12.svg"'
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_10.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_10.svg"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_13.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_13.svg"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_15.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_15.svg"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_14.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_14.svg"'
+sh: 1: dot: not found
+error: Problems running dot: exit code=127, command='dot', arguments='"/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_16.dot" -Tsvg -o "/home/andrew/src/beefocus_gh/code_docs/html/inherit_graph_16.svg"'
+error: Failed to rename file /home/andrew/src/beefocus_gh/code_docs/html/d7/d45/basic__types_8h__incl.svg to /home/andrew/src/beefocus_gh/code_docs/html/d7/d45/basic__types_8h__incl.svg.tmp!

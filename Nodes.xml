@@ -22,6 +22,10 @@
             <Path>df/d0c/namespace_command_parser.html</Path>
            </Node>
            <Node>
+            <Name>FS</Name>
+            <Path>d2/dd3/namespace_f_s.html</Path>
+           </Node>
+           <Node>
             <Name>WifiSecrets</Name>
             <Path>df/d39/namespace_wifi_secrets.html</Path>
            </Node>
@@ -127,6 +131,426 @@
             </Subnodes>
            </Node>
            <Node>
+            <Name>FS</Name>
+            <Path>d2/dd3/namespace_f_s.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>Focuser</Name>
+              <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+              <Subnodes>
+               <Node>
+                <Name>ptrToMember</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>ab36459fb026c3475c5d1f06d842bd872</Anchor>
+               </Node>
+               <Node>
+                <Name>MotorState</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>ae548e09294ed34c73d7301b2ae4b55d1</Anchor>
+                <Subnodes>
+                 <Node>
+                  <Name>ON</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>ae548e09294ed34c73d7301b2ae4b55d1a90651ebea9a35ec4e018c8157492e17c</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>OFF</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>ae548e09294ed34c73d7301b2ae4b55d1a88559a0cfd8250c9d65970cc145c92d4</Anchor>
+                 </Node>
+                </Subnodes>
+               </Node>
+               <Node>
+                <Name>Focuser</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>ac17ed441e4293a37cd4cc8fcf89766bc</Anchor>
+               </Node>
+               <Node>
+                <Name>Focuser</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>aaa9d0429bd2bf3fa43d0c23064f8e53d</Anchor>
+               </Node>
+               <Node>
+                <Name>Focuser</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>aa4daa311eaefcb06f8065ef8dac3c3f4</Anchor>
+               </Node>
+               <Node>
+                <Name>doAbort</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>a7c34f9e91900f027f76ccef901a79aaf</Anchor>
+               </Node>
+               <Node>
+                <Name>doABSPos</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>a5950382dd20e7dc15dfeed3e57de1c49</Anchor>
+               </Node>
+               <Node>
+                <Name>doError</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>ab66fcdac63244dc67abc5a7b4826bedd</Anchor>
+               </Node>
+               <Node>
+                <Name>doHome</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>a3f93bff69c1e30123edaeedffa42d80b</Anchor>
+               </Node>
+               <Node>
+                <Name>doHStatus</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>a890efe923aa6871cf9ca7e4bbb5067ac</Anchor>
+               </Node>
+               <Node>
+                <Name>doPStatus</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>a54cbd6c6a258b61b515291f9b346946c</Anchor>
+               </Node>
+               <Node>
+                <Name>doSStatus</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>a5ba9aa4ba1351aacbc15d028f4f01a18</Anchor>
+               </Node>
+               <Node>
+                <Name>loop</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>a09644b237ac07646be59ffb6426cbc1b</Anchor>
+               </Node>
+               <Node>
+                <Name>operator=</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>afd11b99a42cd8315e0fe1128b9967fcc</Anchor>
+               </Node>
+               <Node>
+                <Name>processCommand</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>ac2afbd8d5dd16dfaff1d7e4ffec5608b</Anchor>
+               </Node>
+               <Node>
+                <Name>setMotor</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>ac7e2b97514289dfd84015632449f8acc</Anchor>
+               </Node>
+               <Node>
+                <Name>setTimingParams</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>a55ad6e7f99a5f58d26bac64b3c473d83</Anchor>
+               </Node>
+               <Node>
+                <Name>stateAcceptCommands</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>a8cbcdf1e6640931f0d3ec880c2c7d02d</Anchor>
+               </Node>
+               <Node>
+                <Name>stateDoingSteps</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>a60a51022f6aa6a046211263024d1bcdf</Anchor>
+               </Node>
+               <Node>
+                <Name>stateError</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>ac2ed08b59c3a11e412b52c86e66f2aad</Anchor>
+               </Node>
+               <Node>
+                <Name>stateMoving</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>acf7eacb9bb539d115dbbe56ef2fd7f76</Anchor>
+               </Node>
+               <Node>
+                <Name>stateSetDir</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>a2b4797f73b7711cd1720c38a1fd524d3</Anchor>
+               </Node>
+               <Node>
+                <Name>stateSleep</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>a6e3c77f1566e441d4d9affec716b2c43</Anchor>
+               </Node>
+               <Node>
+                <Name>stateStepActiveAndWait</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>adedfe503df64ab82b244170b7638efd1</Anchor>
+               </Node>
+               <Node>
+                <Name>stateStepInactiveAndWait</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>a0b8970f8e65292a647be116b8e8de2a7</Anchor>
+               </Node>
+               <Node>
+                <Name>stateStopAtHome</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>a11197ac6e247fc066b5adc781a9fba1e</Anchor>
+               </Node>
+               <Node>
+                <Name>commandImpl</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>a86430f679c34b71563195c95fa77d23b</Anchor>
+               </Node>
+               <Node>
+                <Name>debugLog</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>a26da10eb1acb8dc78533af672ea73a67</Anchor>
+               </Node>
+               <Node>
+                <Name>dir</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>ae22e1019b7a09322f128333a48eec979</Anchor>
+               </Node>
+               <Node>
+                <Name>focuserPosition</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>afd9e287ff3715237153f4a733e24fc25</Anchor>
+               </Node>
+               <Node>
+                <Name>hardware</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>a4e00a51e1dbe164b45c36b94796a5cb4</Anchor>
+               </Node>
+               <Node>
+                <Name>isHomed</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>a4400b966dc75914a2231f5550b3e278d</Anchor>
+               </Node>
+               <Node>
+                <Name>motorState</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>a99519d2db6bf6a69fbaa1f88d8d1a8eb</Anchor>
+               </Node>
+               <Node>
+                <Name>net</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>a7600392f31a6fa43f67265f77c4fcfdf</Anchor>
+               </Node>
+               <Node>
+                <Name>stateImpl</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>a0b2624e21c13ae1ec8fc34d4c2cb779f</Anchor>
+               </Node>
+               <Node>
+                <Name>stateStack</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>aabd3ccf8d44096bcfbd369b44c87e4fb</Anchor>
+               </Node>
+               <Node>
+                <Name>time</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>a85fcb0c6009677c40c3c9be0b7325844</Anchor>
+               </Node>
+               <Node>
+                <Name>timeLastInterruptingCommandOccured</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>aad67bde523a024360a526926e126a44c</Anchor>
+               </Node>
+               <Node>
+                <Name>timingParams</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>a861560a764c110cca5683a8bc542566c</Anchor>
+               </Node>
+               <Node>
+                <Name>uSecRemainder</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Anchor>a7fd56fd0ccd0294781b2a8a171ee9274</Anchor>
+               </Node>
+              </Subnodes>
+             </Node>
+             <Node>
+              <Name>StateArg</Name>
+              <Path>d6/de6/class_f_s_1_1_state_arg.html</Path>
+              <Subnodes>
+               <Node>
+                <Name>Type</Name>
+                <Path>d6/de6/class_f_s_1_1_state_arg.html</Path>
+                <Anchor>af0381f31441875e1593b506ad48ec935</Anchor>
+                <Subnodes>
+                 <Node>
+                  <Name>NONE</Name>
+                  <Path>d6/de6/class_f_s_1_1_state_arg.html</Path>
+                  <Anchor>af0381f31441875e1593b506ad48ec935ab50339a10e1de285ac99d4c3990b8693</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>INT</Name>
+                  <Path>d6/de6/class_f_s_1_1_state_arg.html</Path>
+                  <Anchor>af0381f31441875e1593b506ad48ec935a53f93baa3057821107c750323892fa92</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>DIR</Name>
+                  <Path>d6/de6/class_f_s_1_1_state_arg.html</Path>
+                  <Anchor>af0381f31441875e1593b506ad48ec935ac1561b120842fabe1310417083827590</Anchor>
+                 </Node>
+                </Subnodes>
+               </Node>
+               <Node>
+                <Name>StateArg</Name>
+                <Path>d6/de6/class_f_s_1_1_state_arg.html</Path>
+                <Anchor>a5eede91da21d6b1b67006e1f2d343f00</Anchor>
+               </Node>
+               <Node>
+                <Name>StateArg</Name>
+                <Path>d6/de6/class_f_s_1_1_state_arg.html</Path>
+                <Anchor>aff8127999fef440a7e27e66a7536a8ff</Anchor>
+               </Node>
+               <Node>
+                <Name>StateArg</Name>
+                <Path>d6/de6/class_f_s_1_1_state_arg.html</Path>
+                <Anchor>a703d02e183bea3a0d5683ddbcfcf4113</Anchor>
+               </Node>
+               <Node>
+                <Name>getDir</Name>
+                <Path>d6/de6/class_f_s_1_1_state_arg.html</Path>
+                <Anchor>ae9899f405e2b6526d488eb670e643d69</Anchor>
+               </Node>
+               <Node>
+                <Name>getInt</Name>
+                <Path>d6/de6/class_f_s_1_1_state_arg.html</Path>
+                <Anchor>a5ec0f3de03a77f46c0e9ce050ffdfd4b</Anchor>
+               </Node>
+               <Node>
+                <Name>getType</Name>
+                <Path>d6/de6/class_f_s_1_1_state_arg.html</Path>
+                <Anchor>a99bc2162f7bc340214fcb534ec51f089</Anchor>
+               </Node>
+               <Node>
+                <Name>dirArg</Name>
+                <Path>d6/de6/class_f_s_1_1_state_arg.html</Path>
+                <Anchor>aa8ce6936f2383d64f84cb24576b0d90c</Anchor>
+               </Node>
+               <Node>
+                <Name>intArg</Name>
+                <Path>d6/de6/class_f_s_1_1_state_arg.html</Path>
+                <Anchor>a699326c995bb18fd6367f0aadfa65227</Anchor>
+               </Node>
+               <Node>
+                <Name>type</Name>
+                <Path>d6/de6/class_f_s_1_1_state_arg.html</Path>
+                <Anchor>a797e9ddf32badad3cadd82c019e02db4</Anchor>
+               </Node>
+              </Subnodes>
+             </Node>
+             <Node>
+              <Name>StateStack</Name>
+              <Path>d9/dfa/class_f_s_1_1_state_stack.html</Path>
+              <Subnodes>
+               <Node>
+                <Name>CommandPacket</Name>
+                <Path>d7/db2/struct_f_s_1_1_state_stack_1_1_command_packet.html</Path>
+                <Subnodes>
+                 <Node>
+                  <Name>arg</Name>
+                  <Path>d7/db2/struct_f_s_1_1_state_stack_1_1_command_packet.html</Path>
+                  <Anchor>a184c2909f6e06d85c64d97aa7892b8c2</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>state</Name>
+                  <Path>d7/db2/struct_f_s_1_1_state_stack_1_1_command_packet.html</Path>
+                  <Anchor>a3303d6a1bee93b325d8556002152f763</Anchor>
+                 </Node>
+                </Subnodes>
+               </Node>
+               <Node>
+                <Name>StateStack</Name>
+                <Path>d9/dfa/class_f_s_1_1_state_stack.html</Path>
+                <Anchor>a2f7213ca04ec7e3f8713e960f8df17b6</Anchor>
+               </Node>
+               <Node>
+                <Name>pop</Name>
+                <Path>d9/dfa/class_f_s_1_1_state_stack.html</Path>
+                <Anchor>a3dc08af0d779cb28aa3a85eb4e8237b8</Anchor>
+               </Node>
+               <Node>
+                <Name>push</Name>
+                <Path>d9/dfa/class_f_s_1_1_state_stack.html</Path>
+                <Anchor>a30a953cdca5215bb5871fd3866e8997f</Anchor>
+               </Node>
+               <Node>
+                <Name>reset</Name>
+                <Path>d9/dfa/class_f_s_1_1_state_stack.html</Path>
+                <Anchor>a59d35e8f8ca36a7f1393821eb0978fe2</Anchor>
+               </Node>
+               <Node>
+                <Name>topArg</Name>
+                <Path>d9/dfa/class_f_s_1_1_state_stack.html</Path>
+                <Anchor>a7e118128f6a0a576469e97d81b4da838</Anchor>
+               </Node>
+               <Node>
+                <Name>topArgSet</Name>
+                <Path>d9/dfa/class_f_s_1_1_state_stack.html</Path>
+                <Anchor>a7201c367ca2ecf4667759b3ae25fa827</Anchor>
+               </Node>
+               <Node>
+                <Name>topState</Name>
+                <Path>d9/dfa/class_f_s_1_1_state_stack.html</Path>
+                <Anchor>a46fe9b3ce8dc77d66e9d70cca80ddf82</Anchor>
+               </Node>
+               <Node>
+                <Name>stack</Name>
+                <Path>d9/dfa/class_f_s_1_1_state_stack.html</Path>
+                <Anchor>a140fffacd29dffcb770a91896a0dc810</Anchor>
+               </Node>
+              </Subnodes>
+             </Node>
+             <Node>
+              <Name>TimingParams</Name>
+              <Path>de/dd4/class_f_s_1_1_timing_params.html</Path>
+              <Subnodes>
+               <Node>
+                <Name>TimingParams</Name>
+                <Path>de/dd4/class_f_s_1_1_timing_params.html</Path>
+                <Anchor>a2280b5d334eb5fa57386d4997ca0a610</Anchor>
+               </Node>
+               <Node>
+                <Name>getEpochBetweenCommandChecks</Name>
+                <Path>de/dd4/class_f_s_1_1_timing_params.html</Path>
+                <Anchor>a6f2dcc9b900b6dda99a1325c7e6c8a63</Anchor>
+               </Node>
+               <Node>
+                <Name>getEpochForSleepCommandChecks</Name>
+                <Path>de/dd4/class_f_s_1_1_timing_params.html</Path>
+                <Anchor>a403ee1ead5ff51607b15eba870d51312</Anchor>
+               </Node>
+               <Node>
+                <Name>getInactivityToSleep</Name>
+                <Path>de/dd4/class_f_s_1_1_timing_params.html</Path>
+                <Anchor>a1c28040abecf4bb05e1ba72c4c18fdbd</Anchor>
+               </Node>
+               <Node>
+                <Name>getMaxStepsBetweenChecks</Name>
+                <Path>de/dd4/class_f_s_1_1_timing_params.html</Path>
+                <Anchor>af919bc221cc8a0d9c5f42b314a53d2cd</Anchor>
+               </Node>
+               <Node>
+                <Name>getTimeToPowerStepper</Name>
+                <Path>de/dd4/class_f_s_1_1_timing_params.html</Path>
+                <Anchor>aa336ba0399586c45212d80728b1a52c8</Anchor>
+               </Node>
+               <Node>
+                <Name>maxStepsBetweenChecks</Name>
+                <Path>de/dd4/class_f_s_1_1_timing_params.html</Path>
+                <Anchor>a43eca7f0d11aaf8a24f80f41b4226a23</Anchor>
+               </Node>
+               <Node>
+                <Name>msEpochBetweenCommandChecks</Name>
+                <Path>de/dd4/class_f_s_1_1_timing_params.html</Path>
+                <Anchor>ac22cc510026d383ed3ad5dcb952847b7</Anchor>
+               </Node>
+               <Node>
+                <Name>msEpochForSleepCommandChecks</Name>
+                <Path>de/dd4/class_f_s_1_1_timing_params.html</Path>
+                <Anchor>a85d1a287a2a0238f858689d4fbbdaa95</Anchor>
+               </Node>
+               <Node>
+                <Name>msInactivityToSleep</Name>
+                <Path>de/dd4/class_f_s_1_1_timing_params.html</Path>
+                <Anchor>a2175fb642f42e9a15cb36b75cd6dc349</Anchor>
+               </Node>
+               <Node>
+                <Name>msToPowerStepper</Name>
+                <Path>de/dd4/class_f_s_1_1_timing_params.html</Path>
+                <Anchor>ae77c7848318b9ac6c3bfa3149f573288</Anchor>
+               </Node>
+              </Subnodes>
+             </Node>
+            </Subnodes>
+           </Node>
+           <Node>
             <Name>DebugESP8266</Name>
             <Path>d1/d72/class_debug_e_s_p8266.html</Path>
             <Subnodes>
@@ -188,289 +612,6 @@
               <Name>operator()</Name>
               <Path>d0/d34/struct_enum_hash.html</Path>
               <Anchor>a3ab70b5d0586f982eaa7a11322299caa</Anchor>
-             </Node>
-            </Subnodes>
-           </Node>
-           <Node>
-            <Name>FocuserState</Name>
-            <Path>d0/d0e/class_focuser_state.html</Path>
-            <Subnodes>
-             <Node>
-              <Name>COMMAND_PACKET</Name>
-              <Path>d1/df6/class_focuser_state_1_1_c_o_m_m_a_n_d___p_a_c_k_e_t.html</Path>
-              <Subnodes>
-               <Node>
-                <Name>COMMAND_PACKET</Name>
-                <Path>d1/df6/class_focuser_state_1_1_c_o_m_m_a_n_d___p_a_c_k_e_t.html</Path>
-                <Anchor>a75b28a1ac4d23271c0c1c41ef1db776f</Anchor>
-               </Node>
-               <Node>
-                <Name>arg0</Name>
-                <Path>d1/df6/class_focuser_state_1_1_c_o_m_m_a_n_d___p_a_c_k_e_t.html</Path>
-                <Anchor>a8c6a54888499d75affdef6b4ebe814eb</Anchor>
-               </Node>
-               <Node>
-                <Name>state</Name>
-                <Path>d1/df6/class_focuser_state_1_1_c_o_m_m_a_n_d___p_a_c_k_e_t.html</Path>
-                <Anchor>a3c0d7c5ca5af2b1cc8d295870fe8f83b</Anchor>
-               </Node>
-              </Subnodes>
-             </Node>
-             <Node>
-              <Name>ptrToMember</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>aefad31583b610c0f6ce3460418d2464d</Anchor>
-             </Node>
-             <Node>
-              <Name>Dir</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>ab33d691b659fb9ea8e79961e225724a1</Anchor>
-              <Subnodes>
-               <Node>
-                <Name>FORWARD</Name>
-                <Path>d0/d0e/class_focuser_state.html</Path>
-                <Anchor>ab33d691b659fb9ea8e79961e225724a1abfec72bb37910c61f36b6c29a1f7ec31</Anchor>
-               </Node>
-               <Node>
-                <Name>REVERSE</Name>
-                <Path>d0/d0e/class_focuser_state.html</Path>
-                <Anchor>ab33d691b659fb9ea8e79961e225724a1a642e0b6684e6165e142c074f1cd8d55c</Anchor>
-               </Node>
-              </Subnodes>
-             </Node>
-             <Node>
-              <Name>MotorState</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>a4cf498b3c838444800a1d37c4dee416e</Anchor>
-              <Subnodes>
-               <Node>
-                <Name>ON</Name>
-                <Path>d0/d0e/class_focuser_state.html</Path>
-                <Anchor>a4cf498b3c838444800a1d37c4dee416ea90651ebea9a35ec4e018c8157492e17c</Anchor>
-               </Node>
-               <Node>
-                <Name>OFF</Name>
-                <Path>d0/d0e/class_focuser_state.html</Path>
-                <Anchor>a4cf498b3c838444800a1d37c4dee416ea88559a0cfd8250c9d65970cc145c92d4</Anchor>
-               </Node>
-              </Subnodes>
-             </Node>
-             <Node>
-              <Name>State</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>a5cfe6d89c4f5572fa3cace70d0e67e5b</Anchor>
-              <Subnodes>
-               <Node>
-                <Name>START_OF_STATES</Name>
-                <Path>d0/d0e/class_focuser_state.html</Path>
-                <Anchor>a5cfe6d89c4f5572fa3cace70d0e67e5ba7e39fd0630a209566d80791cc5877f59</Anchor>
-               </Node>
-               <Node>
-                <Name>ACCEPT_COMMANDS</Name>
-                <Path>d0/d0e/class_focuser_state.html</Path>
-                <Anchor>a5cfe6d89c4f5572fa3cace70d0e67e5ba3a33739c8ae7ff464df830c520a89b91</Anchor>
-               </Node>
-               <Node>
-                <Name>DO_STEPS</Name>
-                <Path>d0/d0e/class_focuser_state.html</Path>
-                <Anchor>a5cfe6d89c4f5572fa3cace70d0e67e5baae43493dd4bf69c2dc8de2139ee7154c</Anchor>
-               </Node>
-               <Node>
-                <Name>STEPPER_INACTIVE_AND_WAIT</Name>
-                <Path>d0/d0e/class_focuser_state.html</Path>
-                <Anchor>a5cfe6d89c4f5572fa3cace70d0e67e5bacba8a344ec948c4acd6a5eaabf0c337b</Anchor>
-               </Node>
-               <Node>
-                <Name>STEPPER_ACTIVE_AND_WAIT</Name>
-                <Path>d0/d0e/class_focuser_state.html</Path>
-                <Anchor>a5cfe6d89c4f5572fa3cace70d0e67e5bafa041ed75551c18b1d77d316a40f2bdf</Anchor>
-               </Node>
-               <Node>
-                <Name>SET_DIR</Name>
-                <Path>d0/d0e/class_focuser_state.html</Path>
-                <Anchor>a5cfe6d89c4f5572fa3cace70d0e67e5ba7e054274694008fa9f13127b94e1bed9</Anchor>
-               </Node>
-               <Node>
-                <Name>MOVING</Name>
-                <Path>d0/d0e/class_focuser_state.html</Path>
-                <Anchor>a5cfe6d89c4f5572fa3cace70d0e67e5baaf5a690fd5ec6f789dbfc51ec6a891ba</Anchor>
-               </Node>
-               <Node>
-                <Name>STOP_AT_HOME</Name>
-                <Path>d0/d0e/class_focuser_state.html</Path>
-                <Anchor>a5cfe6d89c4f5572fa3cace70d0e67e5bac66c9addd6e7a35e92772a008a625817</Anchor>
-               </Node>
-               <Node>
-                <Name>LOW_POWER</Name>
-                <Path>d0/d0e/class_focuser_state.html</Path>
-                <Anchor>a5cfe6d89c4f5572fa3cace70d0e67e5ba21126880bb1dc4bb1274024d012272a0</Anchor>
-               </Node>
-               <Node>
-                <Name>AWAKEN</Name>
-                <Path>d0/d0e/class_focuser_state.html</Path>
-                <Anchor>a5cfe6d89c4f5572fa3cace70d0e67e5badcdd9375aa35d3deefe56edfe67606f4</Anchor>
-               </Node>
-               <Node>
-                <Name>ERROR_STATE</Name>
-                <Path>d0/d0e/class_focuser_state.html</Path>
-                <Anchor>a5cfe6d89c4f5572fa3cace70d0e67e5ba397d3e35d1fdce0886c277e2b6bdee58</Anchor>
-               </Node>
-               <Node>
-                <Name>END_OF_STATES</Name>
-                <Path>d0/d0e/class_focuser_state.html</Path>
-                <Anchor>a5cfe6d89c4f5572fa3cace70d0e67e5ba19db1813733fd10c1b7747505700d20d</Anchor>
-               </Node>
-              </Subnodes>
-             </Node>
-             <Node>
-              <Name>FocuserState</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>af7d49ced82b2622fd6ffc932d3ee1a26</Anchor>
-             </Node>
-             <Node>
-              <Name>FocuserState</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>afafa022101ee3e0af545cc7205340f7c</Anchor>
-             </Node>
-             <Node>
-              <Name>FocuserState</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>abc52ac98ae4fb9f3a2a116a258b6e3ca</Anchor>
-             </Node>
-             <Node>
-              <Name>hard_reset_state</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>abb6b4525d854c9e646b241cf7cca95fc</Anchor>
-             </Node>
-             <Node>
-              <Name>loop</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>a5b5d960ef5cdf5534ad69499f540e369</Anchor>
-             </Node>
-             <Node>
-              <Name>operator=</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>a2d46ac56e69621035d075c159e0ee20b</Anchor>
-             </Node>
-             <Node>
-              <Name>processCommand</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>adb18b19b192f68294a952c313cb13fb9</Anchor>
-             </Node>
-             <Node>
-              <Name>pushState</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>a17e0b42d81afdcc762bc1ce2b486fc8a</Anchor>
-             </Node>
-             <Node>
-              <Name>state_awaken</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>ac4ff80aea30b23cce80b98c6081a79ff</Anchor>
-             </Node>
-             <Node>
-              <Name>state_check_for_abort</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>abddd75d0081220addbdb0bc051a678ae</Anchor>
-             </Node>
-             <Node>
-              <Name>state_low_power</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>a30b3517f26bc5a7724630279c3159c66</Anchor>
-             </Node>
-             <Node>
-              <Name>state_stop_at_home</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>a4eb2cb9de8b8da570b366cc7d5a811a2</Anchor>
-             </Node>
-             <Node>
-              <Name>stateAcceptCommands</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>a54665e0acc7897006f06dfeae71d5c26</Anchor>
-             </Node>
-             <Node>
-              <Name>stateDoingSteps</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>a972bc9c680bb3f8852e9a3b59ffe80bb</Anchor>
-             </Node>
-             <Node>
-              <Name>stateError</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>a39e1b3f73fab2c188740a74d5d49a5a9</Anchor>
-             </Node>
-             <Node>
-              <Name>stateMoving</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>a7df86574deec3996ca803cff6d46d2ab</Anchor>
-             </Node>
-             <Node>
-              <Name>stateSetDir</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>aafb1ca623700b36af2b1cd002bfc08d5</Anchor>
-             </Node>
-             <Node>
-              <Name>stateStepActiveAndWait</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>a6a01b36f922d03e98035df2cc52e4a50</Anchor>
-             </Node>
-             <Node>
-              <Name>stateStepInactiveAndWait</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>ad570101a1f814bf04611ed4871d81909</Anchor>
-             </Node>
-             <Node>
-              <Name>top</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>a37e887bcbca04816653a4eb566a4827f</Anchor>
-             </Node>
-             <Node>
-              <Name>debugLog</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>a78517ffe454db3c6a89817560a35c7f9</Anchor>
-             </Node>
-             <Node>
-              <Name>dir</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>a92ae7838c0ca488021d4478ad107ea9e</Anchor>
-             </Node>
-             <Node>
-              <Name>doesCommandInterrupt</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>aa7958f51afa915b40b27ce3f0b77babb</Anchor>
-             </Node>
-             <Node>
-              <Name>focuserPosition</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>adb339af5a654f74c8620e109c77fd0ed</Anchor>
-             </Node>
-             <Node>
-              <Name>hardware</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>aeccbda29c334ae68915a0d73bc766d24</Anchor>
-             </Node>
-             <Node>
-              <Name>motorState</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>a6c2b74a91e3631f13a22f68abf20e51b</Anchor>
-             </Node>
-             <Node>
-              <Name>net</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>a175fcc4912473473bf47fbd5e69b7a99</Anchor>
-             </Node>
-             <Node>
-              <Name>stateImpl</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>a5d7be708293f32da84eb7d1bf6540410</Anchor>
-             </Node>
-             <Node>
-              <Name>stateNames</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>a5dfe1adf0e86cdc30f1b3a8a9346cf4c</Anchor>
-             </Node>
-             <Node>
-              <Name>stateStack</Name>
-              <Path>d0/d0e/class_focuser_state.html</Path>
-              <Anchor>a2d2bd7a1bf8b632c9730fa56a9d5b6fb</Anchor>
              </Node>
             </Subnodes>
            </Node>
@@ -887,9 +1028,9 @@
               <Anchor>a571d1f0a1076c6f7ea5cb06e14bb83f9</Anchor>
              </Node>
              <Node>
-              <Name>putchar</Name>
+              <Name>putChar</Name>
               <Path>d0/dfb/class_net_connection.html</Path>
-              <Anchor>a98746a19abbe4d95095a12a414e818ce</Anchor>
+              <Anchor>aecb4afe1341b9dd9ade90ce4b84b558a</Anchor>
              </Node>
              <Node>
               <Name>reset</Name>
@@ -1102,9 +1243,9 @@
               <Anchor>a79c36b44320e054ec6f24a3c07cd804a</Anchor>
              </Node>
              <Node>
-              <Name>putchar</Name>
+              <Name>putChar</Name>
               <Path>d2/df5/class_wifi_connection_ethernet.html</Path>
-              <Anchor>a30e87e3074d9b5a442e2427f819ce700</Anchor>
+              <Anchor>ade9473779eda7a9f3de8920a6d7a1d1a</Anchor>
              </Node>
              <Node>
               <Name>reset</Name>
@@ -1287,8 +1428,8 @@
           <Path>hierarchy.html</Path>
           <Subnodes>
            <Node>
-            <Name>FocuserState::COMMAND_PACKET</Name>
-            <Path>d1/df6/class_focuser_state_1_1_c_o_m_m_a_n_d___p_a_c_k_e_t.html</Path>
+            <Name>FS::StateStack::CommandPacket</Name>
+            <Path>d7/db2/struct_f_s_1_1_state_stack_1_1_command_packet.html</Path>
            </Node>
            <Node>
             <Name>CommandParser::CommandPacket</Name>
@@ -1321,8 +1462,8 @@
             <Path>d0/d34/struct_enum_hash.html</Path>
            </Node>
            <Node>
-            <Name>FocuserState</Name>
-            <Path>d0/d0e/class_focuser_state.html</Path>
+            <Name>FS::Focuser</Name>
+            <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
            </Node>
            <Node>
             <Name>HWEvent</Name>
@@ -1401,8 +1542,20 @@
             </Subnodes>
            </Node>
            <Node>
+            <Name>FS::StateArg</Name>
+            <Path>d6/de6/class_f_s_1_1_state_arg.html</Path>
+           </Node>
+           <Node>
+            <Name>FS::StateStack</Name>
+            <Path>d9/dfa/class_f_s_1_1_state_stack.html</Path>
+           </Node>
+           <Node>
             <Name>TimedEvent&lt; Event &gt;</Name>
             <Path>dd/dee/class_timed_event.html</Path>
+           </Node>
+           <Node>
+            <Name>FS::TimingParams</Name>
+            <Path>de/dd4/class_f_s_1_1_timing_params.html</Path>
            </Node>
            <Node>
             <Name>WifiDebugOstream</Name>
@@ -1421,6 +1574,84 @@
            <Node>
             <Name>All</Name>
             <Path>functions.html</Path>
+            <Subnodes>
+             <Node>
+              <Name>a</Name>
+              <Path>functions.html</Path>
+             </Node>
+             <Node>
+              <Name>c</Name>
+              <Path>functions_c.html</Path>
+             </Node>
+             <Node>
+              <Name>d</Name>
+              <Path>functions_d.html</Path>
+             </Node>
+             <Node>
+              <Name>e</Name>
+              <Path>functions_e.html</Path>
+             </Node>
+             <Node>
+              <Name>f</Name>
+              <Path>functions_f.html</Path>
+             </Node>
+             <Node>
+              <Name>g</Name>
+              <Path>functions_g.html</Path>
+             </Node>
+             <Node>
+              <Name>h</Name>
+              <Path>functions_h.html</Path>
+             </Node>
+             <Node>
+              <Name>i</Name>
+              <Path>functions_i.html</Path>
+             </Node>
+             <Node>
+              <Name>l</Name>
+              <Path>functions_l.html</Path>
+             </Node>
+             <Node>
+              <Name>m</Name>
+              <Path>functions_m.html</Path>
+             </Node>
+             <Node>
+              <Name>n</Name>
+              <Path>functions_n.html</Path>
+             </Node>
+             <Node>
+              <Name>o</Name>
+              <Path>functions_o.html</Path>
+             </Node>
+             <Node>
+              <Name>p</Name>
+              <Path>functions_p.html</Path>
+             </Node>
+             <Node>
+              <Name>r</Name>
+              <Path>functions_r.html</Path>
+             </Node>
+             <Node>
+              <Name>s</Name>
+              <Path>functions_s.html</Path>
+             </Node>
+             <Node>
+              <Name>t</Name>
+              <Path>functions_t.html</Path>
+             </Node>
+             <Node>
+              <Name>u</Name>
+              <Path>functions_u.html</Path>
+             </Node>
+             <Node>
+              <Name>w</Name>
+              <Path>functions_w.html</Path>
+             </Node>
+             <Node>
+              <Name>~</Name>
+              <Path>functions_0x7e.html</Path>
+             </Node>
+            </Subnodes>
            </Node>
            <Node>
             <Name>Functions</Name>
@@ -1585,11 +1816,6 @@
                   <Anchor>a94e1716f97857ac86f7b484204f6c8b6af6384fde5f1800930a6442007fb8f2c0</Anchor>
                  </Node>
                  <Node>
-                  <Name>Ping</Name>
-                  <Path>d5/d13/command__parser_8h.html</Path>
-                  <Anchor>a94e1716f97857ac86f7b484204f6c8b6ab85815d04cec053ce6deb8021f2df1b8</Anchor>
-                 </Node>
-                 <Node>
                   <Name>Abort</Name>
                   <Path>d5/d13/command__parser_8h.html</Path>
                   <Anchor>a94e1716f97857ac86f7b484204f6c8b6a727b63583e01fa2b3952dab580c84dc2</Anchor>
@@ -1598,11 +1824,6 @@
                   <Name>Home</Name>
                   <Path>d5/d13/command__parser_8h.html</Path>
                   <Anchor>a94e1716f97857ac86f7b484204f6c8b6a8cf04a9734132302f96da8e113e80ce5</Anchor>
-                 </Node>
-                 <Node>
-                  <Name>Status</Name>
-                  <Path>d5/d13/command__parser_8h.html</Path>
-                  <Anchor>a94e1716f97857ac86f7b484204f6c8b6aec53a8c4f07baed5d8825072c89799be</Anchor>
                  </Node>
                  <Node>
                   <Name>PStatus</Name>
@@ -1615,19 +1836,14 @@
                   <Anchor>a94e1716f97857ac86f7b484204f6c8b6abb66be447ea81beb1e72d8315df3dbea</Anchor>
                  </Node>
                  <Node>
+                  <Name>HStatus</Name>
+                  <Path>d5/d13/command__parser_8h.html</Path>
+                  <Anchor>a94e1716f97857ac86f7b484204f6c8b6af3f1fc2c97f7200e1d4b7f66fc39a85e</Anchor>
+                 </Node>
+                 <Node>
                   <Name>ABSPos</Name>
                   <Path>d5/d13/command__parser_8h.html</Path>
                   <Anchor>a94e1716f97857ac86f7b484204f6c8b6aa214f4307f0a5eaf7e1ac503e11af2e9</Anchor>
-                 </Node>
-                 <Node>
-                  <Name>Sleep</Name>
-                  <Path>d5/d13/command__parser_8h.html</Path>
-                  <Anchor>a94e1716f97857ac86f7b484204f6c8b6a243924bfd56a682be235638b53961e09</Anchor>
-                 </Node>
-                 <Node>
-                  <Name>Wake</Name>
-                  <Path>d5/d13/command__parser_8h.html</Path>
-                  <Anchor>a94e1716f97857ac86f7b484204f6c8b6a688761c83ec62d30ec1fe269849d42ad</Anchor>
                  </Node>
                  <Node>
                   <Name>NoCommand</Name>
@@ -1730,313 +1946,543 @@
               <Path>d5/df5/focuser__state_8h.html</Path>
               <Subnodes>
                <Node>
-                <Name>FocuserState</Name>
-                <Path>d0/d0e/class_focuser_state.html</Path>
+                <Name>StateArg</Name>
+                <Path>d6/de6/class_f_s_1_1_state_arg.html</Path>
                 <Subnodes>
                  <Node>
-                  <Name>COMMAND_PACKET</Name>
-                  <Path>d1/df6/class_focuser_state_1_1_c_o_m_m_a_n_d___p_a_c_k_e_t.html</Path>
+                  <Name>Type</Name>
+                  <Path>d6/de6/class_f_s_1_1_state_arg.html</Path>
+                  <Anchor>af0381f31441875e1593b506ad48ec935</Anchor>
                   <Subnodes>
                    <Node>
-                    <Name>COMMAND_PACKET</Name>
-                    <Path>d1/df6/class_focuser_state_1_1_c_o_m_m_a_n_d___p_a_c_k_e_t.html</Path>
-                    <Anchor>a75b28a1ac4d23271c0c1c41ef1db776f</Anchor>
+                    <Name>NONE</Name>
+                    <Path>d6/de6/class_f_s_1_1_state_arg.html</Path>
+                    <Anchor>af0381f31441875e1593b506ad48ec935ab50339a10e1de285ac99d4c3990b8693</Anchor>
                    </Node>
                    <Node>
-                    <Name>arg0</Name>
-                    <Path>d1/df6/class_focuser_state_1_1_c_o_m_m_a_n_d___p_a_c_k_e_t.html</Path>
-                    <Anchor>a8c6a54888499d75affdef6b4ebe814eb</Anchor>
+                    <Name>INT</Name>
+                    <Path>d6/de6/class_f_s_1_1_state_arg.html</Path>
+                    <Anchor>af0381f31441875e1593b506ad48ec935a53f93baa3057821107c750323892fa92</Anchor>
                    </Node>
                    <Node>
-                    <Name>state</Name>
-                    <Path>d1/df6/class_focuser_state_1_1_c_o_m_m_a_n_d___p_a_c_k_e_t.html</Path>
-                    <Anchor>a3c0d7c5ca5af2b1cc8d295870fe8f83b</Anchor>
+                    <Name>DIR</Name>
+                    <Path>d6/de6/class_f_s_1_1_state_arg.html</Path>
+                    <Anchor>af0381f31441875e1593b506ad48ec935ac1561b120842fabe1310417083827590</Anchor>
                    </Node>
                   </Subnodes>
                  </Node>
                  <Node>
-                  <Name>ptrToMember</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>aefad31583b610c0f6ce3460418d2464d</Anchor>
+                  <Name>StateArg</Name>
+                  <Path>d6/de6/class_f_s_1_1_state_arg.html</Path>
+                  <Anchor>a5eede91da21d6b1b67006e1f2d343f00</Anchor>
                  </Node>
                  <Node>
-                  <Name>Dir</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>ab33d691b659fb9ea8e79961e225724a1</Anchor>
-                  <Subnodes>
-                   <Node>
-                    <Name>FORWARD</Name>
-                    <Path>d0/d0e/class_focuser_state.html</Path>
-                    <Anchor>ab33d691b659fb9ea8e79961e225724a1abfec72bb37910c61f36b6c29a1f7ec31</Anchor>
-                   </Node>
-                   <Node>
-                    <Name>REVERSE</Name>
-                    <Path>d0/d0e/class_focuser_state.html</Path>
-                    <Anchor>ab33d691b659fb9ea8e79961e225724a1a642e0b6684e6165e142c074f1cd8d55c</Anchor>
-                   </Node>
-                  </Subnodes>
+                  <Name>StateArg</Name>
+                  <Path>d6/de6/class_f_s_1_1_state_arg.html</Path>
+                  <Anchor>aff8127999fef440a7e27e66a7536a8ff</Anchor>
                  </Node>
                  <Node>
-                  <Name>MotorState</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>a4cf498b3c838444800a1d37c4dee416e</Anchor>
-                  <Subnodes>
-                   <Node>
-                    <Name>ON</Name>
-                    <Path>d0/d0e/class_focuser_state.html</Path>
-                    <Anchor>a4cf498b3c838444800a1d37c4dee416ea90651ebea9a35ec4e018c8157492e17c</Anchor>
-                   </Node>
-                   <Node>
-                    <Name>OFF</Name>
-                    <Path>d0/d0e/class_focuser_state.html</Path>
-                    <Anchor>a4cf498b3c838444800a1d37c4dee416ea88559a0cfd8250c9d65970cc145c92d4</Anchor>
-                   </Node>
-                  </Subnodes>
+                  <Name>StateArg</Name>
+                  <Path>d6/de6/class_f_s_1_1_state_arg.html</Path>
+                  <Anchor>a703d02e183bea3a0d5683ddbcfcf4113</Anchor>
                  </Node>
                  <Node>
-                  <Name>State</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>a5cfe6d89c4f5572fa3cace70d0e67e5b</Anchor>
-                  <Subnodes>
-                   <Node>
-                    <Name>START_OF_STATES</Name>
-                    <Path>d0/d0e/class_focuser_state.html</Path>
-                    <Anchor>a5cfe6d89c4f5572fa3cace70d0e67e5ba7e39fd0630a209566d80791cc5877f59</Anchor>
-                   </Node>
-                   <Node>
-                    <Name>ACCEPT_COMMANDS</Name>
-                    <Path>d0/d0e/class_focuser_state.html</Path>
-                    <Anchor>a5cfe6d89c4f5572fa3cace70d0e67e5ba3a33739c8ae7ff464df830c520a89b91</Anchor>
-                   </Node>
-                   <Node>
-                    <Name>DO_STEPS</Name>
-                    <Path>d0/d0e/class_focuser_state.html</Path>
-                    <Anchor>a5cfe6d89c4f5572fa3cace70d0e67e5baae43493dd4bf69c2dc8de2139ee7154c</Anchor>
-                   </Node>
-                   <Node>
-                    <Name>STEPPER_INACTIVE_AND_WAIT</Name>
-                    <Path>d0/d0e/class_focuser_state.html</Path>
-                    <Anchor>a5cfe6d89c4f5572fa3cace70d0e67e5bacba8a344ec948c4acd6a5eaabf0c337b</Anchor>
-                   </Node>
-                   <Node>
-                    <Name>STEPPER_ACTIVE_AND_WAIT</Name>
-                    <Path>d0/d0e/class_focuser_state.html</Path>
-                    <Anchor>a5cfe6d89c4f5572fa3cace70d0e67e5bafa041ed75551c18b1d77d316a40f2bdf</Anchor>
-                   </Node>
-                   <Node>
-                    <Name>SET_DIR</Name>
-                    <Path>d0/d0e/class_focuser_state.html</Path>
-                    <Anchor>a5cfe6d89c4f5572fa3cace70d0e67e5ba7e054274694008fa9f13127b94e1bed9</Anchor>
-                   </Node>
-                   <Node>
-                    <Name>MOVING</Name>
-                    <Path>d0/d0e/class_focuser_state.html</Path>
-                    <Anchor>a5cfe6d89c4f5572fa3cace70d0e67e5baaf5a690fd5ec6f789dbfc51ec6a891ba</Anchor>
-                   </Node>
-                   <Node>
-                    <Name>STOP_AT_HOME</Name>
-                    <Path>d0/d0e/class_focuser_state.html</Path>
-                    <Anchor>a5cfe6d89c4f5572fa3cace70d0e67e5bac66c9addd6e7a35e92772a008a625817</Anchor>
-                   </Node>
-                   <Node>
-                    <Name>LOW_POWER</Name>
-                    <Path>d0/d0e/class_focuser_state.html</Path>
-                    <Anchor>a5cfe6d89c4f5572fa3cace70d0e67e5ba21126880bb1dc4bb1274024d012272a0</Anchor>
-                   </Node>
-                   <Node>
-                    <Name>AWAKEN</Name>
-                    <Path>d0/d0e/class_focuser_state.html</Path>
-                    <Anchor>a5cfe6d89c4f5572fa3cace70d0e67e5badcdd9375aa35d3deefe56edfe67606f4</Anchor>
-                   </Node>
-                   <Node>
-                    <Name>ERROR_STATE</Name>
-                    <Path>d0/d0e/class_focuser_state.html</Path>
-                    <Anchor>a5cfe6d89c4f5572fa3cace70d0e67e5ba397d3e35d1fdce0886c277e2b6bdee58</Anchor>
-                   </Node>
-                   <Node>
-                    <Name>END_OF_STATES</Name>
-                    <Path>d0/d0e/class_focuser_state.html</Path>
-                    <Anchor>a5cfe6d89c4f5572fa3cace70d0e67e5ba19db1813733fd10c1b7747505700d20d</Anchor>
-                   </Node>
-                  </Subnodes>
+                  <Name>getDir</Name>
+                  <Path>d6/de6/class_f_s_1_1_state_arg.html</Path>
+                  <Anchor>ae9899f405e2b6526d488eb670e643d69</Anchor>
                  </Node>
                  <Node>
-                  <Name>FocuserState</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>af7d49ced82b2622fd6ffc932d3ee1a26</Anchor>
+                  <Name>getInt</Name>
+                  <Path>d6/de6/class_f_s_1_1_state_arg.html</Path>
+                  <Anchor>a5ec0f3de03a77f46c0e9ce050ffdfd4b</Anchor>
                  </Node>
                  <Node>
-                  <Name>FocuserState</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>afafa022101ee3e0af545cc7205340f7c</Anchor>
+                  <Name>getType</Name>
+                  <Path>d6/de6/class_f_s_1_1_state_arg.html</Path>
+                  <Anchor>a99bc2162f7bc340214fcb534ec51f089</Anchor>
                  </Node>
                  <Node>
-                  <Name>FocuserState</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>abc52ac98ae4fb9f3a2a116a258b6e3ca</Anchor>
+                  <Name>dirArg</Name>
+                  <Path>d6/de6/class_f_s_1_1_state_arg.html</Path>
+                  <Anchor>aa8ce6936f2383d64f84cb24576b0d90c</Anchor>
                  </Node>
                  <Node>
-                  <Name>hard_reset_state</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>abb6b4525d854c9e646b241cf7cca95fc</Anchor>
+                  <Name>intArg</Name>
+                  <Path>d6/de6/class_f_s_1_1_state_arg.html</Path>
+                  <Anchor>a699326c995bb18fd6367f0aadfa65227</Anchor>
                  </Node>
                  <Node>
-                  <Name>loop</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>a5b5d960ef5cdf5534ad69499f540e369</Anchor>
-                 </Node>
-                 <Node>
-                  <Name>operator=</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>a2d46ac56e69621035d075c159e0ee20b</Anchor>
-                 </Node>
-                 <Node>
-                  <Name>processCommand</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>adb18b19b192f68294a952c313cb13fb9</Anchor>
-                 </Node>
-                 <Node>
-                  <Name>pushState</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>a17e0b42d81afdcc762bc1ce2b486fc8a</Anchor>
-                 </Node>
-                 <Node>
-                  <Name>state_awaken</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>ac4ff80aea30b23cce80b98c6081a79ff</Anchor>
-                 </Node>
-                 <Node>
-                  <Name>state_check_for_abort</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>abddd75d0081220addbdb0bc051a678ae</Anchor>
-                 </Node>
-                 <Node>
-                  <Name>state_low_power</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>a30b3517f26bc5a7724630279c3159c66</Anchor>
-                 </Node>
-                 <Node>
-                  <Name>state_stop_at_home</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>a4eb2cb9de8b8da570b366cc7d5a811a2</Anchor>
-                 </Node>
-                 <Node>
-                  <Name>stateAcceptCommands</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>a54665e0acc7897006f06dfeae71d5c26</Anchor>
-                 </Node>
-                 <Node>
-                  <Name>stateDoingSteps</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>a972bc9c680bb3f8852e9a3b59ffe80bb</Anchor>
-                 </Node>
-                 <Node>
-                  <Name>stateError</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>a39e1b3f73fab2c188740a74d5d49a5a9</Anchor>
-                 </Node>
-                 <Node>
-                  <Name>stateMoving</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>a7df86574deec3996ca803cff6d46d2ab</Anchor>
-                 </Node>
-                 <Node>
-                  <Name>stateSetDir</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>aafb1ca623700b36af2b1cd002bfc08d5</Anchor>
-                 </Node>
-                 <Node>
-                  <Name>stateStepActiveAndWait</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>a6a01b36f922d03e98035df2cc52e4a50</Anchor>
-                 </Node>
-                 <Node>
-                  <Name>stateStepInactiveAndWait</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>ad570101a1f814bf04611ed4871d81909</Anchor>
-                 </Node>
-                 <Node>
-                  <Name>top</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>a37e887bcbca04816653a4eb566a4827f</Anchor>
-                 </Node>
-                 <Node>
-                  <Name>debugLog</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>a78517ffe454db3c6a89817560a35c7f9</Anchor>
-                 </Node>
-                 <Node>
-                  <Name>dir</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>a92ae7838c0ca488021d4478ad107ea9e</Anchor>
-                 </Node>
-                 <Node>
-                  <Name>doesCommandInterrupt</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>aa7958f51afa915b40b27ce3f0b77babb</Anchor>
-                 </Node>
-                 <Node>
-                  <Name>focuserPosition</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>adb339af5a654f74c8620e109c77fd0ed</Anchor>
-                 </Node>
-                 <Node>
-                  <Name>hardware</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>aeccbda29c334ae68915a0d73bc766d24</Anchor>
-                 </Node>
-                 <Node>
-                  <Name>motorState</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>a6c2b74a91e3631f13a22f68abf20e51b</Anchor>
-                 </Node>
-                 <Node>
-                  <Name>net</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>a175fcc4912473473bf47fbd5e69b7a99</Anchor>
-                 </Node>
-                 <Node>
-                  <Name>stateImpl</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>a5d7be708293f32da84eb7d1bf6540410</Anchor>
-                 </Node>
-                 <Node>
-                  <Name>stateNames</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>a5dfe1adf0e86cdc30f1b3a8a9346cf4c</Anchor>
-                 </Node>
-                 <Node>
-                  <Name>stateStack</Name>
-                  <Path>d0/d0e/class_focuser_state.html</Path>
-                  <Anchor>a2d2bd7a1bf8b632c9730fa56a9d5b6fb</Anchor>
+                  <Name>type</Name>
+                  <Path>d6/de6/class_f_s_1_1_state_arg.html</Path>
+                  <Anchor>a797e9ddf32badad3cadd82c019e02db4</Anchor>
                  </Node>
                 </Subnodes>
                </Node>
                <Node>
-                <Name>COMMAND_PACKET</Name>
-                <Path>d1/df6/class_focuser_state_1_1_c_o_m_m_a_n_d___p_a_c_k_e_t.html</Path>
+                <Name>TimingParams</Name>
+                <Path>de/dd4/class_f_s_1_1_timing_params.html</Path>
                 <Subnodes>
                  <Node>
-                  <Name>COMMAND_PACKET</Name>
-                  <Path>d1/df6/class_focuser_state_1_1_c_o_m_m_a_n_d___p_a_c_k_e_t.html</Path>
-                  <Anchor>a75b28a1ac4d23271c0c1c41ef1db776f</Anchor>
+                  <Name>TimingParams</Name>
+                  <Path>de/dd4/class_f_s_1_1_timing_params.html</Path>
+                  <Anchor>a2280b5d334eb5fa57386d4997ca0a610</Anchor>
                  </Node>
                  <Node>
-                  <Name>arg0</Name>
-                  <Path>d1/df6/class_focuser_state_1_1_c_o_m_m_a_n_d___p_a_c_k_e_t.html</Path>
-                  <Anchor>a8c6a54888499d75affdef6b4ebe814eb</Anchor>
+                  <Name>getEpochBetweenCommandChecks</Name>
+                  <Path>de/dd4/class_f_s_1_1_timing_params.html</Path>
+                  <Anchor>a6f2dcc9b900b6dda99a1325c7e6c8a63</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>getEpochForSleepCommandChecks</Name>
+                  <Path>de/dd4/class_f_s_1_1_timing_params.html</Path>
+                  <Anchor>a403ee1ead5ff51607b15eba870d51312</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>getInactivityToSleep</Name>
+                  <Path>de/dd4/class_f_s_1_1_timing_params.html</Path>
+                  <Anchor>a1c28040abecf4bb05e1ba72c4c18fdbd</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>getMaxStepsBetweenChecks</Name>
+                  <Path>de/dd4/class_f_s_1_1_timing_params.html</Path>
+                  <Anchor>af919bc221cc8a0d9c5f42b314a53d2cd</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>getTimeToPowerStepper</Name>
+                  <Path>de/dd4/class_f_s_1_1_timing_params.html</Path>
+                  <Anchor>aa336ba0399586c45212d80728b1a52c8</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>maxStepsBetweenChecks</Name>
+                  <Path>de/dd4/class_f_s_1_1_timing_params.html</Path>
+                  <Anchor>a43eca7f0d11aaf8a24f80f41b4226a23</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>msEpochBetweenCommandChecks</Name>
+                  <Path>de/dd4/class_f_s_1_1_timing_params.html</Path>
+                  <Anchor>ac22cc510026d383ed3ad5dcb952847b7</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>msEpochForSleepCommandChecks</Name>
+                  <Path>de/dd4/class_f_s_1_1_timing_params.html</Path>
+                  <Anchor>a85d1a287a2a0238f858689d4fbbdaa95</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>msInactivityToSleep</Name>
+                  <Path>de/dd4/class_f_s_1_1_timing_params.html</Path>
+                  <Anchor>a2175fb642f42e9a15cb36b75cd6dc349</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>msToPowerStepper</Name>
+                  <Path>de/dd4/class_f_s_1_1_timing_params.html</Path>
+                  <Anchor>ae77c7848318b9ac6c3bfa3149f573288</Anchor>
+                 </Node>
+                </Subnodes>
+               </Node>
+               <Node>
+                <Name>StateStack</Name>
+                <Path>d9/dfa/class_f_s_1_1_state_stack.html</Path>
+                <Subnodes>
+                 <Node>
+                  <Name>CommandPacket</Name>
+                  <Path>d7/db2/struct_f_s_1_1_state_stack_1_1_command_packet.html</Path>
+                  <Subnodes>
+                   <Node>
+                    <Name>arg</Name>
+                    <Path>d7/db2/struct_f_s_1_1_state_stack_1_1_command_packet.html</Path>
+                    <Anchor>a184c2909f6e06d85c64d97aa7892b8c2</Anchor>
+                   </Node>
+                   <Node>
+                    <Name>state</Name>
+                    <Path>d7/db2/struct_f_s_1_1_state_stack_1_1_command_packet.html</Path>
+                    <Anchor>a3303d6a1bee93b325d8556002152f763</Anchor>
+                   </Node>
+                  </Subnodes>
+                 </Node>
+                 <Node>
+                  <Name>StateStack</Name>
+                  <Path>d9/dfa/class_f_s_1_1_state_stack.html</Path>
+                  <Anchor>a2f7213ca04ec7e3f8713e960f8df17b6</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>pop</Name>
+                  <Path>d9/dfa/class_f_s_1_1_state_stack.html</Path>
+                  <Anchor>a3dc08af0d779cb28aa3a85eb4e8237b8</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>push</Name>
+                  <Path>d9/dfa/class_f_s_1_1_state_stack.html</Path>
+                  <Anchor>a30a953cdca5215bb5871fd3866e8997f</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>reset</Name>
+                  <Path>d9/dfa/class_f_s_1_1_state_stack.html</Path>
+                  <Anchor>a59d35e8f8ca36a7f1393821eb0978fe2</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>topArg</Name>
+                  <Path>d9/dfa/class_f_s_1_1_state_stack.html</Path>
+                  <Anchor>a7e118128f6a0a576469e97d81b4da838</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>topArgSet</Name>
+                  <Path>d9/dfa/class_f_s_1_1_state_stack.html</Path>
+                  <Anchor>a7201c367ca2ecf4667759b3ae25fa827</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>topState</Name>
+                  <Path>d9/dfa/class_f_s_1_1_state_stack.html</Path>
+                  <Anchor>a46fe9b3ce8dc77d66e9d70cca80ddf82</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>stack</Name>
+                  <Path>d9/dfa/class_f_s_1_1_state_stack.html</Path>
+                  <Anchor>a140fffacd29dffcb770a91896a0dc810</Anchor>
+                 </Node>
+                </Subnodes>
+               </Node>
+               <Node>
+                <Name>CommandPacket</Name>
+                <Path>d7/db2/struct_f_s_1_1_state_stack_1_1_command_packet.html</Path>
+                <Subnodes>
+                 <Node>
+                  <Name>arg</Name>
+                  <Path>d7/db2/struct_f_s_1_1_state_stack_1_1_command_packet.html</Path>
+                  <Anchor>a184c2909f6e06d85c64d97aa7892b8c2</Anchor>
                  </Node>
                  <Node>
                   <Name>state</Name>
-                  <Path>d1/df6/class_focuser_state_1_1_c_o_m_m_a_n_d___p_a_c_k_e_t.html</Path>
-                  <Anchor>a3c0d7c5ca5af2b1cc8d295870fe8f83b</Anchor>
+                  <Path>d7/db2/struct_f_s_1_1_state_stack_1_1_command_packet.html</Path>
+                  <Anchor>a3303d6a1bee93b325d8556002152f763</Anchor>
+                 </Node>
+                </Subnodes>
+               </Node>
+               <Node>
+                <Name>Focuser</Name>
+                <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                <Subnodes>
+                 <Node>
+                  <Name>ptrToMember</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>ab36459fb026c3475c5d1f06d842bd872</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>MotorState</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>ae548e09294ed34c73d7301b2ae4b55d1</Anchor>
+                  <Subnodes>
+                   <Node>
+                    <Name>ON</Name>
+                    <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                    <Anchor>ae548e09294ed34c73d7301b2ae4b55d1a90651ebea9a35ec4e018c8157492e17c</Anchor>
+                   </Node>
+                   <Node>
+                    <Name>OFF</Name>
+                    <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                    <Anchor>ae548e09294ed34c73d7301b2ae4b55d1a88559a0cfd8250c9d65970cc145c92d4</Anchor>
+                   </Node>
+                  </Subnodes>
+                 </Node>
+                 <Node>
+                  <Name>Focuser</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>ac17ed441e4293a37cd4cc8fcf89766bc</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>Focuser</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>aaa9d0429bd2bf3fa43d0c23064f8e53d</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>Focuser</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>aa4daa311eaefcb06f8065ef8dac3c3f4</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>doAbort</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>a7c34f9e91900f027f76ccef901a79aaf</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>doABSPos</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>a5950382dd20e7dc15dfeed3e57de1c49</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>doError</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>ab66fcdac63244dc67abc5a7b4826bedd</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>doHome</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>a3f93bff69c1e30123edaeedffa42d80b</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>doHStatus</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>a890efe923aa6871cf9ca7e4bbb5067ac</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>doPStatus</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>a54cbd6c6a258b61b515291f9b346946c</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>doSStatus</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>a5ba9aa4ba1351aacbc15d028f4f01a18</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>loop</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>a09644b237ac07646be59ffb6426cbc1b</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>operator=</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>afd11b99a42cd8315e0fe1128b9967fcc</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>processCommand</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>ac2afbd8d5dd16dfaff1d7e4ffec5608b</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>setMotor</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>ac7e2b97514289dfd84015632449f8acc</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>setTimingParams</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>a55ad6e7f99a5f58d26bac64b3c473d83</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>stateAcceptCommands</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>a8cbcdf1e6640931f0d3ec880c2c7d02d</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>stateDoingSteps</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>a60a51022f6aa6a046211263024d1bcdf</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>stateError</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>ac2ed08b59c3a11e412b52c86e66f2aad</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>stateMoving</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>acf7eacb9bb539d115dbbe56ef2fd7f76</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>stateSetDir</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>a2b4797f73b7711cd1720c38a1fd524d3</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>stateSleep</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>a6e3c77f1566e441d4d9affec716b2c43</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>stateStepActiveAndWait</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>adedfe503df64ab82b244170b7638efd1</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>stateStepInactiveAndWait</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>a0b8970f8e65292a647be116b8e8de2a7</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>stateStopAtHome</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>a11197ac6e247fc066b5adc781a9fba1e</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>commandImpl</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>a86430f679c34b71563195c95fa77d23b</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>debugLog</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>a26da10eb1acb8dc78533af672ea73a67</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>dir</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>ae22e1019b7a09322f128333a48eec979</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>focuserPosition</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>afd9e287ff3715237153f4a733e24fc25</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>hardware</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>a4e00a51e1dbe164b45c36b94796a5cb4</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>isHomed</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>a4400b966dc75914a2231f5550b3e278d</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>motorState</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>a99519d2db6bf6a69fbaa1f88d8d1a8eb</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>net</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>a7600392f31a6fa43f67265f77c4fcfdf</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>stateImpl</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>a0b2624e21c13ae1ec8fc34d4c2cb779f</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>stateStack</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>aabd3ccf8d44096bcfbd369b44c87e4fb</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>time</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>a85fcb0c6009677c40c3c9be0b7325844</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>timeLastInterruptingCommandOccured</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>aad67bde523a024360a526926e126a44c</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>timingParams</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>a861560a764c110cca5683a8bc542566c</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>uSecRemainder</Name>
+                  <Path>d8/dd5/class_f_s_1_1_focuser.html</Path>
+                  <Anchor>a7fd56fd0ccd0294781b2a8a171ee9274</Anchor>
+                 </Node>
+                </Subnodes>
+               </Node>
+               <Node>
+                <Name>CommandToBool</Name>
+                <Path>d5/df5/focuser__state_8h.html</Path>
+                <Anchor>a9d66242c95a2dd36df065c567a965ae1</Anchor>
+               </Node>
+               <Node>
+                <Name>StateToString</Name>
+                <Path>d5/df5/focuser__state_8h.html</Path>
+                <Anchor>a9154dc4cdb36292f144caaca29a2b977</Anchor>
+               </Node>
+               <Node>
+                <Name>Dir</Name>
+                <Path>d5/df5/focuser__state_8h.html</Path>
+                <Anchor>a43c9776981da1627ff0d8c6497d45740</Anchor>
+                <Subnodes>
+                 <Node>
+                  <Name>FORWARD</Name>
+                  <Path>d5/df5/focuser__state_8h.html</Path>
+                  <Anchor>a43c9776981da1627ff0d8c6497d45740abfec72bb37910c61f36b6c29a1f7ec31</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>REVERSE</Name>
+                  <Path>d5/df5/focuser__state_8h.html</Path>
+                  <Anchor>a43c9776981da1627ff0d8c6497d45740a642e0b6684e6165e142c074f1cd8d55c</Anchor>
+                 </Node>
+                </Subnodes>
+               </Node>
+               <Node>
+                <Name>State</Name>
+                <Path>d5/df5/focuser__state_8h.html</Path>
+                <Anchor>a5e73fd7660c8fb74e5a3b27e12129a72</Anchor>
+                <Subnodes>
+                 <Node>
+                  <Name>START_OF_STATES</Name>
+                  <Path>d5/df5/focuser__state_8h.html</Path>
+                  <Anchor>a5e73fd7660c8fb74e5a3b27e12129a72a7e39fd0630a209566d80791cc5877f59</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>ACCEPT_COMMANDS</Name>
+                  <Path>d5/df5/focuser__state_8h.html</Path>
+                  <Anchor>a5e73fd7660c8fb74e5a3b27e12129a72a3a33739c8ae7ff464df830c520a89b91</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>DO_STEPS</Name>
+                  <Path>d5/df5/focuser__state_8h.html</Path>
+                  <Anchor>a5e73fd7660c8fb74e5a3b27e12129a72aae43493dd4bf69c2dc8de2139ee7154c</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>STEPPER_INACTIVE_AND_WAIT</Name>
+                  <Path>d5/df5/focuser__state_8h.html</Path>
+                  <Anchor>a5e73fd7660c8fb74e5a3b27e12129a72acba8a344ec948c4acd6a5eaabf0c337b</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>STEPPER_ACTIVE_AND_WAIT</Name>
+                  <Path>d5/df5/focuser__state_8h.html</Path>
+                  <Anchor>a5e73fd7660c8fb74e5a3b27e12129a72afa041ed75551c18b1d77d316a40f2bdf</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>SET_DIR</Name>
+                  <Path>d5/df5/focuser__state_8h.html</Path>
+                  <Anchor>a5e73fd7660c8fb74e5a3b27e12129a72a7e054274694008fa9f13127b94e1bed9</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>MOVING</Name>
+                  <Path>d5/df5/focuser__state_8h.html</Path>
+                  <Anchor>a5e73fd7660c8fb74e5a3b27e12129a72aaf5a690fd5ec6f789dbfc51ec6a891ba</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>STOP_AT_HOME</Name>
+                  <Path>d5/df5/focuser__state_8h.html</Path>
+                  <Anchor>a5e73fd7660c8fb74e5a3b27e12129a72ac66c9addd6e7a35e92772a008a625817</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>SLEEP</Name>
+                  <Path>d5/df5/focuser__state_8h.html</Path>
+                  <Anchor>a5e73fd7660c8fb74e5a3b27e12129a72ab32bd403b93dc6deffdab7af55e82596</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>ERROR_STATE</Name>
+                  <Path>d5/df5/focuser__state_8h.html</Path>
+                  <Anchor>a5e73fd7660c8fb74e5a3b27e12129a72a397d3e35d1fdce0886c277e2b6bdee58</Anchor>
+                 </Node>
+                 <Node>
+                  <Name>END_OF_STATES</Name>
+                  <Path>d5/df5/focuser__state_8h.html</Path>
+                  <Anchor>a5e73fd7660c8fb74e5a3b27e12129a72a19db1813733fd10c1b7747505700d20d</Anchor>
                  </Node>
                 </Subnodes>
                </Node>
                <Node>
                 <Name>operator++</Name>
                 <Path>d5/df5/focuser__state_8h.html</Path>
-                <Anchor>a8406c3747d749a92dfce46c10858612d</Anchor>
+                <Anchor>aec332b1b77f1109eed7032b35f86cdc8</Anchor>
+               </Node>
+               <Node>
+                <Name>operator&lt;&lt;</Name>
+                <Path>d5/df5/focuser__state_8h.html</Path>
+                <Anchor>a54b61976919822b845cde725eec59f09</Anchor>
+               </Node>
+               <Node>
+                <Name>doesCommandInterrupt</Name>
+                <Path>d5/df5/focuser__state_8h.html</Path>
+                <Anchor>ab45ba82f9b83ae533124906912dd6921</Anchor>
+               </Node>
+               <Node>
+                <Name>stateNames</Name>
+                <Path>d5/df5/focuser__state_8h.html</Path>
+                <Anchor>aaad6511c07897a9bcfdabe51e03bb4b2</Anchor>
                </Node>
               </Subnodes>
              </Node>
@@ -2291,7 +2737,7 @@
                <Node>
                 <Name>focuser</Name>
                 <Path>df/d0a/main_8cpp.html</Path>
-                <Anchor>a54d4ef21f568cbd31dcb47b0b998f2bc</Anchor>
+                <Anchor>a60de315c063376b0686504b8eddd14a4</Anchor>
                </Node>
               </Subnodes>
              </Node>
@@ -2343,9 +2789,9 @@
                   <Anchor>a79c36b44320e054ec6f24a3c07cd804a</Anchor>
                  </Node>
                  <Node>
-                  <Name>putchar</Name>
+                  <Name>putChar</Name>
                   <Path>d2/df5/class_wifi_connection_ethernet.html</Path>
-                  <Anchor>a30e87e3074d9b5a442e2427f819ce700</Anchor>
+                  <Anchor>ade9473779eda7a9f3de8920a6d7a1d1a</Anchor>
                  </Node>
                  <Node>
                   <Name>reset</Name>
@@ -2512,9 +2958,9 @@
                   <Anchor>a571d1f0a1076c6f7ea5cb06e14bb83f9</Anchor>
                  </Node>
                  <Node>
-                  <Name>putchar</Name>
+                  <Name>putChar</Name>
                   <Path>d0/dfb/class_net_connection.html</Path>
-                  <Anchor>a98746a19abbe4d95095a12a414e818ce</Anchor>
+                  <Anchor>aecb4afe1341b9dd9ade90ce4b84b558a</Anchor>
                  </Node>
                  <Node>
                   <Name>reset</Name>
@@ -2757,7 +3203,7 @@
                <Node>
                 <Name>focuser</Name>
                 <Path>de/d12/sim_2main_8cpp.html</Path>
-                <Anchor>a54d4ef21f568cbd31dcb47b0b998f2bc</Anchor>
+                <Anchor>a60de315c063376b0686504b8eddd14a4</Anchor>
                </Node>
               </Subnodes>
              </Node>
@@ -2821,12 +3267,12 @@
                <Node>
                 <Name>make_focuser</Name>
                 <Path>d9/de3/test__focuser__state_8cpp.html</Path>
-                <Anchor>afecfebea8f33155a826f34d4b6e0004f</Anchor>
+                <Anchor>a08e3119f98947551dbc2d2ef4d531275</Anchor>
                </Node>
                <Node>
                 <Name>simulateFocuser</Name>
                 <Path>d9/de3/test__focuser__state_8cpp.html</Path>
-                <Anchor>a54123a1728efec139a3f0648a1ae1aba</Anchor>
+                <Anchor>addf145e3af2224bf72184175ac13cfe5</Anchor>
                </Node>
                <Node>
                 <Name>TEST</Name>
@@ -2837,6 +3283,11 @@
                 <Name>TEST</Name>
                 <Path>d9/de3/test__focuser__state_8cpp.html</Path>
                 <Anchor>a9d8ad2feaf820aef0cbc6a72237242e0</Anchor>
+               </Node>
+               <Node>
+                <Name>TEST</Name>
+                <Path>d9/de3/test__focuser__state_8cpp.html</Path>
+                <Anchor>a10927592d6565d0117af45ae664fbbbe</Anchor>
                </Node>
                <Node>
                 <Name>TEST</Name>
@@ -2872,6 +3323,51 @@
                 <Name>TEST</Name>
                 <Path>d9/de3/test__focuser__state_8cpp.html</Path>
                 <Anchor>adc82b8a3baab035dc7644c20371844ee</Anchor>
+               </Node>
+               <Node>
+                <Name>TEST</Name>
+                <Path>d9/de3/test__focuser__state_8cpp.html</Path>
+                <Anchor>a576358cca438ae9504e9c35b4e551a1b</Anchor>
+               </Node>
+               <Node>
+                <Name>TEST</Name>
+                <Path>d9/de3/test__focuser__state_8cpp.html</Path>
+                <Anchor>a08701c6847d4268ab562c86982c731ac</Anchor>
+               </Node>
+               <Node>
+                <Name>TEST</Name>
+                <Path>d9/de3/test__focuser__state_8cpp.html</Path>
+                <Anchor>a415cff1a1ab8f7fa47de236f0c1c7222</Anchor>
+               </Node>
+               <Node>
+                <Name>TEST</Name>
+                <Path>d9/de3/test__focuser__state_8cpp.html</Path>
+                <Anchor>ae720ecfbe269795403b704b4c3ed93fe</Anchor>
+               </Node>
+               <Node>
+                <Name>TEST</Name>
+                <Path>d9/de3/test__focuser__state_8cpp.html</Path>
+                <Anchor>a821f13804d4d4cf20711b5abe1cfbacf</Anchor>
+               </Node>
+               <Node>
+                <Name>TEST</Name>
+                <Path>d9/de3/test__focuser__state_8cpp.html</Path>
+                <Anchor>a76c8b98da4d9baf05d5a1399a407816e</Anchor>
+               </Node>
+               <Node>
+                <Name>TEST</Name>
+                <Path>d9/de3/test__focuser__state_8cpp.html</Path>
+                <Anchor>abb43fc047398a684d01a97a550c3271d</Anchor>
+               </Node>
+               <Node>
+                <Name>TEST</Name>
+                <Path>d9/de3/test__focuser__state_8cpp.html</Path>
+                <Anchor>afa6d490258de2d532d90e021467a32db</Anchor>
+               </Node>
+               <Node>
+                <Name>TEST</Name>
+                <Path>d9/de3/test__focuser__state_8cpp.html</Path>
+                <Anchor>a4bd2d313b7581bcc39d9fb222d41a02b</Anchor>
                </Node>
                <Node>
                 <Name>goldenHWStart</Name>

@@ -1,4 +1,4 @@
-digraph "/home/andrew/src/beefocus/unit_tests" {
+digraph "/home/andrew/src/beefocus_gh/unit_tests" {
   compound=true
   node [ fontsize="10", fontname="Helvetica"];
   edge [ labelfontsize="10", labelfontname="Helvetica"];

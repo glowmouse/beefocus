@@ -1,0 +1,11 @@
+digraph "FS::Focuser"
+{
+ // INTERACTIVE_SVG=YES
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="FS::Focuser",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node2 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" stateStack" ,fontname="Helvetica"];
+  Node2 [label="FS::StateStack",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$d9/dfa/class_f_s_1_1_state_stack.html",tooltip="Stack of FS:States. "];
+  Node3 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" timingParams" ,fontname="Helvetica"];
+  Node3 [label="FS::TimingParams",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$de/dd4/class_f_s_1_1_timing_params.html"];
+}

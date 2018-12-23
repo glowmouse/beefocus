@@ -1,12 +1,12 @@
 var annotated_dup =
 [
     [ "CommandParser", "df/d0c/namespace_command_parser.html", "df/d0c/namespace_command_parser" ],
+    [ "FS", "d2/dd3/namespace_f_s.html", "d2/dd3/namespace_f_s" ],
     [ "DebugESP8266", "d1/d72/class_debug_e_s_p8266.html", "d1/d72/class_debug_e_s_p8266" ],
     [ "DebugInterface", "dd/d7d/class_debug_interface.html", "dd/d7d/class_debug_interface" ],
     [ "DebugInterfaceIgnoreMock", "da/d43/class_debug_interface_ignore_mock.html", "da/d43/class_debug_interface_ignore_mock" ],
     [ "DebugInterfaceSim", "d9/d91/class_debug_interface_sim.html", "d9/d91/class_debug_interface_sim" ],
     [ "EnumHash", "d0/d34/struct_enum_hash.html", "d0/d34/struct_enum_hash" ],
-    [ "FocuserState", "d0/d0e/class_focuser_state.html", "d0/d0e/class_focuser_state" ],
     [ "HardwareESP8266", "df/dff/class_hardware_e_s_p8266.html", "df/dff/class_hardware_e_s_p8266" ],
     [ "HWEvent", "d1/d2c/class_h_w_event.html", "d1/d2c/class_h_w_event" ],
     [ "HWI", "d3/de6/class_h_w_i.html", "d3/de6/class_h_w_i" ],

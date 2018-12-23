@@ -6,5 +6,5 @@ var sim_2main_8cpp =
     [ "loop", "de/d12/sim_2main_8cpp.html#afe461d27b9c48d5921c00d521181f12f", null ],
     [ "main", "de/d12/sim_2main_8cpp.html#a0ddf1224851353fc92bfbff6f499fa97", null ],
     [ "setup", "de/d12/sim_2main_8cpp.html#a4fc01d736fe50cf5b977f755b675f11d", null ],
-    [ "focuser", "de/d12/sim_2main_8cpp.html#a54d4ef21f568cbd31dcb47b0b998f2bc", null ]
+    [ "focuser", "de/d12/sim_2main_8cpp.html#a60de315c063376b0686504b8eddd14a4", null ]
 ];
