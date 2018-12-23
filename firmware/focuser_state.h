@@ -120,7 +120,7 @@ class TimingParams
   TimingParams( 
     int msEpochBetweenCommandChecksRHS    = 100,        // 100 ms
     int maxStepsBetweenChecksRHS          = 50,
-    int msInactivityToSleepRHS            = 10*60*1000, // 10 minutes
+    unsigned msInactivityToSleepRHS       = 10*60*1000, // 10 minutes
     int msEpochForSleepCommandChecksRHS   = 5*1000,     // 5 seconds
     int msToPowerStepperRHS               = 1*1000      // 1 second
   ) :
@@ -140,7 +140,7 @@ class TimingParams
   { 
     return maxStepsBetweenChecks; 
   }
-  int getInactivityToSleep() const 
+  unsigned getInactivityToSleep() const 
   { 
     return msInactivityToSleep; 
   }
@@ -156,7 +156,7 @@ class TimingParams
   private:
   int msEpochBetweenCommandChecks;
   int maxStepsBetweenChecks;
-  int msInactivityToSleep;
+  unsigned msInactivityToSleep;
   int msEpochForSleepCommandChecks;
   int msToPowerStepper;
 };
