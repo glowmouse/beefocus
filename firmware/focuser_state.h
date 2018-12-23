@@ -120,8 +120,8 @@ class TimingParams
   TimingParams( 
     int msEpochBetweenCommandChecksRHS    = 100,        // 100 ms
     int maxStepsBetweenChecksRHS          = 50,
-    unsigned msInactivityToSleepRHS       = 10*60*1000, // 10 minutes
-    int msEpochForSleepCommandChecksRHS   = 5*1000,     // 5 seconds
+    unsigned msInactivityToSleepRHS       = 5*60*1000,  // 5 minutes
+    int msEpochForSleepCommandChecksRHS   = 1*1000,     // 1 seconds
     int msToPowerStepperRHS               = 1*1000      // 1 second
   ) :
     msEpochBetweenCommandChecks{ msEpochBetweenCommandChecksRHS },
@@ -344,6 +344,8 @@ class Focuser
 
   /// @brief Is the Stepper Motor On or Off. 
   MotorState motorState;
+
+  void setMotor( WifiDebugOstream& log, MotorState );
 
   /// @brief What is the focuser's position of record
   int focuserPosition;

@@ -76,27 +76,27 @@ Focuser::Focuser(
   std::swap( hardware, hardwareArg );
   std::swap( debugLog, debugArg );
   
-  DebugInterface& log = *debugLog;
-  log << "Bringing up net interface\n";
+  DebugInterface& dlog = *debugLog;
+  dlog << "Bringing up net interface\n";
   
   // Bring up the interface to the controlling computer
 
-  net->setup( log );
+  net->setup( dlog );
+  WifiDebugOstream log( debugLog.get(), net.get() );
 
   //
   // Set the pin modes 
   //
-  hardware->PinMode(HWI::Pin::STEP, HWI::PinIOMode::M_OUTPUT );  
-  hardware->PinMode(HWI::Pin::DIR,  HWI::PinIOMode::M_OUTPUT );  
+  hardware->PinMode(HWI::Pin::STEP,       HWI::PinIOMode::M_OUTPUT );  
+  hardware->PinMode(HWI::Pin::DIR,        HWI::PinIOMode::M_OUTPUT );  
   hardware->PinMode(HWI::Pin::MOTOR_ENA,  HWI::PinIOMode::M_OUTPUT );  
-  hardware->PinMode(HWI::Pin::HOME, HWI::PinIOMode::M_INPUT ); 
+  hardware->PinMode(HWI::Pin::HOME,       HWI::PinIOMode::M_INPUT ); 
  
   //
   // Set the output pin defaults and internal state
-  //
-  motorState = MotorState::ON;
-  hardware->DigitalWrite( HWI::Pin::MOTOR_ENA, HWI::PinState::MOTOR_ON );
-        
+  // 
+  setMotor( log, MotorState::ON ); 
+
   dir = Dir::FORWARD;
   hardware->DigitalWrite( HWI::Pin::DIR, HWI::PinState::DIR_FORWARD); 
   hardware->DigitalWrite( HWI::Pin::STEP, HWI::PinState::STEP_INACTIVE );
@@ -249,7 +249,7 @@ unsigned int Focuser::stateDoingSteps()
   stateStack.push( State::STEPPER_ACTIVE_AND_WAIT );
 
   focuserPosition += (dir == Dir::FORWARD) ? 1 : -1;
-  focuserPosition = focuserPosition >= 0 ? focuserPosition : 0;
+  //focuserPosition = focuserPosition >= 0 ? focuserPosition : 0;
 
   return 0;  
 }
@@ -311,7 +311,7 @@ unsigned int Focuser::stateStopAtHome()
 
   const int  doStepsMax   = timingParams.getMaxStepsBetweenChecks(); 
 
-  if ( (focuserPosition % doStepsMax) == 0 )
+  if ( ((focuserPosition) % doStepsMax) == 0 )
   {
     log << "Homing " << focuserPosition << "\n";
 
@@ -340,6 +340,7 @@ unsigned int Focuser::stateStopAtHome()
 
 unsigned int Focuser::stateSleep()
 {
+  WifiDebugOstream log( debugLog.get(), net.get() );
   // Check for new commands
   DebugInterface& debug= *debugLog;
   auto cp = CommandParser::checkForCommands( debug, *net );
@@ -355,8 +356,7 @@ unsigned int Focuser::stateSleep()
     {
       if ( motorState != MotorState::ON ) 
       {
-        hardware->DigitalWrite( HWI::Pin::MOTOR_ENA, HWI::PinState::MOTOR_ON );
-        motorState = MotorState::ON;
+        setMotor( log, MotorState::ON );
         return timingParams.getTimeToPowerStepper() * 1000;
       }
     }
@@ -365,9 +365,7 @@ unsigned int Focuser::stateSleep()
 
   if ( motorState != MotorState::OFF )
   {
-    WifiDebugOstream log( debugLog.get(), net.get() );
-    hardware->DigitalWrite( HWI::Pin::MOTOR_ENA, HWI::PinState::MOTOR_OFF );
-    motorState = MotorState::OFF;
+    setMotor( log, MotorState::OFF );
   }
   const int mSecToNextEpoch = timingParams.getEpochForSleepCommandChecks() - 
         (time % timingParams.getEpochForSleepCommandChecks());
@@ -390,5 +388,16 @@ unsigned int Focuser::loop(void)
   time += uSecRemainder / 1000;
   uSecRemainder = uSecRemainder % 1000;
   return uSecToNextCall;
+}
+
+void Focuser::setMotor( WifiDebugOstream& log, MotorState m )
+{
+  motorState = m;
+
+  hardware->DigitalWrite( HWI::Pin::MOTOR_ENA, ( m == MotorState::ON ) ?
+      HWI::PinState::MOTOR_ON :
+      HWI::PinState::MOTOR_OFF );
+
+  log << "Motor set " << (( m == MotorState::ON ) ? "on" : "off" ) << "\n";
 }
 
