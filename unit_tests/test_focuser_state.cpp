@@ -139,7 +139,10 @@ TEST( FOCUSER_STATE, init_Focuser )
   auto focuser = make_focuser( netInput, hwInput, wifiAlias, hwMockAlias ); 
   simulateFocuser( focuser.get(), wifiAlias, hwMockAlias, 1000 );
 
-  TimedStringEvents goldenNet;
+  TimedStringEvents goldenNet = {
+    { 0, "# Motor set on" },
+    { 0, "# Focuser is up" },
+  };
 
   ASSERT_EQ( goldenNet, wifiAlias->getOutput() );
   ASSERT_EQ( goldenHWStart, hwMockAlias->getOutEvents() );
@@ -326,7 +329,7 @@ TEST( FOCUSER_STATE, home_focuser )
 
   TimedStringEvents goldenNet = {
     {  0, "Homed: NO" },
-    { 13, "Homed: NO" },
+    { 15, "Homed: NO" },
     { 20, "Homed: YES" },
     { 40, "Homed: YES" },
   };
@@ -455,7 +458,7 @@ TEST( FOCUSER_STATE, abort_while_homing )
 
   TimedStringEvents goldenNet = {
     {  0, "Homed: NO" },
-    { 13, "Homed: NO" },
+    { 15, "Homed: NO" },
     { 40, "Homed: NO" },
   };
 
@@ -467,6 +470,8 @@ TEST( FOCUSER_STATE, abort_while_homing )
     { 14, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
     { 15, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
     { 16, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 17, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 18, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
   };
 
   goldenHW.insert( goldenHW.begin(), goldenHWStart.begin(), goldenHWStart.end());
@@ -536,7 +541,7 @@ TEST( FOCUSER_STATE, new_move_while_homing )
 
   TimedStringEvents goldenNet = {
     {  0, "Homed: NO" },
-    { 13, "Homed: NO" },
+    { 15, "Homed: NO" },
     { 40, "Homed: NO" },
     { 50, "Position: 1" },
   };
@@ -549,9 +554,19 @@ TEST( FOCUSER_STATE, new_move_while_homing )
     { 14, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
     { 15, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
     { 16, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 17, { HWI::Pin::DIR,        HWI::PinState::DIR_FORWARD } },
-    { 18, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 19, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 17, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 18, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 19, { HWI::Pin::DIR,        HWI::PinState::DIR_FORWARD } },
+    { 20, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 21, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 22, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 23, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 24, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 25, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 26, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 27, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 28, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 29, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
   };
 
   goldenHW.insert( goldenHW.begin(), goldenHWStart.begin(), goldenHWStart.end());
@@ -653,8 +668,8 @@ TEST( FOCUSER_STATE, new_home_while_homing )
   goldenHW.insert( goldenHW.begin(), goldenHWStart.begin(), goldenHWStart.end());
   TimedStringEvents goldenNet = {
     {  0,  "Homed: NO" },
-    { 13,  "Position: 0" },
-    { 17,  "Homed: NO" },
+    { 15,  "Position: -2" },
+    { 19,  "Homed: NO" },
     { 30,  "Position: 0"},
     { 40,  "Homed: YES"},
   };
