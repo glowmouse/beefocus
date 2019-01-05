@@ -34,6 +34,7 @@ const std::vector<CommandTemplate> commandTemplates =
   { "mstatus",    Command::MStatus,  HasArg::No  },
   { "sstatus",    Command::SStatus,  HasArg::No  },
   { "abs_pos",    Command::ABSPos,   HasArg::Yes },
+  { "sync",       Command::Sync,     HasArg::Yes },
 };
 
 /// @brief Process an integer argument

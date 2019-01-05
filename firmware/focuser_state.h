@@ -341,6 +341,7 @@ class Focuser
   void doMStatus( CommandParser::CommandPacket );
   void doSStatus( CommandParser::CommandPacket );
   void doABSPos( CommandParser::CommandPacket );
+  void doSync( CommandParser::CommandPacket );
   void doError( CommandParser::CommandPacket );
 
   std::unique_ptr<NetInterface> net;

@@ -30,6 +30,7 @@ const CommandToBool FS::doesCommandInterrupt=
   { CommandParser::Command::MStatus,       false  },
   { CommandParser::Command::SStatus,       false  },
   { CommandParser::Command::ABSPos,        true   },
+  { CommandParser::Command::Sync,          true   },
   { CommandParser::Command::NoCommand,     false  },
 };
 
@@ -43,6 +44,7 @@ const std::unordered_map<CommandParser::Command,
   { CommandParser::Command::MStatus,    &Focuser::doMStatus },
   { CommandParser::Command::SStatus,    &Focuser::doSStatus },
   { CommandParser::Command::ABSPos,     &Focuser::doABSPos },
+  { CommandParser::Command::Sync,       &Focuser::doSync},
   { CommandParser::Command::NoCommand,  &Focuser::doError },
 };
 
@@ -214,6 +216,13 @@ void Focuser::doABSPos( CommandParser::CommandPacket cp )
     backtrack = backtrack < 0 ? 0 : backtrack;
     stateStack.push( State::MOVING, backtrack );
   }
+}
+
+void Focuser::doSync( CommandParser::CommandPacket cp )
+{
+  stateStack.push( State::MOVING, cp.optionalArg );
+  focuserPosition = cp.optionalArg;
+  isHomed = true;
 }
 
 void Focuser::doError( CommandParser::CommandPacket cp )

@@ -19,6 +19,7 @@ namespace CommandParser {
     MStatus,              ///<  Return the Mode (i.e., "moving", "homing")
     SStatus,              ///<  Is the focuser synced (i.e., homed)
     ABSPos,               ///<  Move to an absolute position
+    Sync,                 ///<  Argument is the new position
     NoCommand,            ///<  No command was specified.
     EndOfCommands         ///<  End of the comand list.
   };
