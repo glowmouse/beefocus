@@ -161,6 +161,42 @@ class TimingParams
   int msToPowerStepper;
 };
 
+enum class Build
+{
+  LOW_POWER_HYPERSTAR_FOCUSER,
+  TRADITIONAL_FOCUSER,
+  UNIT_TEST_BUILD_HYPERSTAR,
+  UNIT_TEST_TRADITIONAL_FOCUSER
+};
+
+
+class BuildParams {
+  public:
+
+  using BuildParamMap = const std::unordered_map<Build, BuildParams, EnumHash >;
+
+  BuildParams() = delete;
+
+  BuildParams( 
+    TimingParams timingParamsRHS,
+    bool focuserHasHomeRHS
+  ) : 
+    timingParams{ timingParamsRHS },
+    focuserHasHome{ focuserHasHomeRHS }
+  {
+  }
+  BuildParams( Build buildType )
+  {
+    *this = builds.at( buildType );
+  } 
+
+  TimingParams timingParams;
+  bool focuserHasHome;
+  static BuildParamMap builds;
+
+  private:
+};
+
 ///
 /// @brief Stack of FS:States.
 ///
@@ -243,11 +279,13 @@ class Focuser
   /// @param[in] netArg       - Interface to the network
   /// @param[in] hardwareArg  - Interface to the Hardware
   /// @param[in] debugArg     - Interface to the debug logger.
+  /// @param[in] params       - Hardware Parameters 
   ///
   Focuser( 
 		std::unique_ptr<NetInterface> netArg,
 		std::unique_ptr<HWI> hardwareArg,
-		std::unique_ptr<DebugInterface> debugArg
+		std::unique_ptr<DebugInterface> debugArg,
+    const BuildParams params
 	);
 
   ///
@@ -257,25 +295,6 @@ class Focuser
   ///         before calling loop again.
   ///
   unsigned int loop();
-
-  ///
-  /// @brief Set the maximum number of steps we'll do at a time
-  ///
-  /// @param[in] maxSteps - The maximum number of steps the focuser should
-  ///                       move before we check the network interface for
-  ///                       a new command.
-  ///
-  /// On the ESP8266 checking the network to see if there's anything new
-  /// is a realitively expensive operation - checking often hurts 
-  /// performance.
-  ///
-  /// In unit testing, we want to decrease this number so we'll check for
-  /// interrupts move frequently.
-  /// 
-  void setTimingParams( const TimingParams& tp )
-  {
-    timingParams = tp; 
-  }
 
   static const std::unordered_map<CommandParser::Command,
     void (Focuser::*)( CommandParser::CommandPacket),EnumHash> 
@@ -328,7 +347,7 @@ class Focuser
   std::unique_ptr<HWI> hardware;
   std::unique_ptr<DebugInterface> debugLog;
   
-  TimingParams timingParams;
+  const BuildParams buildParams;
 
   /// @brief What direction are we going? 
   ///

@@ -60,11 +60,65 @@ const std::unordered_map<State,unsigned int (Focuser::*)( void ),EnumHash>
   { State::ERROR_STATE,               &Focuser::stateError }
 };
 
+BuildParams::BuildParamMap BuildParams::builds = {
+  {
+    Build::LOW_POWER_HYPERSTAR_FOCUSER,
+    {
+      TimingParams { 
+        100,        // Check for new commands every 100ms
+        50,         // Take 50 steps before checking for interrupts
+        5*60*1000,  // Go to sleep after 5 minutes of inactivity
+        1000,       // Check for new input in sleep mode every second
+        1000        // Take 1 second to power up the focuser motor on awaken
+      },
+      true        // Focuser can use a home switch to synch
+    }
+  },
+  { Build::UNIT_TEST_BUILD_HYPERSTAR, 
+    {
+      TimingParams { 
+        10,         // Check for new commands every 10ms
+        2,          // Take 2 steps before checking for interrupts
+        1000,       // Go to sleep after 1 second of inactivity
+        500,        // Check for new input in sleep mode every 500ms
+        200,        // Allow 200ms to power on the motor
+      },
+      true        // Focuser can use a home switch to synch
+    }
+  },
+  {
+    Build::TRADITIONAL_FOCUSER,
+    {
+      TimingParams { 
+        100,        // Check for new commands every 100ms
+        50,         // Take 50 steps before checking for interrupts
+        10*24*60*1000,  // Go to sleep after 10 days of inactivity
+        1000,       // Check for new input in sleep mode every second
+        1000        // Take 1 second to power up the focuser motor on awaken
+      },
+      false         // Focuser cannot use a home switch to synch
+    }
+  },
+  { Build::UNIT_TEST_TRADITIONAL_FOCUSER, 
+    {
+      TimingParams { 
+        10,         // Check for new commands every 10ms
+        2,          // Take 2 steps before checking for interrupts
+        1000,       // Go to sleep after 1 second of inactivity
+        500,        // Check for new input in sleep mode every 500ms
+        200,        // Allow 200ms to power on the motor
+      },
+      false         // Focuser cannot use a home switch to synch
+    }
+  },
+};
+
 Focuser::Focuser(
     std::unique_ptr<NetInterface> netArg,
     std::unique_ptr<HWI> hardwareArg,
-    std::unique_ptr<DebugInterface> debugArg
-)
+    std::unique_ptr<DebugInterface> debugArg,
+    const BuildParams params
+) : buildParams{ params }
 {
   focuserPosition = 0;
   isHomed = false;
@@ -188,14 +242,14 @@ unsigned int Focuser::stateAcceptCommands()
   const unsigned int timeSinceLastInterrupt = 
       time - timeLastInterruptingCommandOccured;
 
-  if ( timeSinceLastInterrupt > timingParams.getInactivityToSleep() )
+  if ( timeSinceLastInterrupt > buildParams.timingParams.getInactivityToSleep() )
   {
     stateStack.push( State::SLEEP );
     return 0;
   }
 
-  const int mSecToNextEpoch = timingParams.getEpochBetweenCommandChecks() - 
-        (time % timingParams.getEpochBetweenCommandChecks());
+  const int timeBetweenChecks = buildParams.timingParams.getEpochBetweenCommandChecks();
+  const int mSecToNextEpoch = timeBetweenChecks - ( time % timeBetweenChecks );
 
   return mSecToNextEpoch * 1000;
 }
@@ -285,7 +339,7 @@ unsigned int Focuser::stateMoving()
   const int  steps        = stateStack.topArg().getInt() - focuserPosition;
   const Dir  nextDir      = steps > 0 ? Dir::FORWARD : Dir::REVERSE;
   const int  absSteps     = steps > 0 ? steps : -steps;
-  const int  doStepsMax   = timingParams.getMaxStepsBetweenChecks(); 
+  const int  doStepsMax   = buildParams.timingParams.getMaxStepsBetweenChecks(); 
   const int  clippedSteps = absSteps > doStepsMax ? doStepsMax : absSteps;
 
   stateStack.push( State::DO_STEPS, clippedSteps );
@@ -309,7 +363,7 @@ unsigned int Focuser::stateStopAtHome()
     return 0;        
   }
 
-  const int  doStepsMax   = timingParams.getMaxStepsBetweenChecks(); 
+  const int  doStepsMax   = buildParams.timingParams.getMaxStepsBetweenChecks(); 
 
   if ( ((focuserPosition) % doStepsMax) == 0 )
   {
@@ -357,7 +411,7 @@ unsigned int Focuser::stateSleep()
       if ( motorState != MotorState::ON ) 
       {
         setMotor( log, MotorState::ON );
-        return timingParams.getTimeToPowerStepper() * 1000;
+        return buildParams.timingParams.getTimeToPowerStepper() * 1000;
       }
     }
     return 0;   // Go until we're out of commands.
@@ -367,8 +421,8 @@ unsigned int Focuser::stateSleep()
   {
     setMotor( log, MotorState::OFF );
   }
-  const int mSecToNextEpoch = timingParams.getEpochForSleepCommandChecks() - 
-        (time % timingParams.getEpochForSleepCommandChecks());
+  const int sleepEpoch = buildParams.timingParams.getEpochForSleepCommandChecks();
+  const int mSecToNextEpoch = sleepEpoch - ( time % sleepEpoch ); 
 
   return mSecToNextEpoch * 1000;
 }

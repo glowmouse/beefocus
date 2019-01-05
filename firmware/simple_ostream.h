@@ -43,7 +43,7 @@ template <class T,
   typename = my_enable_if_t<is_beefocus_ostream<T>::value>>
 void rawWrite( T& ostream,  const char *bytes, std::size_t numBytes )
 {
-   for ( int i = 0; i < numBytes; ++i )
+   for ( size_t i = 0; i < numBytes; ++i )
    {
       ostream << bytes[i];
    }

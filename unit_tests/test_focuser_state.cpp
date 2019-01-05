@@ -31,24 +31,15 @@ std::unique_ptr<FS::Focuser> make_focuser(
   net_interface = wifi.get();
   hw_interface = hardware.get();
 
+  FS::BuildParams params( FS::Build::UNIT_TEST_BUILD_HYPERSTAR );
+
   auto focuser = std::unique_ptr<FS::Focuser>(
      new FS::Focuser(
         std::move(wifi),
         std::move(hardware),
-        std::move(debug) )
+        std::move(debug),
+        params )
   );
-
-  // Create a standard set of timing parameters for unit tests.
-
-  const FS::TimingParams testTimingParams( 
-    10,         // 10ms Epoch to check for new commands on 
-    2,          // Maximum steps to take before checking for interrupts
-    1000,       // Go to sleep after 1 second
-    500,        // Check for new input in sleep every 500ms
-    200         // Take 200ms to power on the motor
-  );
-
-  focuser->setTimingParams( testTimingParams );
 
   return focuser;
 }
