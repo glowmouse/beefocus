@@ -300,7 +300,7 @@ TEST( FOCUSER_STATE, run_abs_pos_with_backlash_correction )
 TEST( FOCUSER_STATE, ignore_home )
 {
   TimedStringEvents netInput = {
-    { 0,  "sstatus" },        // Make sure we're not homed
+    { 0,  "sstatus" },        // Make sure we're not synched 
     { 10, "home" },           // issue home command
     { 11, "sstatus" },        // Home is ignored
     { 20, "sstatus" },        // Home is ignored
@@ -339,7 +339,7 @@ TEST( FOCUSER_STATE, ignore_home )
 TEST( FOCUSER_STATE, sync_focuser )
 {
   TimedStringEvents netInput = {
-    { 0,  "sstatus" },        // Make sure we're not homed
+    { 0,  "sstatus" },        // Make sure we're not synched
     { 10, "sync=100" },       // issue a sync comand
     { 10, "sstatus" },        // Should now be synced
     { 10, "pstatus" },        // Poisition should be 100
@@ -368,7 +368,7 @@ TEST( FOCUSER_STATE, mstatus_while_moving )
   TimedStringEvents netInput = {
     { 10, "abs_pos=7" },        // Start the focuser moving
     { 13, "mstatus" },          // Ask for state status while moving
-    { 15, "sstatus" },          // Ask for home status while moving
+    { 15, "sstatus" },          // Ask for synch status while moving
     { 17, "pstatus" },          // Ask for position status while moving
   };
 
@@ -484,11 +484,11 @@ TEST( FOCUSER_STATE, sync_while_moving )
 TEST( FOCUSER_STATE, abort_on_ignored_home )
 {
   TimedStringEvents netInput = {
-    { 0,  "sstatus" },        // Make sure we're not homed
+    { 0,  "sstatus" },        // Make sure we're not synched
     { 10, "home" },           // issue home command (ignored)
-    { 11, "sstatus" },        // Should not be homed
-    { 16, "abort" },          // On second thought... 
-    { 40, "sstatus" },        // Should still not be homed
+    { 11, "sstatus" },        // Should not be synched
+    { 16, "abort" },          // Random abort of nothing
+    { 40, "sstatus" },        // Should still not be synched
   };
 
   HWTimedEvents hwInput= {
@@ -557,12 +557,12 @@ TEST( FOCUSER_STATE, new_move_while_moving )
 TEST( FOCUSER_STATE, move_after_ignored_home )
 {
   TimedStringEvents netInput = {
-    { 0,  "sstatus" },        // Make sure we're not homed
+    { 0,  "sstatus" },        // Make sure we're not synched
     { 10, "home" },           // issue home command
-    { 11, "sstatus" },        // Should not be homed during homing
-    { 16, "abs_pos=1" },      // On second thought... 
-    { 40, "sstatus" },        // Should still be homed.
-    { 41, "pstatus" },        // Should still be homed.
+    { 11, "sstatus" },        // Should not be synched - home ignored
+    { 16, "abs_pos=1" },      // Now move
+    { 40, "sstatus" },        // Should still be synched
+    { 41, "pstatus" },        // Should still be synched.
   };
 
   HWTimedEvents hwInput= {
@@ -594,16 +594,16 @@ TEST( FOCUSER_STATE, move_after_ignored_home )
 }
 
 
-TEST( FOCUSER_STATE, ignore_home_while_moving )
+TEST( FOCUSER_STATE, mostly_ignore_home_while_moving )
 {
   TimedStringEvents netInput = {
-    {  0, "sstatus" },          // Are we homed?
+    {  0, "sstatus" },          // Should not start synched
     { 10, "abs_pos=99" },       // Start the focuser moving
     { 13, "pstatus" },          // Where are we?
-    { 15, "home" },             // On second thought, I forgot to home
+    { 15, "home" },             // Home will actually stop us moving 
     { 17, "mstatus" },          // What are we doing now?
     { 30, "pstatus" },          // Where did we land?
-    { 32, "sstatus" },          // Are we homed?
+    { 32, "sstatus" },          // Are we homed?  Should be no.
   };
 
   HWTimedEvents hwInput= {
@@ -643,13 +643,13 @@ TEST( FOCUSER_STATE, ignore_home_while_moving )
 TEST( FOCUSER_STATE, ignore_multiple_homes )
 {
   TimedStringEvents netInput = {
-    {  0, "sstatus" },          // Are we homed?
+    {  0, "sstatus" },          // Are we synched?
     { 10, "home" },             // Should ignore
     { 13, "pstatus" },          // Where are we?
     { 15, "home" },             // Should still ignore
     { 17, "sstatus" },          // What are we doing now?
     { 30, "pstatus" },          // Where did we land?
-    { 32, "sstatus" },          // Are we homed?
+    { 32, "sstatus" },          // Are we synched? should be no.
   };
 
   HWTimedEvents hwInput= {

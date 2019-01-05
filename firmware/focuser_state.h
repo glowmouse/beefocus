@@ -370,8 +370,8 @@ class Focuser
   /// @brief What is the focuser's position of record
   int focuserPosition;
 
-  /// @brief Is the focuser homed?
-  bool isHomed;
+  /// @brief Is the focuser synched to a "known good" position
+  bool isSynched;
 
   /// @brief Focuser uptime in MS
   unsigned int time;

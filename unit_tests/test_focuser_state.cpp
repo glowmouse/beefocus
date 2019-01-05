@@ -300,12 +300,12 @@ TEST( FOCUSER_STATE, run_abs_pos_with_backlash_correction )
 TEST( FOCUSER_STATE, home_focuser )
 {
   TimedStringEvents netInput = {
-    { 0,  "sstatus" },        // Make sure we're not homed
+    { 0,  "sstatus" },        // Make sure we're not synched
     { 10, "home" },           // issue home command
-    { 11, "sstatus" },        // Should not be homed during homing
-    { 20, "sstatus" },        // Should now be homed
+    { 11, "sstatus" },        // Should not be synched during homing
+    { 20, "sstatus" },        // Should now be synched 
     { 30, "abs_pos=1" },      // Move back to 1
-    { 40, "sstatus" },        // Should still be homed.
+    { 40, "sstatus" },        // Should still be synched
   };
 
   HWTimedEvents hwInput= {
@@ -349,7 +349,7 @@ TEST( FOCUSER_STATE, home_focuser )
 TEST( FOCUSER_STATE, sync_focuser )
 {
   TimedStringEvents netInput = {
-    { 0,  "sstatus" },        // Make sure we're not homed
+    { 0,  "sstatus" },        // Make sure we're not synched
     { 10, "sync=100" },       // issue a sync comand
     { 10, "sstatus" },        // Should now be synced
     { 10, "pstatus" },        // Poisition should be 100
@@ -379,7 +379,7 @@ TEST( FOCUSER_STATE, mstatus_while_moving )
   TimedStringEvents netInput = {
     { 10, "abs_pos=7" },        // Start the focuser moving
     { 13, "mstatus" },          // Ask for state status while moving
-    { 15, "sstatus" },          // Ask for home status while moving
+    { 15, "sstatus" },          // Ask for synch status while moving
     { 17, "pstatus" },          // Ask for position status while moving
   };
 
@@ -496,11 +496,11 @@ TEST( FOCUSER_STATE, sync_while_moving )
 TEST( FOCUSER_STATE, abort_while_homing )
 {
   TimedStringEvents netInput = {
-    { 0,  "sstatus" },        // Make sure we're not homed
+    { 0,  "sstatus" },        // Make sure we're not synched
     { 10, "home" },           // issue home command
-    { 11, "sstatus" },        // Should not be homed during homing
-    { 16, "abort" },          // On second thought... 
-    { 40, "sstatus" },        // Should still not be homed.
+    { 11, "sstatus" },        // Should not be synched during homing
+    { 16, "abort" },          // On second thought, abort... 
+    { 40, "sstatus" },        // Should still not be synched
   };
 
   HWTimedEvents hwInput= {
@@ -540,11 +540,11 @@ TEST( FOCUSER_STATE, abort_while_homing )
 TEST( FOCUSER_STATE, sync_while_homing )
 {
   TimedStringEvents netInput = {
-    { 0,  "sstatus" },        // Make sure we're not homed
+    { 0,  "sstatus" },        // Make sure we're not synched
     { 10, "home" },           // issue home command
-    { 11, "sstatus" },        // Should not be homed during homing
+    { 11, "sstatus" },        // Should not be synched during homing
     { 16, "sync=100" },       // On second thought, just issue a sync
-    { 40, "sstatus" },        // Should be synced
+    { 40, "sstatus" },        // Should be synced (from the sync, not the home)
     { 40, "pstatus" },        // Should be at 100.
   };
 
@@ -625,12 +625,12 @@ TEST( FOCUSER_STATE, new_move_while_moving )
 TEST( FOCUSER_STATE, new_move_while_homing )
 {
   TimedStringEvents netInput = {
-    { 0,  "sstatus" },        // Make sure we're not homed
+    { 0,  "sstatus" },        // Make sure we're not synched
     { 10, "home" },           // issue home command
-    { 11, "sstatus" },        // Should not be homed during homing
-    { 16, "abs_pos=1" },      // On second thought... 
-    { 40, "sstatus" },        // Should still be homed.
-    { 41, "pstatus" },        // Should still be homed.
+    { 11, "sstatus" },        // Should not be synched during homing
+    { 16, "abs_pos=1" },      // On second thought, issue a move.
+    { 40, "sstatus" },        // Should not be synched
+    { 41, "pstatus" },        // Should be at position 1
   };
 
   HWTimedEvents hwInput= {
@@ -683,13 +683,13 @@ TEST( FOCUSER_STATE, new_move_while_homing )
 TEST( FOCUSER_STATE, new_home_while_moving )
 {
   TimedStringEvents netInput = {
-    {  0, "sstatus" },          // Are we homed?
+    {  0, "sstatus" },          // Are we synhed
     { 10, "abs_pos=99" },       // Start the focuser moving
     { 13, "pstatus" },          // Where are we?
     { 15, "home" },             // On second thought, I forgot to home
     { 17, "mstatus" },          // What are we doing now?
     { 30, "pstatus" },          // Where did we land?
-    { 32, "sstatus" },          // Are we homed?
+    { 32, "sstatus" },          // We should be synched.
   };
 
   HWTimedEvents hwInput= {
@@ -734,13 +734,13 @@ TEST( FOCUSER_STATE, new_home_while_moving )
 TEST( FOCUSER_STATE, new_home_while_homing )
 {
   TimedStringEvents netInput = {
-    {  0, "sstatus" },          // Are we homed?
+    {  0, "sstatus" },          // Should not start synched
     { 10, "home" },             // Start the focuser moving
     { 13, "pstatus" },          // Where are we?
-    { 15, "home" },             // On second thought, I forgot to home
+    { 15, "home" },             // A home while homing!
     { 17, "sstatus" },          // What are we doing now?
     { 30, "pstatus" },          // Where did we land?
-    { 32, "sstatus" },          // Are we homed?
+    { 32, "sstatus" },          // Are we synched (should be)
   };
 
   HWTimedEvents hwInput= {

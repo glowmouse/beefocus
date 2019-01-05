@@ -123,7 +123,7 @@ Focuser::Focuser(
 ) : buildParams{ params }
 {
   focuserPosition = 0;
-  isHomed = false;
+  isSynched = false;
   time = 0;
   uSecRemainder = 0;
   timeLastInterruptingCommandOccured = 0;
@@ -201,7 +201,7 @@ void Focuser::doSStatus( CommandParser::CommandPacket cp )
   DebugInterface& log = *debugLog;
 
   log << "Processing sstatus request\n";
-  *net << "Synched: " << (isHomed ? "YES" : "NO" ) << "\n";
+  *net << "Synched: " << (isSynched ? "YES" : "NO" ) << "\n";
   return;
 }
 
@@ -222,7 +222,7 @@ void Focuser::doSync( CommandParser::CommandPacket cp )
 {
   stateStack.push( State::MOVING, cp.optionalArg );
   focuserPosition = cp.optionalArg;
-  isHomed = true;
+  isSynched = true;
 }
 
 void Focuser::doError( CommandParser::CommandPacket cp )
@@ -370,7 +370,7 @@ unsigned int Focuser::stateStopAtHome()
     log << "Hit home at position " << focuserPosition << "\n";
     log << "Resetting position to 0\n";
     focuserPosition = 0;
-    isHomed = true;
+    isSynched = true;
     stateStack.pop();
     return 0;        
   }
