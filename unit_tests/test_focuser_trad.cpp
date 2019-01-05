@@ -300,12 +300,12 @@ TEST( FOCUSER_STATE, run_abs_pos_with_backlash_correction )
 TEST( FOCUSER_STATE, ignore_home )
 {
   TimedStringEvents netInput = {
-    { 0,  "hstatus" },        // Make sure we're not homed
+    { 0,  "sstatus" },        // Make sure we're not homed
     { 10, "home" },           // issue home command
-    { 11, "hstatus" },        // Home is ignored
-    { 20, "hstatus" },        // Home is ignored
+    { 11, "sstatus" },        // Home is ignored
+    { 20, "sstatus" },        // Home is ignored
     { 30, "abs_pos=1" },      // Move back to 1
-    { 40, "hstatus" },        // Still ignored
+    { 40, "sstatus" },        // Still ignored
   };
 
   HWTimedEvents hwInput= {
@@ -319,10 +319,10 @@ TEST( FOCUSER_STATE, ignore_home )
   simulateFocuser( focuser.get(), wifiAlias, hwMockAlias, 1000 );
 
   TimedStringEvents goldenNet = {
-    {  0, "Homed: NO" },
-    { 20, "Homed: NO" },
-    { 20, "Homed: NO" },
-    { 40, "Homed: NO" },
+    {  0, "Synched: NO" },
+    { 20, "Synched: NO" },
+    { 20, "Synched: NO" },
+    { 40, "Synched: NO" },
   };
 
   HWTimedEvents goldenHW = {
@@ -341,7 +341,7 @@ TEST( FOCUSER_STATE, mstatus_while_moving )
   TimedStringEvents netInput = {
     { 10, "abs_pos=7" },        // Start the focuser moving
     { 13, "mstatus" },          // Ask for state status while moving
-    { 15, "hstatus" },          // Ask for home status while moving
+    { 15, "sstatus" },          // Ask for home status while moving
     { 17, "pstatus" },          // Ask for position status while moving
   };
 
@@ -372,7 +372,7 @@ TEST( FOCUSER_STATE, mstatus_while_moving )
   goldenHW.insert( goldenHW.begin(), goldenHWStart.begin(), goldenHWStart.end());
   TimedStringEvents goldenNet = {
     { 14, "State: MOVING 7" },
-    { 18, "Homed: NO" },
+    { 18, "Synched: NO" },
     { 22, "Position: 6" }
   };
 
@@ -420,11 +420,11 @@ TEST( FOCUSER_STATE, abort_while_moving )
 TEST( FOCUSER_STATE, abort_on_ignored_home )
 {
   TimedStringEvents netInput = {
-    { 0,  "hstatus" },        // Make sure we're not homed
+    { 0,  "sstatus" },        // Make sure we're not homed
     { 10, "home" },           // issue home command (ignored)
-    { 11, "hstatus" },        // Should not be homed
+    { 11, "sstatus" },        // Should not be homed
     { 16, "abort" },          // On second thought... 
-    { 40, "hstatus" },        // Should still not be homed
+    { 40, "sstatus" },        // Should still not be homed
   };
 
   HWTimedEvents hwInput= {
@@ -438,9 +438,9 @@ TEST( FOCUSER_STATE, abort_on_ignored_home )
   simulateFocuser( focuser.get(), wifiAlias, hwMockAlias, 1000 );
 
   TimedStringEvents goldenNet = {
-    {  0, "Homed: NO" },
-    { 20, "Homed: NO" },
-    { 40, "Homed: NO" },
+    {  0, "Synched: NO" },
+    { 20, "Synched: NO" },
+    { 40, "Synched: NO" },
   };
 
   HWTimedEvents goldenHW = {
@@ -493,11 +493,11 @@ TEST( FOCUSER_STATE, new_move_while_moving )
 TEST( FOCUSER_STATE, move_after_ignored_home )
 {
   TimedStringEvents netInput = {
-    { 0,  "hstatus" },        // Make sure we're not homed
+    { 0,  "sstatus" },        // Make sure we're not homed
     { 10, "home" },           // issue home command
-    { 11, "hstatus" },        // Should not be homed during homing
+    { 11, "sstatus" },        // Should not be homed during homing
     { 16, "abs_pos=1" },      // On second thought... 
-    { 40, "hstatus" },        // Should still be homed.
+    { 40, "sstatus" },        // Should still be homed.
     { 41, "pstatus" },        // Should still be homed.
   };
 
@@ -512,9 +512,9 @@ TEST( FOCUSER_STATE, move_after_ignored_home )
   simulateFocuser( focuser.get(), wifiAlias, hwMockAlias, 1000 );
 
   TimedStringEvents goldenNet = {
-    {  0, "Homed: NO" },
-    { 20, "Homed: NO" },
-    { 40, "Homed: NO" },
+    {  0, "Synched: NO" },
+    { 20, "Synched: NO" },
+    { 40, "Synched: NO" },
     { 50, "Position: 1" },
   };
 
@@ -533,13 +533,13 @@ TEST( FOCUSER_STATE, move_after_ignored_home )
 TEST( FOCUSER_STATE, ignore_home_while_moving )
 {
   TimedStringEvents netInput = {
-    {  0, "hstatus" },          // Are we homed?
+    {  0, "sstatus" },          // Are we homed?
     { 10, "abs_pos=99" },       // Start the focuser moving
     { 13, "pstatus" },          // Where are we?
     { 15, "home" },             // On second thought, I forgot to home
     { 17, "mstatus" },          // What are we doing now?
     { 30, "pstatus" },          // Where did we land?
-    { 32, "hstatus" },          // Are we homed?
+    { 32, "sstatus" },          // Are we homed?
   };
 
   HWTimedEvents hwInput= {
@@ -565,11 +565,11 @@ TEST( FOCUSER_STATE, ignore_home_while_moving )
 
   goldenHW.insert( goldenHW.begin(), goldenHWStart.begin(), goldenHWStart.end());
   TimedStringEvents goldenNet = {
-    {  0,  "Homed: NO" },
+    {  0,  "Synched: NO" },
     { 14,  "Position: 2" },
     { 18,  "State: ACCEPTING_COMMANDS NoArg" },
     { 30,  "Position: 4"},
-    { 40,  "Homed: NO"},
+    { 40,  "Synched: NO"},
   };
 
   ASSERT_EQ( goldenNet, testFilterComments(wifiAlias->getOutput() ));
@@ -579,13 +579,13 @@ TEST( FOCUSER_STATE, ignore_home_while_moving )
 TEST( FOCUSER_STATE, ignore_multiple_homes )
 {
   TimedStringEvents netInput = {
-    {  0, "hstatus" },          // Are we homed?
+    {  0, "sstatus" },          // Are we homed?
     { 10, "home" },             // Should ignore
     { 13, "pstatus" },          // Where are we?
     { 15, "home" },             // Should still ignore
-    { 17, "hstatus" },          // What are we doing now?
+    { 17, "sstatus" },          // What are we doing now?
     { 30, "pstatus" },          // Where did we land?
-    { 32, "hstatus" },          // Are we homed?
+    { 32, "sstatus" },          // Are we homed?
   };
 
   HWTimedEvents hwInput= {
@@ -603,11 +603,11 @@ TEST( FOCUSER_STATE, ignore_multiple_homes )
 
   goldenHW.insert( goldenHW.begin(), goldenHWStart.begin(), goldenHWStart.end());
   TimedStringEvents goldenNet = {
-    {  0,  "Homed: NO" },
+    {  0,  "Synched: NO" },
     { 20,  "Position: 0" },
-    { 20,  "Homed: NO" },
+    { 20,  "Synched: NO" },
     { 30,  "Position: 0"},
-    { 40,  "Homed: NO"},
+    { 40,  "Synched: NO"},
   };
 
   ASSERT_EQ( goldenNet, testFilterComments(wifiAlias->getOutput() ));
@@ -666,7 +666,7 @@ TEST( FOCUSER_STATE, enterSleepModeAndWake )
     { 1060, "mstatus" },          // Will process mstatus before sleeping
     { 1061, "mstatus" },          // Now we'll be in sleep mode
     { 1062, "pstatus" },          // Check timing, should happen at 1500
-    { 1500, "hstatus" },          // Should also happen at 1500
+    { 1500, "sstatus" },          // Should also happen at 1500
     { 1501, "mstatus" },          // Should happen at 2000
     { 2001, "abs_pos=2" },        // Should happen at 2500
     { 2500, "mstatus" },
@@ -691,7 +691,7 @@ TEST( FOCUSER_STATE, enterSleepModeAndWake )
     { 1060, "State: ACCEPTING_COMMANDS NoArg" },
     { 1500, "State: LOW_POWER NoArg" },
     { 1500, "Position: 1" },
-    { 1500, "Homed: NO" },
+    { 1500, "Synched: NO" },
     { 2000, "State: LOW_POWER NoArg" },
     { 2700, "State: MOVING 2" },
   };

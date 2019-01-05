@@ -198,8 +198,8 @@ void Focuser::doHStatus( CommandParser::CommandPacket cp )
   (void) cp;
   DebugInterface& log = *debugLog;
 
-  log << "Processing hstatus request\n";
-  *net << "Homed: " << (isHomed ? "YES" : "NO" ) << "\n";
+  log << "Processing sstatus request\n";
+  *net << "Synched: " << (isHomed ? "YES" : "NO" ) << "\n";
   return;
 }
 

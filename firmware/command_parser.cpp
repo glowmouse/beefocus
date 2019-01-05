@@ -32,7 +32,7 @@ const std::vector<CommandTemplate> commandTemplates =
   { "home",       Command::Home,     HasArg::No  },
   { "pstatus",    Command::PStatus,  HasArg::No  },
   { "mstatus",    Command::SStatus,  HasArg::No  },
-  { "hstatus",    Command::HStatus,  HasArg::No  },
+  { "sstatus",    Command::HStatus,  HasArg::No  },
   { "abs_pos",    Command::ABSPos,   HasArg::Yes },
 };
 
