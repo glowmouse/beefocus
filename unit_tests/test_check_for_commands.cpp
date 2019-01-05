@@ -46,7 +46,7 @@ TEST( COMMAND_PARSER, checkForCommands)
 
 
   NetMockSimpleTimed mstatus("mstatus");
-  ASSERT_EQ( checkForCommands(dbgmock, mstatus), CommandPacket( Command::SStatus ));
+  ASSERT_EQ( checkForCommands(dbgmock, mstatus), CommandPacket( Command::MStatus ));
 
   // Argument defaults to 0 if not given
   NetMockSimpleTimed abs_pos0("ABS_POS");

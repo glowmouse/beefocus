@@ -338,8 +338,8 @@ class Focuser
   void doAbort( CommandParser::CommandPacket );
   void doHome( CommandParser::CommandPacket );
   void doPStatus( CommandParser::CommandPacket );
+  void doMStatus( CommandParser::CommandPacket );
   void doSStatus( CommandParser::CommandPacket );
-  void doHStatus( CommandParser::CommandPacket );
   void doABSPos( CommandParser::CommandPacket );
   void doError( CommandParser::CommandPacket );
 

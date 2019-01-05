@@ -27,8 +27,8 @@ const CommandToBool FS::doesCommandInterrupt=
   { CommandParser::Command::Abort,         true   },
   { CommandParser::Command::Home,          true   },
   { CommandParser::Command::PStatus,       false  },
+  { CommandParser::Command::MStatus,       false  },
   { CommandParser::Command::SStatus,       false  },
-  { CommandParser::Command::HStatus,       false  },
   { CommandParser::Command::ABSPos,        true   },
   { CommandParser::Command::NoCommand,     false  },
 };
@@ -40,8 +40,8 @@ const std::unordered_map<CommandParser::Command,
   { CommandParser::Command::Abort,      &Focuser::doAbort },
   { CommandParser::Command::Home,       &Focuser::doHome },
   { CommandParser::Command::PStatus,    &Focuser::doPStatus },
+  { CommandParser::Command::MStatus,    &Focuser::doMStatus },
   { CommandParser::Command::SStatus,    &Focuser::doSStatus },
-  { CommandParser::Command::HStatus,    &Focuser::doHStatus },
   { CommandParser::Command::ABSPos,     &Focuser::doABSPos },
   { CommandParser::Command::NoCommand,  &Focuser::doError },
 };
@@ -182,7 +182,7 @@ void Focuser::doPStatus( CommandParser::CommandPacket cp )
   *net << "Position: " << focuserPosition << "\n";
 }
 
-void Focuser::doSStatus( CommandParser::CommandPacket cp )
+void Focuser::doMStatus( CommandParser::CommandPacket cp )
 {
   (void) cp;
   DebugInterface& log = *debugLog;
@@ -193,7 +193,7 @@ void Focuser::doSStatus( CommandParser::CommandPacket cp )
   return;
 }
 
-void Focuser::doHStatus( CommandParser::CommandPacket cp )
+void Focuser::doSStatus( CommandParser::CommandPacket cp )
 {
   (void) cp;
   DebugInterface& log = *debugLog;
