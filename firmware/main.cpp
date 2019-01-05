@@ -22,10 +22,12 @@ void setup() {
   std::unique_ptr<NetInterface> wifi( new WifiInterfaceEthernet );
   std::unique_ptr<HWI> hardware( new HardwareESP8266 );
   std::unique_ptr<DebugInterface> debug( new DebugESP8266 );
+  FS::BuildParams params( FS::Build::LOW_POWER_HYPERSTAR_FOCUSER );
   focuser = std::unique_ptr<FS::Focuser>(
      new FS::Focuser( 
         std::move(wifi), 
         std::move(hardware),
-				std::move(debug) )
+				std::move(debug),
+        params )
   );
 }
