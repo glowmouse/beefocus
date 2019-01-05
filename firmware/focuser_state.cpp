@@ -167,7 +167,10 @@ void Focuser::doAbort( CommandParser::CommandPacket cp )
 void Focuser::doHome( CommandParser::CommandPacket cp )
 {
   (void) cp;
-  stateStack.push( State::STOP_AT_HOME );
+  if ( buildParams.focuserHasHome )
+  {
+    stateStack.push( State::STOP_AT_HOME );
+  }
   return;
 }
 
