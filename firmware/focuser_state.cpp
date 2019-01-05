@@ -187,7 +187,7 @@ void Focuser::doSStatus( CommandParser::CommandPacket cp )
   (void) cp;
   DebugInterface& log = *debugLog;
 
-  log << "Processing sstatus request\n";
+  log << "Processing mstatus request\n";
   *net << "State: " << stateNames.at(stateStack.topState()) << 
                 " " << stateStack.topArg() << "\n";
   return;

@@ -145,9 +145,9 @@ TEST( FOCUSER_STATE, init_Focuser )
 TEST( FOCUSER_STATE, run_status)
 {
   TimedStringEvents netInput = {
-    { 0, "sstatus" },     // status  @ Time 0
+    { 0, "mstatus" },     // status  @ Time 0
     { 50, "pstatus" },    // pstatus @ Time 50 ms
-    { 75, "sstatus" },    // sstatus @ Time 70 (!epoch) ms
+    { 75, "mstatus" },    // mstatus @ Time 70 (!epoch) ms
     { 76, "pstatus" }     // check pstatus 1 ms later (!epoch)
   };
   HWTimedEvents hwInput= {
@@ -346,11 +346,11 @@ TEST( FOCUSER_STATE, home_focuser )
   ASSERT_EQ( goldenHW, hwMockAlias->getOutEvents() );
 }
 
-TEST( FOCUSER_STATE, sstatus_while_moving )
+TEST( FOCUSER_STATE, mstatus_while_moving )
 {
   TimedStringEvents netInput = {
     { 10, "abs_pos=7" },        // Start the focuser moving
-    { 13, "sstatus" },          // Ask for state status while moving
+    { 13, "mstatus" },          // Ask for state status while moving
     { 15, "hstatus" },          // Ask for home status while moving
     { 17, "pstatus" },          // Ask for position status while moving
   };
@@ -395,7 +395,7 @@ TEST( FOCUSER_STATE, abort_while_moving )
   TimedStringEvents netInput = {
     { 10, "abs_pos=7" },        // Start the focuser moving
     { 15, "abort" },            // Nope!
-    { 16, "sstatus" },          // What state are we in?
+    { 16, "mstatus" },          // What state are we in?
     { 20, "pstatus" },          // Where did we end up?
   };
 
@@ -574,7 +574,7 @@ TEST( FOCUSER_STATE, new_home_while_moving )
     { 10, "abs_pos=99" },       // Start the focuser moving
     { 13, "pstatus" },          // Where are we?
     { 15, "home" },             // On second thought, I forgot to home
-    { 17, "sstatus" },          // What are we doing now?
+    { 17, "mstatus" },          // What are we doing now?
     { 30, "pstatus" },          // Where did we land?
     { 32, "hstatus" },          // Are we homed?
   };
@@ -715,16 +715,16 @@ TEST( FOCUSER_STATE, enterSleepModeAndWake )
 {
   TimedStringEvents netInput = {
     { 50,   "abs_pos=1" },        // Forward to 1
-    { 50,   "sstatus" },          // What are we doing?
-    { 60,   "sstatus" },          // What are we doing now?
-    { 1059, "sstatus" },          // Right before sleep mode
-    { 1060, "sstatus" },          // Will process sstatus before sleeping
-    { 1061, "sstatus" },          // Now we'll be in sleep mode
+    { 50,   "mstatus" },          // What are we doing?
+    { 60,   "mstatus" },          // What are we doing now?
+    { 1059, "mstatus" },          // Right before sleep mode
+    { 1060, "mstatus" },          // Will process mstatus before sleeping
+    { 1061, "mstatus" },          // Now we'll be in sleep mode
     { 1062, "pstatus" },          // Check timing, should happen at 1500
     { 1500, "hstatus" },          // Should also happen at 1500
-    { 1501, "sstatus" },          // Should happen at 2000
+    { 1501, "mstatus" },          // Should happen at 2000
     { 2001, "abs_pos=2" },        // Should happen at 2500
-    { 2500, "sstatus" },
+    { 2500, "mstatus" },
     { 4200, "abort" },            // should cause a wake @ 4500
     { 5600, "home" },             // should cause a wake @ 6000
   };
