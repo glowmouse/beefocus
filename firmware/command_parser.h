@@ -16,9 +16,10 @@ namespace CommandParser {
     Abort = 0,            ///<  Abort a move
     Home,                 ///<  Rewind until the home pin is active
     PStatus,              ///<  Return Position to Caller
-    SStatus,              ///<  Return the State (i.e., "moving", "homing")
-    HStatus,              ///<  Return Home Status (i.e, "homed" or "!homed")
+    MStatus,              ///<  Return the Mode (i.e., "moving", "homing")
+    SStatus,              ///<  Is the focuser synced (i.e., homed)
     ABSPos,               ///<  Move to an absolute position
+    Sync,                 ///<  Argument is the new position
     NoCommand,            ///<  No command was specified.
     EndOfCommands         ///<  End of the comand list.
   };

@@ -82,11 +82,13 @@ void setup() {
   std::unique_ptr<NetInterface> wifi( new NetInterfaceSim );
   std::unique_ptr<HWI> hardware( new HWISim );
   std::unique_ptr<DebugInterface> debug( new DebugInterfaceSim );
+  FS::BuildParams params( FS::Build::LOW_POWER_HYPERSTAR_FOCUSER );
   focuser = std::unique_ptr<FS::Focuser>(
      new FS::Focuser( 
         std::move(wifi), 
         std::move(hardware),
-				std::move(debug) )
+				std::move(debug),
+        params )
   );
 }
 

@@ -31,7 +31,7 @@ std::unique_ptr<FS::Focuser> make_focuser(
   net_interface = wifi.get();
   hw_interface = hardware.get();
 
-  FS::BuildParams params( FS::Build::UNIT_TEST_BUILD_HYPERSTAR );
+  FS::BuildParams params( FS::Build::UNIT_TEST_TRADITIONAL_FOCUSER );
 
   auto focuser = std::unique_ptr<FS::Focuser>(
      new FS::Focuser(
@@ -297,15 +297,15 @@ TEST( FOCUSER_STATE, run_abs_pos_with_backlash_correction )
   ASSERT_EQ( goldenHW, hwMockAlias->getOutEvents() );
 }
 
-TEST( FOCUSER_STATE, home_focuser )
+TEST( FOCUSER_STATE, ignore_home )
 {
   TimedStringEvents netInput = {
-    { 0,  "sstatus" },        // Make sure we're not synched
+    { 0,  "sstatus" },        // Make sure we're not synched 
     { 10, "home" },           // issue home command
-    { 11, "sstatus" },        // Should not be synched during homing
-    { 20, "sstatus" },        // Should now be synched 
+    { 11, "sstatus" },        // Home is ignored
+    { 20, "sstatus" },        // Home is ignored
     { 30, "abs_pos=1" },      // Move back to 1
-    { 40, "sstatus" },        // Should still be synched
+    { 40, "sstatus" },        // Still ignored
   };
 
   HWTimedEvents hwInput= {
@@ -320,24 +320,14 @@ TEST( FOCUSER_STATE, home_focuser )
 
   TimedStringEvents goldenNet = {
     {  0, "Synched: NO" },
-    { 15, "Synched: NO" },
-    { 20, "Synched: YES" },
-    { 40, "Synched: YES" },
+    { 20, "Synched: NO" },
+    { 20, "Synched: NO" },
+    { 40, "Synched: NO" },
   };
 
   HWTimedEvents goldenHW = {
-    { 10, { HWI::Pin::DIR,        HWI::PinState::DIR_BACKWARD } },
-    { 11, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 12, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 13, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 14, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 15, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 16, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 17, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 18, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 30, { HWI::Pin::DIR,        HWI::PinState::DIR_FORWARD} },
-    { 31, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 32, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 30, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 31, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
   };
 
   goldenHW.insert( goldenHW.begin(), goldenHWStart.begin(), goldenHWStart.end());
@@ -358,7 +348,7 @@ TEST( FOCUSER_STATE, sync_focuser )
   HWTimedEvents hwInput;
   NetMockSimpleTimed* wifiAlias;
   HWMockTimed* hwMockAlias;
-  auto focuser = make_focuser( netInput, hwInput, wifiAlias, hwMockAlias ); 
+  auto focuser = make_focuser( netInput, hwInput, wifiAlias, hwMockAlias );
   simulateFocuser( focuser.get(), wifiAlias, hwMockAlias, 1000 );
 
   TimedStringEvents goldenNet = {
@@ -372,7 +362,6 @@ TEST( FOCUSER_STATE, sync_focuser )
   ASSERT_EQ( goldenNet, testFilterComments(wifiAlias->getOutput() ));
   ASSERT_EQ( goldenHW, hwMockAlias->getOutEvents() );
 }
-
 
 TEST( FOCUSER_STATE, mstatus_while_moving )
 {
@@ -459,7 +448,7 @@ TEST( FOCUSER_STATE, sync_while_moving )
 {
   TimedStringEvents netInput = {
     { 10, "abs_pos=7" },        // Start the focuser moving
-    { 15, "sync=100" },         // Actually, just sync it.
+    { 15, "sync=100" },         // Actually, just synch it
     { 16, "mstatus" },          // What state are we in?
     { 20, "pstatus" },          // Where did we end up?
   };
@@ -492,14 +481,13 @@ TEST( FOCUSER_STATE, sync_while_moving )
   ASSERT_EQ( goldenHW, hwMockAlias->getOutEvents() );
 }
 
-
-TEST( FOCUSER_STATE, abort_while_homing )
+TEST( FOCUSER_STATE, abort_on_ignored_home )
 {
   TimedStringEvents netInput = {
     { 0,  "sstatus" },        // Make sure we're not synched
-    { 10, "home" },           // issue home command
-    { 11, "sstatus" },        // Should not be synched during homing
-    { 16, "abort" },          // On second thought, abort... 
+    { 10, "home" },           // issue home command (ignored)
+    { 11, "sstatus" },        // Should not be synched
+    { 16, "abort" },          // Random abort of nothing
     { 40, "sstatus" },        // Should still not be synched
   };
 
@@ -515,20 +503,11 @@ TEST( FOCUSER_STATE, abort_while_homing )
 
   TimedStringEvents goldenNet = {
     {  0, "Synched: NO" },
-    { 15, "Synched: NO" },
+    { 20, "Synched: NO" },
     { 40, "Synched: NO" },
   };
 
   HWTimedEvents goldenHW = {
-    { 10, { HWI::Pin::DIR,        HWI::PinState::DIR_BACKWARD } },
-    { 11, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 12, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 13, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 14, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 15, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 16, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 17, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 18, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
   };
 
   goldenHW.insert( goldenHW.begin(), goldenHWStart.begin(), goldenHWStart.end());
@@ -536,53 +515,6 @@ TEST( FOCUSER_STATE, abort_while_homing )
   ASSERT_EQ( goldenNet, testFilterComments(wifiAlias->getOutput() ));
   ASSERT_EQ( goldenHW, hwMockAlias->getOutEvents() );
 }
-
-TEST( FOCUSER_STATE, sync_while_homing )
-{
-  TimedStringEvents netInput = {
-    { 0,  "sstatus" },        // Make sure we're not synched
-    { 10, "home" },           // issue home command
-    { 11, "sstatus" },        // Should not be synched during homing
-    { 16, "sync=100" },       // On second thought, just issue a sync
-    { 40, "sstatus" },        // Should be synced (from the sync, not the home)
-    { 40, "pstatus" },        // Should be at 100.
-  };
-
-  HWTimedEvents hwInput= {
-    { 0,  { HWI::Pin::HOME,        HWI::PinState::HOME_INACTIVE} },
-    { 25, { HWI::Pin::HOME,        HWI::PinState::HOME_ACTIVE } },
-  }; 
-
-  NetMockSimpleTimed* wifiAlias;
-  HWMockTimed* hwMockAlias;
-  auto focuser = make_focuser( netInput, hwInput, wifiAlias, hwMockAlias ); 
-  simulateFocuser( focuser.get(), wifiAlias, hwMockAlias, 1000 );
-
-  TimedStringEvents goldenNet = {
-    {  0, "Synched: NO" },
-    { 15, "Synched: NO" },
-    { 40, "Synched: YES" },
-    { 40, "Position: 100" },
-  };
-
-  HWTimedEvents goldenHW = {
-    { 10, { HWI::Pin::DIR,        HWI::PinState::DIR_BACKWARD } },
-    { 11, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 12, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 13, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 14, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 15, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 16, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 17, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 18, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-  };
-
-  goldenHW.insert( goldenHW.begin(), goldenHWStart.begin(), goldenHWStart.end());
-
-  ASSERT_EQ( goldenNet, testFilterComments(wifiAlias->getOutput() ));
-  ASSERT_EQ( goldenHW, hwMockAlias->getOutEvents() );
-}
-
 
 
 TEST( FOCUSER_STATE, new_move_while_moving )
@@ -622,15 +554,15 @@ TEST( FOCUSER_STATE, new_move_while_moving )
   ASSERT_EQ( goldenHW, hwMockAlias->getOutEvents() );
 }
 
-TEST( FOCUSER_STATE, new_move_while_homing )
+TEST( FOCUSER_STATE, move_after_ignored_home )
 {
   TimedStringEvents netInput = {
     { 0,  "sstatus" },        // Make sure we're not synched
     { 10, "home" },           // issue home command
-    { 11, "sstatus" },        // Should not be synched during homing
-    { 16, "abs_pos=1" },      // On second thought, issue a move.
-    { 40, "sstatus" },        // Should not be synched
-    { 41, "pstatus" },        // Should be at position 1
+    { 11, "sstatus" },        // Should not be synched - home ignored
+    { 16, "abs_pos=1" },      // Now move
+    { 40, "sstatus" },        // Should still be synched
+    { 41, "pstatus" },        // Should still be synched.
   };
 
   HWTimedEvents hwInput= {
@@ -645,32 +577,14 @@ TEST( FOCUSER_STATE, new_move_while_homing )
 
   TimedStringEvents goldenNet = {
     {  0, "Synched: NO" },
-    { 15, "Synched: NO" },
+    { 20, "Synched: NO" },
     { 40, "Synched: NO" },
     { 50, "Position: 1" },
   };
 
   HWTimedEvents goldenHW = {
-    { 10, { HWI::Pin::DIR,        HWI::PinState::DIR_BACKWARD } },
-    { 11, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 12, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 13, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 14, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 15, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 16, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 17, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 18, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 19, { HWI::Pin::DIR,        HWI::PinState::DIR_FORWARD } },
     { 20, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
     { 21, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 22, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 23, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 24, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 25, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 26, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 27, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 28, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 29, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
   };
 
   goldenHW.insert( goldenHW.begin(), goldenHWStart.begin(), goldenHWStart.end());
@@ -680,16 +594,16 @@ TEST( FOCUSER_STATE, new_move_while_homing )
 }
 
 
-TEST( FOCUSER_STATE, new_home_while_moving )
+TEST( FOCUSER_STATE, mostly_ignore_home_while_moving )
 {
   TimedStringEvents netInput = {
-    {  0, "sstatus" },          // Are we synhed
+    {  0, "sstatus" },          // Should not start synched
     { 10, "abs_pos=99" },       // Start the focuser moving
     { 13, "pstatus" },          // Where are we?
-    { 15, "home" },             // On second thought, I forgot to home
+    { 15, "home" },             // Home will actually stop us moving 
     { 17, "mstatus" },          // What are we doing now?
     { 30, "pstatus" },          // Where did we land?
-    { 32, "sstatus" },          // We should be synched.
+    { 32, "sstatus" },          // Are we homed?  Should be no.
   };
 
   HWTimedEvents hwInput= {
@@ -711,36 +625,31 @@ TEST( FOCUSER_STATE, new_home_while_moving )
     { 15, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
     { 16, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
     { 17, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 18, { HWI::Pin::DIR,        HWI::PinState::DIR_BACKWARD } },
-    { 19, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 20, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 21, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 22, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
   };
 
   goldenHW.insert( goldenHW.begin(), goldenHWStart.begin(), goldenHWStart.end());
   TimedStringEvents goldenNet = {
     {  0,  "Synched: NO" },
     { 14,  "Position: 2" },
-    { 18,  "State: STOP_AT_HOME NoArg" },
-    { 30,  "Position: 0"},
-    { 40,  "Synched: YES"},
+    { 18,  "State: ACCEPTING_COMMANDS NoArg" },
+    { 30,  "Position: 4"},
+    { 40,  "Synched: NO"},
   };
 
   ASSERT_EQ( goldenNet, testFilterComments(wifiAlias->getOutput() ));
   ASSERT_EQ( goldenHW, hwMockAlias->getOutEvents() );
 }
 
-TEST( FOCUSER_STATE, new_home_while_homing )
+TEST( FOCUSER_STATE, ignore_multiple_homes )
 {
   TimedStringEvents netInput = {
-    {  0, "sstatus" },          // Should not start synched
-    { 10, "home" },             // Start the focuser moving
+    {  0, "sstatus" },          // Are we synched?
+    { 10, "home" },             // Should ignore
     { 13, "pstatus" },          // Where are we?
-    { 15, "home" },             // A home while homing!
+    { 15, "home" },             // Should still ignore
     { 17, "sstatus" },          // What are we doing now?
     { 30, "pstatus" },          // Where did we land?
-    { 32, "sstatus" },          // Are we synched (should be)
+    { 32, "sstatus" },          // Are we synched? should be no.
   };
 
   HWTimedEvents hwInput= {
@@ -754,28 +663,15 @@ TEST( FOCUSER_STATE, new_home_while_homing )
   simulateFocuser( focuser.get(), wifiAlias, hwMockAlias, 1000 );
 
   HWTimedEvents goldenHW = {
-    { 10, { HWI::Pin::DIR,        HWI::PinState::DIR_BACKWARD } },
-    { 11, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 12, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 13, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 14, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 15, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 16, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 17, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 18, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 19, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 20, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 21, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 22, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
   };
 
   goldenHW.insert( goldenHW.begin(), goldenHWStart.begin(), goldenHWStart.end());
   TimedStringEvents goldenNet = {
     {  0,  "Synched: NO" },
-    { 15,  "Position: -2" },
-    { 19,  "Synched: NO" },
+    { 20,  "Position: 0" },
+    { 20,  "Synched: NO" },
     { 30,  "Position: 0"},
-    { 40,  "Synched: YES"},
+    { 40,  "Synched: NO"},
   };
 
   ASSERT_EQ( goldenNet, testFilterComments(wifiAlias->getOutput() ));
@@ -839,7 +735,7 @@ TEST( FOCUSER_STATE, enterSleepModeAndWake )
     { 2001, "abs_pos=2" },        // Should happen at 2500
     { 2500, "mstatus" },
     { 4200, "abort" },            // should cause a wake @ 4500
-    { 5600, "home" },             // should cause a wake @ 6000
+    { 5600, "home" },             // Even though home isn't supported, will wake
   };
 
   HWTimedEvents hwInput= {
@@ -875,13 +771,6 @@ TEST( FOCUSER_STATE, enterSleepModeAndWake )
     { 4500, { HWI::Pin::MOTOR_ENA,  HWI::PinState::MOTOR_ON} },
     { 5510, { HWI::Pin::MOTOR_ENA,  HWI::PinState::MOTOR_OFF} },
     { 6000, { HWI::Pin::MOTOR_ENA,  HWI::PinState::MOTOR_ON} },
-    { 6200, { HWI::Pin::DIR,        HWI::PinState::DIR_BACKWARD} },
-    { 6201, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 6202, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 6203, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 6204, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
-    { 6205, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
-    { 6206, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
     { 7010, { HWI::Pin::MOTOR_ENA,  HWI::PinState::MOTOR_OFF} },
   };
   goldenHW.insert( goldenHW.begin(), goldenHWStart.begin(), goldenHWStart.end());
