@@ -78,7 +78,7 @@ BuildParams::BuildParamMap BuildParams::builds = {
         1000        // Take 1 second to power up the focuser motor on awaken
       },
       true,         // Focuser can use a home switch to synch
-      15000         // End of the line for my focuser
+      35000         // End of the line for my focuser
     }
   },
   { Build::UNIT_TEST_BUILD_HYPERSTAR, 
@@ -91,7 +91,7 @@ BuildParams::BuildParamMap BuildParams::builds = {
         200,        // Allow 200ms to power on the motor
       },
       true,         // Focuser can use a home switch to synch
-      15000         // End of the line for my focuser
+      35000         // End of the line for my focuser
     }
   },
   {

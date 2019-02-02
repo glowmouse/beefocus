@@ -905,7 +905,7 @@ TEST( FOCUSER_STATE, getFirmwareAndCaps )
 
   TimedStringEvents goldenNet = {
     { 0,  "Firmware: 1.0"},
-    { 50, "MaxPos: 15000"},
+    { 50, "MaxPos: 35000"},
     { 50, "CanHome: YES" }
   };
 
@@ -916,18 +916,18 @@ TEST( FOCUSER_STATE, getFirmwareAndCaps )
 TEST( FOCUSER_STATE, doesNotGoBeyoundMax)
 {
   TimedStringEvents netInput = {
-    { 0,      "abs_pos=17000" },    
-    { 60000,  "pstatus" },    
+    { 0,      "abs_pos=37000" },    
+    { 90000,  "pstatus" },    
   };
 
   HWTimedEvents hwInput;
   NetMockSimpleTimed* wifiAlias;
   HWMockTimed* hwMockAlias;
   auto focuser = make_focuser( netInput, hwInput, wifiAlias, hwMockAlias ); 
-  simulateFocuser( focuser.get(), wifiAlias, hwMockAlias, 70000 );
+  simulateFocuser( focuser.get(), wifiAlias, hwMockAlias, 95000 );
 
   TimedStringEvents goldenNet = {
-    { 60000,  "Position: 15000" },
+    { 90000,  "Position: 35000" },
   };
 
   ASSERT_EQ( goldenNet, testFilterComments(wifiAlias->getOutput() ));
