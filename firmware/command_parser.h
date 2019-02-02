@@ -20,6 +20,8 @@ namespace CommandParser {
     SStatus,              ///<  Is the focuser synced (i.e., homed)
     ABSPos,               ///<  Move to an absolute position
     Sync,                 ///<  Argument is the new position
+    Firmware,             ///<  Get the firmware version
+    Caps,                 ///<  Get build specific focuser capabilities
     NoCommand,            ///<  No command was specified.
     EndOfCommands         ///<  End of the comand list.
   };

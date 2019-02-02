@@ -779,6 +779,28 @@ TEST( FOCUSER_STATE, enterSleepModeAndWake )
   ASSERT_EQ( goldenNet, testFilterComments(wifiAlias->getOutput() ));
 }
 
+TEST( FOCUSER_STATE, getFirmwareAndCaps )
+{ 
+  TimedStringEvents netInput = {
+    { 0, "firmware" },     // Firmware version @ Time 0
+    { 50, "caps" },        // Caps request @ Time 50ms
+  };
+  HWTimedEvents hwInput;
+
+  NetMockSimpleTimed* wifiAlias;
+  HWMockTimed* hwMockAlias;
+  auto focuser = make_focuser( netInput, hwInput, wifiAlias, hwMockAlias );
+  simulateFocuser( focuser.get(), wifiAlias, hwMockAlias, 1000 );
+
+  TimedStringEvents goldenNet = {
+    { 0,  "Firmware: 1.0"},
+    { 50, "MaxPos: 5000"},
+    { 50, "CanHome: NO" }
+  };
+
+  ASSERT_EQ( goldenNet, testFilterComments(wifiAlias->getOutput() ));
+  ASSERT_EQ( goldenHWStart, hwMockAlias->getOutEvents() );
+}
 
 
 

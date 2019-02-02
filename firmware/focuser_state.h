@@ -179,10 +179,12 @@ class BuildParams {
 
   BuildParams( 
     TimingParams timingParamsRHS,
-    bool focuserHasHomeRHS
+    bool focuserHasHomeRHS,
+    unsigned int maxAbsPosRHS
   ) : 
     timingParams{ timingParamsRHS },
-    focuserHasHome{ focuserHasHomeRHS }
+    focuserHasHome{ focuserHasHomeRHS },
+    maxAbsPos { maxAbsPosRHS }
   {
   }
   BuildParams( Build buildType )
@@ -192,6 +194,7 @@ class BuildParams {
 
   TimingParams timingParams;
   bool focuserHasHome;
+  unsigned int maxAbsPos;
   static BuildParamMap builds;
 
   private:
@@ -342,6 +345,8 @@ class Focuser
   void doSStatus( CommandParser::CommandPacket );
   void doABSPos( CommandParser::CommandPacket );
   void doSync( CommandParser::CommandPacket );
+  void doFirmware( CommandParser::CommandPacket );
+  void doCaps( CommandParser::CommandPacket );
   void doError( CommandParser::CommandPacket );
 
   std::unique_ptr<NetInterface> net;

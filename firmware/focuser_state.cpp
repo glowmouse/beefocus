@@ -31,6 +31,8 @@ const CommandToBool FS::doesCommandInterrupt=
   { CommandParser::Command::SStatus,       false  },
   { CommandParser::Command::ABSPos,        true   },
   { CommandParser::Command::Sync,          true   },
+  { CommandParser::Command::Firmware,      false  },
+  { CommandParser::Command::Caps,          false  },
   { CommandParser::Command::NoCommand,     false  },
 };
 
@@ -45,6 +47,8 @@ const std::unordered_map<CommandParser::Command,
   { CommandParser::Command::SStatus,    &Focuser::doSStatus },
   { CommandParser::Command::ABSPos,     &Focuser::doABSPos },
   { CommandParser::Command::Sync,       &Focuser::doSync},
+  { CommandParser::Command::Firmware,   &Focuser::doFirmware},
+  { CommandParser::Command::Caps,       &Focuser::doCaps},
   { CommandParser::Command::NoCommand,  &Focuser::doError },
 };
 
@@ -73,7 +77,8 @@ BuildParams::BuildParamMap BuildParams::builds = {
         1000,       // Check for new input in sleep mode every second
         1000        // Take 1 second to power up the focuser motor on awaken
       },
-      true        // Focuser can use a home switch to synch
+      true,         // Focuser can use a home switch to synch
+      15000         // End of the line for my focuser
     }
   },
   { Build::UNIT_TEST_BUILD_HYPERSTAR, 
@@ -85,7 +90,8 @@ BuildParams::BuildParamMap BuildParams::builds = {
         500,        // Check for new input in sleep mode every 500ms
         200,        // Allow 200ms to power on the motor
       },
-      true        // Focuser can use a home switch to synch
+      true,         // Focuser can use a home switch to synch
+      15000         // End of the line for my focuser
     }
   },
   {
@@ -98,7 +104,8 @@ BuildParams::BuildParamMap BuildParams::builds = {
         1000,       // Check for new input in sleep mode every second
         1000        // Take 1 second to power up the focuser motor on awaken
       },
-      false         // Focuser cannot use a home switch to synch
+      false,        // Focuser cannot use a home switch to synch
+      5000          // Mostly a place holder
     }
   },
   { Build::UNIT_TEST_TRADITIONAL_FOCUSER, 
@@ -110,7 +117,8 @@ BuildParams::BuildParamMap BuildParams::builds = {
         500,        // Check for new input in sleep mode every 500ms
         200,        // Allow 200ms to power on the motor
       },
-      false         // Focuser cannot use a home switch to synch
+      false,        // Focuser cannot use a home switch to synch
+      5000          // Mostly a place holder
     }
   },
 };
@@ -202,6 +210,27 @@ void Focuser::doSStatus( CommandParser::CommandPacket cp )
 
   log << "Processing sstatus request\n";
   *net << "Synched: " << (isSynched ? "YES" : "NO" ) << "\n";
+  return;
+}
+
+void Focuser::doFirmware( CommandParser::CommandPacket cp )
+{
+  (void) cp;
+  DebugInterface& log = *debugLog;
+
+  log << "Processing firmware request\n";
+  *net << "Firmware: 1.0\n";
+  return;
+}
+
+void Focuser::doCaps( CommandParser::CommandPacket cp )
+{
+  (void) cp;
+  DebugInterface& log = *debugLog;
+
+  log << "Processing capabilities request\n";
+  *net << "MaxPos: " << buildParams.maxAbsPos << "\n";
+  *net << "CanHome: " << (buildParams.focuserHasHome ? "YES\n" : "NO\n" );
   return;
 }
 
