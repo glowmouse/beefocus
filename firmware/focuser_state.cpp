@@ -236,8 +236,10 @@ void Focuser::doCaps( CommandParser::CommandPacket cp )
 
 void Focuser::doABSPos( CommandParser::CommandPacket cp )
 {
-  stateStack.push( State::MOVING, cp.optionalArg );
   int new_position = cp.optionalArg;
+  new_position = std::min( new_position, (int) buildParams.maxAbsPos );
+
+  stateStack.push( State::MOVING, new_position );
 
   if ( new_position < focuserPosition )
   {
