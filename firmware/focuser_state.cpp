@@ -135,6 +135,7 @@ Focuser::Focuser(
   time = 0;
   uSecRemainder = 0;
   timeLastInterruptingCommandOccured = 0;
+  motorState = MotorState::OFF;
 
   std::swap( net, netArg );
   std::swap( hardware, hardwareArg );
@@ -181,7 +182,6 @@ void Focuser::doHome( CommandParser::CommandPacket cp )
   {
     stateStack.push( State::STOP_AT_HOME );
   }
-  return;
 }
 
 void Focuser::doPStatus( CommandParser::CommandPacket cp )
@@ -200,7 +200,6 @@ void Focuser::doMStatus( CommandParser::CommandPacket cp )
   log << "Processing mstatus request\n";
   *net << "State: " << stateNames.at(stateStack.topState()) << 
                 " " << stateStack.topArg() << "\n";
-  return;
 }
 
 void Focuser::doSStatus( CommandParser::CommandPacket cp )
@@ -210,7 +209,6 @@ void Focuser::doSStatus( CommandParser::CommandPacket cp )
 
   log << "Processing sstatus request\n";
   *net << "Synched: " << (isSynched ? "YES" : "NO" ) << "\n";
-  return;
 }
 
 void Focuser::doFirmware( CommandParser::CommandPacket cp )
@@ -220,7 +218,6 @@ void Focuser::doFirmware( CommandParser::CommandPacket cp )
 
   log << "Processing firmware request\n";
   *net << "Firmware: 1.0\n";
-  return;
 }
 
 void Focuser::doCaps( CommandParser::CommandPacket cp )
@@ -231,7 +228,6 @@ void Focuser::doCaps( CommandParser::CommandPacket cp )
   log << "Processing capabilities request\n";
   *net << "MaxPos: " << buildParams.maxAbsPos << "\n";
   *net << "CanHome: " << (buildParams.focuserHasHome ? "YES\n" : "NO\n" );
-  return;
 }
 
 void Focuser::doABSPos( CommandParser::CommandPacket cp )
@@ -477,7 +473,7 @@ unsigned int Focuser::stateError()
   return 10*1000*1000; // 10 sec pause 
 }
 
-unsigned int Focuser::loop(void)
+unsigned int Focuser::loop()
 {
   ptrToMember function = stateImpl.at( stateStack.topState() );
   const unsigned uSecToNextCall = (this->*function)();
