@@ -15,11 +15,14 @@ namespace CommandParser {
     StartOfCommands = 0,  ///<  Start of the command list
     Abort = 0,            ///<  Abort a move
     Home,                 ///<  Rewind until the home pin is active
+    LHome,                ///<  Lazy Home.  Home if not already synched
     PStatus,              ///<  Return Position to Caller
     MStatus,              ///<  Return the Mode (i.e., "moving", "homing")
     SStatus,              ///<  Is the focuser synced (i.e., homed)
     ABSPos,               ///<  Move to an absolute position
     Sync,                 ///<  Argument is the new position
+    Firmware,             ///<  Get the firmware version
+    Caps,                 ///<  Get build specific focuser capabilities
     NoCommand,            ///<  No command was specified.
     EndOfCommands         ///<  End of the comand list.
   };

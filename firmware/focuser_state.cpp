@@ -26,11 +26,14 @@ const CommandToBool FS::doesCommandInterrupt=
 {
   { CommandParser::Command::Abort,         true   },
   { CommandParser::Command::Home,          true   },
+  { CommandParser::Command::LHome,         true   },
   { CommandParser::Command::PStatus,       false  },
   { CommandParser::Command::MStatus,       false  },
   { CommandParser::Command::SStatus,       false  },
   { CommandParser::Command::ABSPos,        true   },
   { CommandParser::Command::Sync,          true   },
+  { CommandParser::Command::Firmware,      false  },
+  { CommandParser::Command::Caps,          false  },
   { CommandParser::Command::NoCommand,     false  },
 };
 
@@ -40,11 +43,14 @@ const std::unordered_map<CommandParser::Command,
 {
   { CommandParser::Command::Abort,      &Focuser::doAbort },
   { CommandParser::Command::Home,       &Focuser::doHome },
+  { CommandParser::Command::LHome,      &Focuser::doLHome },
   { CommandParser::Command::PStatus,    &Focuser::doPStatus },
   { CommandParser::Command::MStatus,    &Focuser::doMStatus },
   { CommandParser::Command::SStatus,    &Focuser::doSStatus },
   { CommandParser::Command::ABSPos,     &Focuser::doABSPos },
   { CommandParser::Command::Sync,       &Focuser::doSync},
+  { CommandParser::Command::Firmware,   &Focuser::doFirmware},
+  { CommandParser::Command::Caps,       &Focuser::doCaps},
   { CommandParser::Command::NoCommand,  &Focuser::doError },
 };
 
@@ -73,7 +79,8 @@ BuildParams::BuildParamMap BuildParams::builds = {
         1000,       // Check for new input in sleep mode every second
         1000        // Take 1 second to power up the focuser motor on awaken
       },
-      true        // Focuser can use a home switch to synch
+      true,         // Focuser can use a home switch to synch
+      35000         // End of the line for my focuser
     }
   },
   { Build::UNIT_TEST_BUILD_HYPERSTAR, 
@@ -85,7 +92,8 @@ BuildParams::BuildParamMap BuildParams::builds = {
         500,        // Check for new input in sleep mode every 500ms
         200,        // Allow 200ms to power on the motor
       },
-      true        // Focuser can use a home switch to synch
+      true,         // Focuser can use a home switch to synch
+      35000         // End of the line for my focuser
     }
   },
   {
@@ -98,7 +106,8 @@ BuildParams::BuildParamMap BuildParams::builds = {
         1000,       // Check for new input in sleep mode every second
         1000        // Take 1 second to power up the focuser motor on awaken
       },
-      false         // Focuser cannot use a home switch to synch
+      false,        // Focuser cannot use a home switch to synch
+      5000          // Mostly a place holder
     }
   },
   { Build::UNIT_TEST_TRADITIONAL_FOCUSER, 
@@ -110,7 +119,8 @@ BuildParams::BuildParamMap BuildParams::builds = {
         500,        // Check for new input in sleep mode every 500ms
         200,        // Allow 200ms to power on the motor
       },
-      false         // Focuser cannot use a home switch to synch
+      false,        // Focuser cannot use a home switch to synch
+      5000          // Mostly a place holder
     }
   },
 };
@@ -127,6 +137,7 @@ Focuser::Focuser(
   time = 0;
   uSecRemainder = 0;
   timeLastInterruptingCommandOccured = 0;
+  motorState = MotorState::OFF;
 
   std::swap( net, netArg );
   std::swap( hardware, hardwareArg );
@@ -173,7 +184,18 @@ void Focuser::doHome( CommandParser::CommandPacket cp )
   {
     stateStack.push( State::STOP_AT_HOME );
   }
-  return;
+}
+
+void Focuser::doLHome( CommandParser::CommandPacket cp )
+{
+  (void) cp;
+  if ( buildParams.focuserHasHome )
+  {
+    if ( !isSynched )
+    {
+      stateStack.push( State::STOP_AT_HOME );
+    }
+  }
 }
 
 void Focuser::doPStatus( CommandParser::CommandPacket cp )
@@ -192,7 +214,6 @@ void Focuser::doMStatus( CommandParser::CommandPacket cp )
   log << "Processing mstatus request\n";
   *net << "State: " << stateNames.at(stateStack.topState()) << 
                 " " << stateStack.topArg() << "\n";
-  return;
 }
 
 void Focuser::doSStatus( CommandParser::CommandPacket cp )
@@ -202,13 +223,33 @@ void Focuser::doSStatus( CommandParser::CommandPacket cp )
 
   log << "Processing sstatus request\n";
   *net << "Synched: " << (isSynched ? "YES" : "NO" ) << "\n";
-  return;
+}
+
+void Focuser::doFirmware( CommandParser::CommandPacket cp )
+{
+  (void) cp;
+  DebugInterface& log = *debugLog;
+
+  log << "Processing firmware request\n";
+  *net << "Firmware: 1.0\n";
+}
+
+void Focuser::doCaps( CommandParser::CommandPacket cp )
+{
+  (void) cp;
+  DebugInterface& log = *debugLog;
+
+  log << "Processing capabilities request\n";
+  *net << "MaxPos: " << buildParams.maxAbsPos << "\n";
+  *net << "CanHome: " << (buildParams.focuserHasHome ? "YES\n" : "NO\n" );
 }
 
 void Focuser::doABSPos( CommandParser::CommandPacket cp )
 {
-  stateStack.push( State::MOVING, cp.optionalArg );
   int new_position = cp.optionalArg;
+  new_position = std::min( new_position, (int) buildParams.maxAbsPos );
+
+  stateStack.push( State::MOVING, new_position );
 
   if ( new_position < focuserPosition )
   {
@@ -446,7 +487,7 @@ unsigned int Focuser::stateError()
   return 10*1000*1000; // 10 sec pause 
 }
 
-unsigned int Focuser::loop(void)
+unsigned int Focuser::loop()
 {
   ptrToMember function = stateImpl.at( stateStack.topState() );
   const unsigned uSecToNextCall = (this->*function)();
