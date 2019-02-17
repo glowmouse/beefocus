@@ -30,6 +30,7 @@ const std::vector<CommandTemplate> commandTemplates =
 {
   { "abort",      Command::Abort,    HasArg::No  },
   { "home",       Command::Home,     HasArg::No  },
+  { "lazyhome",   Command::LHome,    HasArg::No  },
   { "pstatus",    Command::PStatus,  HasArg::No  },
   { "mstatus",    Command::MStatus,  HasArg::No  },
   { "sstatus",    Command::SStatus,  HasArg::No  },

@@ -26,6 +26,7 @@ const CommandToBool FS::doesCommandInterrupt=
 {
   { CommandParser::Command::Abort,         true   },
   { CommandParser::Command::Home,          true   },
+  { CommandParser::Command::LHome,         true   },
   { CommandParser::Command::PStatus,       false  },
   { CommandParser::Command::MStatus,       false  },
   { CommandParser::Command::SStatus,       false  },
@@ -42,6 +43,7 @@ const std::unordered_map<CommandParser::Command,
 {
   { CommandParser::Command::Abort,      &Focuser::doAbort },
   { CommandParser::Command::Home,       &Focuser::doHome },
+  { CommandParser::Command::LHome,      &Focuser::doLHome },
   { CommandParser::Command::PStatus,    &Focuser::doPStatus },
   { CommandParser::Command::MStatus,    &Focuser::doMStatus },
   { CommandParser::Command::SStatus,    &Focuser::doSStatus },
@@ -181,6 +183,18 @@ void Focuser::doHome( CommandParser::CommandPacket cp )
   if ( buildParams.focuserHasHome )
   {
     stateStack.push( State::STOP_AT_HOME );
+  }
+}
+
+void Focuser::doLHome( CommandParser::CommandPacket cp )
+{
+  (void) cp;
+  if ( buildParams.focuserHasHome )
+  {
+    if ( !isSynched )
+    {
+      stateStack.push( State::STOP_AT_HOME );
+    }
   }
 }
 
