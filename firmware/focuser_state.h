@@ -345,6 +345,7 @@ class Focuser
   void doMStatus( CommandParser::CommandPacket );
   void doSStatus( CommandParser::CommandPacket );
   void doABSPos( CommandParser::CommandPacket );
+  void doRELPos( CommandParser::CommandPacket );
   void doSync( CommandParser::CommandPacket );
   void doFirmware( CommandParser::CommandPacket );
   void doCaps( CommandParser::CommandPacket );

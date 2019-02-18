@@ -170,6 +170,12 @@ TEST( FOCUSER_STATE, run_status)
   ASSERT_EQ( goldenHWStart, hwMockAlias->getOutEvents() );
 }
 
+///
+/// @brief A basic absolute position command test
+///
+/// Moves the focuser to position 3 and checks to see if stepper
+/// 'clicks' 3 times.
+/// 
 TEST( FOCUSER_STATE, run_abs_pos )
 {
   TimedStringEvents netInput = {
@@ -200,6 +206,90 @@ TEST( FOCUSER_STATE, run_abs_pos )
   ASSERT_EQ( goldenNet, testFilterComments(wifiAlias->getOutput() ));
   ASSERT_EQ( goldenHW, hwMockAlias->getOutEvents() );
 }
+
+///
+/// @brief Basic relative position command check
+///
+/// Issue a sync command to set the official focuser position to 5
+/// Then issue a relative move to go back 3 spots.
+///
+/// The result should be 5 backwards to get rid of backlash and 2
+/// forwards ( 5 - 5 + 2 = 5 - 3 )
+/// 
+TEST( FOCUSER_STATE, run_rel_pos)
+{
+  TimedStringEvents netInput = {
+    { 0,  "sync=5" },
+    { 10, "rel_pos=-3" },
+  };
+
+  HWTimedEvents hwInput= {
+    { 0,  { HWI::Pin::HOME,        HWI::PinState::HOME_INACTIVE} },
+  };
+
+  NetMockSimpleTimed* wifiAlias;
+  HWMockTimed* hwMockAlias;
+  auto focuser = make_focuser( netInput, hwInput, wifiAlias, hwMockAlias );
+  simulateFocuser( focuser.get(), wifiAlias, hwMockAlias, 1000 );
+
+  TimedStringEvents goldenNet;
+
+  // Go back to 0 to correct backlash then forward to 2 ( 5 - 3 = 2 )
+  HWTimedEvents goldenHW = {
+    { 10, { HWI::Pin::DIR,        HWI::PinState::DIR_BACKWARD } },
+    { 11, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 12, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 13, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 14, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 15, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 16, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 17, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 18, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 19, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 20, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 21, { HWI::Pin::DIR,        HWI::PinState::DIR_FORWARD } },
+    { 22, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 23, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+    { 24, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 25, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+  };
+  goldenHW.insert( goldenHW.begin(), goldenHWStart.begin(), goldenHWStart.end());
+
+  ASSERT_EQ( goldenNet, testFilterComments(wifiAlias->getOutput() ));
+  ASSERT_EQ( goldenHW, hwMockAlias->getOutEvents() );
+}
+
+TEST( FOCUSER_STATE, run_abs_pos_negative )
+{
+  TimedStringEvents netInput = {
+    { 0,  "sync=1" },    
+    { 10, "abs_pos=-3" },
+  };
+
+  HWTimedEvents hwInput= {
+    { 0,  { HWI::Pin::HOME,        HWI::PinState::HOME_INACTIVE} },
+  };
+
+  NetMockSimpleTimed* wifiAlias;  
+  HWMockTimed* hwMockAlias;       
+  auto focuser = make_focuser( netInput, hwInput, wifiAlias, hwMockAlias );
+  simulateFocuser( focuser.get(), wifiAlias, hwMockAlias, 1000 );
+
+  // Should go back 1, to 0, then stop.  -3 is right now.
+  TimedStringEvents goldenNet;
+  HWTimedEvents goldenHW = {
+    { 10, { HWI::Pin::DIR,        HWI::PinState::DIR_BACKWARD } },
+    { 11, { HWI::Pin::STEP,       HWI::PinState::STEP_ACTIVE} },
+    { 12, { HWI::Pin::STEP,       HWI::PinState::STEP_INACTIVE} },
+  };
+  
+  goldenHW.insert( goldenHW.begin(), goldenHWStart.begin(), goldenHWStart.end());   
+  
+  ASSERT_EQ( goldenNet, testFilterComments(wifiAlias->getOutput() ));
+  ASSERT_EQ( goldenHW, hwMockAlias->getOutEvents() );
+}   
+  
+
 
 ///
 /// @brief Test double abs_pos command
