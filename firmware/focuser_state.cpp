@@ -31,6 +31,7 @@ const CommandToBool FS::doesCommandInterrupt=
   { CommandParser::Command::MStatus,       false  },
   { CommandParser::Command::SStatus,       false  },
   { CommandParser::Command::ABSPos,        true   },
+  { CommandParser::Command::RELPos,        true   },
   { CommandParser::Command::Sync,          true   },
   { CommandParser::Command::Firmware,      false  },
   { CommandParser::Command::Caps,          false  },
@@ -48,6 +49,7 @@ const std::unordered_map<CommandParser::Command,
   { CommandParser::Command::MStatus,    &Focuser::doMStatus },
   { CommandParser::Command::SStatus,    &Focuser::doSStatus },
   { CommandParser::Command::ABSPos,     &Focuser::doABSPos },
+  { CommandParser::Command::RELPos,     &Focuser::doRELPos },
   { CommandParser::Command::Sync,       &Focuser::doSync},
   { CommandParser::Command::Firmware,   &Focuser::doFirmware},
   { CommandParser::Command::Caps,       &Focuser::doCaps},
@@ -244,17 +246,24 @@ void Focuser::doCaps( CommandParser::CommandPacket cp )
   *net << "CanHome: " << (buildParams.focuserHasHome ? "YES\n" : "NO\n" );
 }
 
+void Focuser::doRELPos( CommandParser::CommandPacket cp )
+{
+  cp.optionalArg += focuserPosition;
+  doABSPos( cp );
+}
+
 void Focuser::doABSPos( CommandParser::CommandPacket cp )
 {
   int new_position = cp.optionalArg;
   new_position = std::min( new_position, (int) buildParams.maxAbsPos );
+  new_position = std::max( new_position, (int) 0 );
 
   stateStack.push( State::MOVING, new_position );
 
   if ( new_position < focuserPosition )
   {
     int backtrack = new_position - 500;
-    backtrack = backtrack < 0 ? 0 : backtrack;
+    backtrack = std::max( backtrack, (int) 0 );
     stateStack.push( State::MOVING, backtrack );
   }
 }

@@ -35,6 +35,7 @@ const std::vector<CommandTemplate> commandTemplates =
   { "mstatus",    Command::MStatus,  HasArg::No  },
   { "sstatus",    Command::SStatus,  HasArg::No  },
   { "abs_pos",    Command::ABSPos,   HasArg::Yes },
+  { "rel_pos",    Command::RELPos,   HasArg::Yes },
   { "sync",       Command::Sync,     HasArg::Yes },
   { "firmware",   Command::Firmware, HasArg::No  },
   { "caps",       Command::Caps,     HasArg::No  },
@@ -56,6 +57,9 @@ int process_int( const std::string& string,  size_t pos )
   if ( pos > end )
     return 0;
 
+  const bool negative = (string[pos] == '-');
+  if ( negative ) ++pos;
+
   int result = 0;
   for ( size_t iter = pos; iter != end; iter++ ) {
     char current = string[ iter ];
@@ -64,7 +68,7 @@ int process_int( const std::string& string,  size_t pos )
     else
       break;
   }
-  return result;
+  return negative ? -result : result;
 }
 
 const CommandPacket checkForCommands( 

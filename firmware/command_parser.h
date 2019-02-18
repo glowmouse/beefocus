@@ -20,6 +20,7 @@ namespace CommandParser {
     MStatus,              ///<  Return the Mode (i.e., "moving", "homing")
     SStatus,              ///<  Is the focuser synced (i.e., homed)
     ABSPos,               ///<  Move to an absolute position
+    RELPos,               ///<  Move relative to the current position
     Sync,                 ///<  Argument is the new position
     Firmware,             ///<  Get the firmware version
     Caps,                 ///<  Get build specific focuser capabilities

@@ -20,6 +20,8 @@ TEST( COMMAND_PARSER, should_process_int )
   ASSERT_EQ( process_int( std::string("ABS_POS=500") , 8 ), 500 );
   ASSERT_EQ( process_int( std::string("ABS_POS") , 8 ), 0 );
   ASSERT_EQ( process_int( std::string("ABS_POS") , 7 ), 0 );
+  ASSERT_EQ( process_int( std::string("REL_POS=500") , 8 ), 500 );
+  ASSERT_EQ( process_int( std::string("REL_POS=-500") , 8 ), -500 );
 }
 
 TEST( COMMAND_PARSER, checkForCommands)
@@ -62,9 +64,13 @@ TEST( COMMAND_PARSER, checkForCommands)
   NetMockSimpleTimed abs_pos3("ABS_POS  100");
   ASSERT_EQ( checkForCommands(dbgmock, abs_pos3), CommandPacket( Command::ABSPos, 0));
 
-  // Negatives not supported
+  // Negatives supported now
   NetMockSimpleTimed abs_pos4("ABS_POS -100");
-  ASSERT_EQ( checkForCommands(dbgmock, abs_pos4), CommandPacket( Command::ABSPos, 0));
+  ASSERT_EQ( checkForCommands(dbgmock, abs_pos4), CommandPacket( Command::ABSPos, -100));
+
+  // A real use case for negatives.
+  NetMockSimpleTimed rel_pos("REL_POS -100");
+  ASSERT_EQ( checkForCommands(dbgmock, rel_pos), CommandPacket( Command::RELPos, -100));
 
 }
 
