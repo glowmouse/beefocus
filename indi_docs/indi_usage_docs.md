@@ -59,8 +59,8 @@ message
 If the focuser's hardware supports a home switch the focuser will 
 automatically move to it's home, or zero position, the first time INDI 
 connects.  The sync switch can also be used to set the Focuser's current
-absolute position.  In this example the Sync switch is used to reser the
-absolute position to 0.
+absolute position.  In this example the Sync switch is used to reset the
+absolute position to 2000.
  
 ![alt text](https://raw.githubusercontent.com/glowmouse/beefocus/master/indi_docs/con_sim_abs_dst_sync_before.png "Sync Before")
 ![alt text](https://raw.githubusercontent.com/glowmouse/beefocus/master/indi_docs/con_sim_abs_dst_sync_after.png "Sync After")
