@@ -14,19 +14,19 @@ Installation
 Features
 --------
 
-- Beefocused talks to the computer that runs INDI using Wifi.  The advantage
+- Beefocused talks to the computer that runs INDI using WiFi.  The advantage
   of this is that there's one less wire to worry about.  It does mean that
-  your telescope needs a Wifi hotspot,  but that's becoming more common now
+  your telescope needs a WiFi hotspot,  but that's becoming more common now
   that people are running telescopes from compute sticks and Raspberry Pis
   mounting on the telescope itself.
 - The default built uses a Nema 14 Stepper motor for positioning - these motors
   are widely used by 3D printers.  The Motor's step rate is 1.8 degrees 
   (200 steps / rotation), so it's reasonably accurate.
-- The electronic parts for a Beefocused will cost you about $25 on ebay.
+- The electronic parts for a Beefocused will cost you about $25 on eBay.
   That includes the Nema 14 Stepper Motor. 
 - Beefocus focusers operate as either Absolute or Relative focusers,
-  dependong on the build.  The focuser supports either automatic homing at
-  start up or manual synching.
+  depending on the build.  The focuser supports either automatic homing at
+  start up or manual syncing.
 
 Using the Simulated Focuser
 ---------------------------
@@ -49,6 +49,35 @@ Set Button.  The Focuser Status message box will change from Ready to Moving,
 and the Absolute Position of the focuser will begin changing.
 
 ![alt text](https://raw.githubusercontent.com/glowmouse/beefocus/master/indi_docs/con_sim_main_moving.png "Simulated Focuser Moving")
+
+A move can be interrupted by pressing the Abort button.  If you try to move
+the focuser past the Maximum Position the driver will generate an Error
+message
+
+![alt text](https://raw.githubusercontent.com/glowmouse/beefocus/master/indi_docs/con_sim_main_move_oob.png "Out of bounds error message")
+
+If the focuser's hardware supports a home switch the focuser will 
+automatically move to it's home, or zero position, the first time INDI 
+connects.  The sync switch can also be used to set the Focuser's current
+absolute position. 
+ 
+![alt text](https://raw.githubusercontent.com/glowmouse/beefocus/master/indi_docs/con_sim_abs_dst_sync_before.png "Sync Before")
+![alt text](https://raw.githubusercontent.com/glowmouse/beefocus/master/indi_docs/con_sim_abs_dst_sync_before.png "Sync After")
+
+The focuser can move relative to it's current position.  In this mode the
+user changes the Relative Position field number to the number of positions they
+want the focuser to move (2000 in this example) and presses set.  Pressing
+Set again will cause the focuser to move again.
+
+![alt text](https://raw.githubusercontent.com/glowmouse/beefocus/master/indi_docs/con_sim_main_rel_move.png "Relative Move +2000")
+
+The Focus In and Focus Out buttons control the direction of relative movements.
+In the last example the Focus Out switch was active. In the example the 
+Focus In switch was active and then the Relative Position Set button was 
+pressed twice.  The Focuser moved by -2000 each time.
+
+![alt text](https://raw.githubusercontent.com/glowmouse/beefocus/master/indi_docs/con_sim_main_rel_move.png "Relative Move -2000")
+ 
 
 Installing Firmware 
 -------------------
