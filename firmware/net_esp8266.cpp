@@ -11,6 +11,11 @@ void WifiInterfaceEthernet::setup( DebugInterface& log ) {
   // Connect to WiFi network
   log << "Connecting to " << ssid << "\n";
 
+  // Disable Wifi Persistence.  It's not needed and wears the flash memory.
+  // Kudos Erik H. Bakke for pointing this point.
+  WiFi.persistent( false );
+  WiFi.mode( WIFI_STA );
+  wifi_set_sleep_type(LIGHT_SLEEP_T);
   WiFi.begin(ssid, password);
    
   while (WiFi.status() != WL_CONNECTED) {

@@ -38,11 +38,11 @@ class WifiConnectionEthernet: public NetConnection {
 
   WifiConnectionEthernet& operator<<( char c )
   {
-    putchar(c);
+    putChar(c);
     return *this;
   }
 
-  void putchar( char c ) override
+  void putChar( char c ) override
   {
     if ( m_connectedClient )
     {

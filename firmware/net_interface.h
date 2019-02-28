@@ -35,7 +35,7 @@ class NetConnection {
 
   NetConnection& operator<<( char c )
   {
-    putchar( c );
+    putChar( c );
     return *this;
   }
   virtual bool getString( WifiDebugOstream& lot, std::string& string )=0;
@@ -44,7 +44,7 @@ class NetConnection {
 
   protected:
 
-  virtual void putchar( char c ) = 0;
+  virtual void putChar( char c ) = 0;
 
 };
 
