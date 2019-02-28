@@ -59,10 +59,11 @@ message
 If the focuser's hardware supports a home switch the focuser will 
 automatically move to it's home, or zero position, the first time INDI 
 connects.  The sync switch can also be used to set the Focuser's current
-absolute position. 
+absolute position.  In this example the Sync switch is used to reser the
+absolute position to 0.
  
 ![alt text](https://raw.githubusercontent.com/glowmouse/beefocus/master/indi_docs/con_sim_abs_dst_sync_before.png "Sync Before")
-![alt text](https://raw.githubusercontent.com/glowmouse/beefocus/master/indi_docs/con_sim_abs_dst_sync_before.png "Sync After")
+![alt text](https://raw.githubusercontent.com/glowmouse/beefocus/master/indi_docs/con_sim_abs_dst_sync_after.png "Sync After")
 
 The focuser can move relative to it's current position.  In this mode the
 user changes the Relative Position field number to the number of positions they
@@ -76,7 +77,7 @@ In the last example the Focus Out switch was active. In the example the
 Focus In switch was active and then the Relative Position Set button was 
 pressed twice.  The Focuser moved by -2000 each time.
 
-![alt text](https://raw.githubusercontent.com/glowmouse/beefocus/master/indi_docs/con_sim_main_rel_move.png "Relative Move -2000")
+![alt text](https://raw.githubusercontent.com/glowmouse/beefocus/master/indi_docs/con_sim_main_rel_move_in.png "Relative Move -2000")
  
 
 Installing Firmware 
