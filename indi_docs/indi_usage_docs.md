@@ -8,17 +8,19 @@ relatively easy to build and modify.
 Installation
 ------------
 
-- Beefocused can only be built from source right now.  If you're interested in
-  building one send an email to andrew.brownbill@gmail.com
+- Beefocused can only be built from source right now (and only on Indi -
+  https://indilib.org/ ) - ASCOM drivers haven't been written yet.  
+  If you're interested in building one send an email to 
+  andrew.brownbill@gmail.com
 
 Features
 --------
 
-- Beefocused talks to the computer that runs INDI using WiFi.  The advantage
-  of this is that there's one less wire to worry about.  It does mean that
-  your telescope needs a WiFi hotspot,  but that's becoming more common now
-  that people are running telescopes from compute sticks and Raspberry Pis
-  mounting on the telescope itself.
+- Beefocused talks to the INDI computer using WiFi.  This is nice because
+  it means there's one less wire on the telescope to worry about.  It does 
+  mean that the telescope needs a WiFi hotspot,  but that's becoming more 
+  common now that people are running telescopes from compute sticks and 
+  Raspberry Pis that are mounted directly onto the scope.
 - The default built uses a Nema 14 Stepper motor for positioning - these motors
   are widely used by 3D printers.  The Motor's step rate is 1.8 degrees 
   (200 steps / rotation), so it's reasonably accurate.
@@ -83,5 +85,6 @@ pressed twice.  The Focuser moved by -2000 each time.
 Installing Firmware 
 -------------------
 
+TODO
 
 
