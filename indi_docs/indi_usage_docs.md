@@ -98,6 +98,14 @@ so I've added a 28000 entry to the Presets tab.
 
 ![alt text](https://raw.githubusercontent.com/glowmouse/beefocus/master/indi_docs/presets.png "Presets")
 
+To connect to the actual focuser, switch the connection type to ethernet and
+enter the address of the focuser.  The port is always 4999.  
+
+![alt text](https://raw.githubusercontent.com/glowmouse/beefocus/master/indi_docs/con_eth.png "Ethernet Connection")
+
+The main control tab of the actual focuser and simulated focuser are the same.
+
+![alt text](https://raw.githubusercontent.com/glowmouse/beefocus/master/indi_docs/con_eth_main.png "Ethernet Main Tab ")
 
 Installing Firmware 
 -------------------
