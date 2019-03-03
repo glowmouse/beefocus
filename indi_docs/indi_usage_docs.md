@@ -88,7 +88,7 @@ setup (100 was good for me),  turn on Joystick in the Options Tab
 ![alt text](https://raw.githubusercontent.com/glowmouse/beefocus/master/indi_docs/options.png "options")
 
 And set-up the Joystick Buttons in the Joystick TAB.  I used the bottom
-buttons on my game controller to focus in and out (BUTTON_7 and BUTTON_8),  
+buttons on my game controller to focus in and out (BUTTON_7 and BUTTON_8),
 and the "A" button to Abort (BUTTON_2).
 
 ![alt text](https://raw.githubusercontent.com/glowmouse/beefocus/master/indi_docs/joystick.png "joystick")
