@@ -81,6 +81,23 @@ pressed twice.  The Focuser moved by -2000 each time.
 
 ![alt text](https://raw.githubusercontent.com/glowmouse/beefocus/master/indi_docs/con_sim_main_rel_move_in.png "Relative Move -2000")
  
+A game controller is a convenient way to manually operate the focuser.  To use
+the game controller, set a relative focuser movement rate that works for 
+setup (100 was good for me),  turn on Joystick in the Options Tab
+
+![alt text](https://raw.githubusercontent.com/glowmouse/beefocus/master/indi_docs/options.png "options")
+
+And set-up the Joystick Buttons in the Joystick TAB.  I used the bottom
+buttons on my game controller to focus in and out,  and the "A" button
+to Abort.
+
+![alt text](https://raw.githubusercontent.com/glowmouse/beefocus/master/indi_docs/joystick.png "joystick")
+
+I know that absolute position 28000 is close to my telescope's focal point, 
+so I've added a 28000 entry to the Presets tab. 
+
+![alt text](https://raw.githubusercontent.com/glowmouse/beefocus/master/indi_docs/presets.png "Presets")
+
 
 Installing Firmware 
 -------------------
