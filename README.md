@@ -33,19 +33,24 @@ Code Documentation
 
 Documentation can be found at https://glowmouse.github.io/beefocus/ 
 
-Status
-------
+Status March 2019
+-----------------
 
 - I have a physical prototype. It's been field tested and
   it worked almost flawlessly.  The issues that I want to fix before
   "Version 1.0" are tracked on the [Github Project Issues Page].
-- The [Prototype ESP8266 Firmware] is posted.
-- There is a Prototype INDI Driver.  I need to refactor the INDI driver 
-  once I'm finished making changes to the firmware and ask to have my driver 
-  pulled into the [Main INDI Project].
+- The [Prototype ESP8266 Firmware] is posted.  The only thing I want to
+  fix in the Firmware is the way you hook up to the Wifi Network.
+  Right now you have to modify the Firmware Source Code to add your
+  SSID and Password.
 - I've published a [Prototype Board Design].  I made my prototype using 
-  a CNC circuit router.  I've sent the board off to be professionally 
-  fabricated, and I'm waiting for the results.
+  a CNC circuit router. I had an initial version of the board professionally
+  fabricated, and it had a flaw :(.  I'll make a new version of the board
+  when I make setting the SSID and Password more user friendly.  I'm also
+  waiting for some parts from Ebay.
+- There is an INDI Driver for Beefocus, the driver is in the
+  [INDI Github Repository] in the [3rd Party Beefocus] directory.
+- I've created a [Beefocus INDI Usage] page.
 
 ![alt text](https://raw.githubusercontent.com/glowmouse/beefocus/master/boards/nema_14_b0/build_example_0.jpg "Nema 14 Build Example")
 
@@ -55,7 +60,9 @@ Status
 
 [Github Project Issues Page]:https://github.com/glowmouse/beefocus/issues
 [Prototype ESP8266 firmware]: https://github.com/glowmouse/beefocus/tree/master/firmware
-[Main INDI project]: https://github.com/indilib/indi
+[INDI Github Repository]: https://github.com/indilib/indi
+[3rd Party Beefocus]: https://github.com/indilib/indi/tree/master/3rdparty/indi-beefocus 
 [Prototype board design]: https://github.com/glowmouse/beefocus/tree/master/boards/nema_14_b0
+[Beefocus INDI Usage]: https://github.com/glowmouse/beefocus/blob/master/indi_docs/indi_usage_docs.md 
 
 
