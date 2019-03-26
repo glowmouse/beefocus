@@ -882,21 +882,16 @@
   <script type="text/javascript" gwd-events="handlers">
     window.gwd = window.gwd || {};
     gwd.finished = function(event) {
-      alert('finished');
+      alert(document.ssid);
     };
     gwd.test = function(event) {
-        var gwdId = new gwd.GwdId(' ssid_textbox SSID_NAME');
-        alert(gwdId);
-        alert(gwdId.getGroupName());
-        groupName = gwdId.getGroupName();
-        var instances = document.querySelectorAll("[" + gwd.GwdId.GROUP_REFERENCE_ATTR + " = " + groupName + "]");
-        alert('c0');
-        Array.prototype.forEach.call(instances, function(instance) {
-          alert('c1');
-          var target = gwdId.getElementInInstance(document, instance);
-          alert(target);
-          alert(target.value);
-        });
+      document.ssid = event.target.value;
+      var gwdId = new gwd.GwdId(' ssid_textbox SSID_NAME');
+      groupName = gwdId.getGroupName();
+      var instances = document.querySelectorAll("[" + gwd.GwdId.GROUP_REFERENCE_ATTR + " = " + groupName + "]");
+      Array.prototype.forEach.call(instances, function(instance) {
+        gwdId.getElementInInstance(document, instance).value = document.ssid;
+      });
     };
   </script>
   <script type="text/javascript" gwd-events="registration">
