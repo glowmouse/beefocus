@@ -352,17 +352,6 @@
       top: 0px;
       background-color: rgb(80, 80, 80);
     }
-    [data-gwd-group="PortLine"] .gwd-grp-8pxd.gwd-input-4xf8 {
-      position: absolute;
-      transform-style: preserve-3d;
-      top: 50%;
-      left: 310px;
-      height: 30px;
-      background-image: none;
-      background-color: rgb(192, 192, 192);
-      width: 80px;
-      transform: translate3d(0px, -18px, 0px);
-    }
     [data-gwd-group="MainForm"] .gwd-grp-j87e.gwd-div-1fiu {
       position: absolute;
       left: 0px;
@@ -611,17 +600,6 @@
     [data-gwd-group="PortLine320"] .gwd-grp-1ic3.gwd-div-uyzq {
       width: 160px;
     }
-    [data-gwd-group="PortLine320"] .gwd-grp-1ic3.gwd-input-7w17 {
-      position: absolute;
-      width: 50px;
-      height: 30px;
-      background-image: none;
-      background-color: rgb(192, 192, 192);
-      top: 50%;
-      transform: translate3d(0px, -18px, 0px);
-      transform-style: preserve-3d;
-      left: 170px;
-    }
     [data-gwd-group="MainForm320"] .gwd-grp-9axo.gwd-div-c975 {
       position: absolute;
       left: 0px;
@@ -830,6 +808,34 @@
       transform-style: preserve-3d;
       left: 310px;
     }
+    [data-gwd-group="wifi_port_input"] .gwd-grp-1ul1.gwd-input-7w17 {
+      position: absolute;
+      height: 30px;
+      background-image: none;
+      background-color: rgb(192, 192, 192);
+      top: 50%;
+      transform: translate3d(0px, -18px, 0px);
+      transform-style: preserve-3d;
+      left: 0px;
+      width: 100%;
+    }
+    [data-gwd-group="wifi_port_input"] {
+      width: 54px;
+      height: 50px;
+    }
+    [data-gwd-group="PortLine320"] .gwd-grp-1ic3.gwd-div-1dq6 {
+      position: absolute;
+      left: 170px;
+      top: 0px;
+    }
+    [data-gwd-group="PortLine"] .gwd-grp-8pxd.gwd-div-1pk0 {
+      position: absolute;
+      width: 80px;
+      left: 310px;
+      top: 50%;
+      transform: translate3d(0px, -25px, 0px);
+      transform-style: preserve-3d;
+    }
     @media (max-width: 607px) {
       .gwd-div-wln8 {
         visibility: hidden;
@@ -893,6 +899,15 @@
         gwdId.getElementInInstance(document, instance).value = document.ssid;
       });
     };
+    gwd.portnuminput = function(event) {
+      document.portnum = event.target.value;
+      var gwdId = new gwd.GwdId(' wifi_port_input WIFI_PORT');
+      groupName = gwdId.getGroupName();
+      var instances = document.querySelectorAll("[" + gwd.GwdId.GROUP_REFERENCE_ATTR + " = " + groupName + "]");
+      Array.prototype.forEach.call(instances, function(instance) {
+        gwdId.getElementInInstance(document, instance).value = document.portnum;
+      });
+    };
   </script>
   <script type="text/javascript" gwd-events="registration">
     // Support code for event handling in Google Web Designer
@@ -900,10 +915,12 @@
     gwd.actions.events.registerEventHandlers = function(event) {
       gwd.actions.events.addHandler(' FinishedButton FINISHED_BUTTON', 'click', gwd.finished, false);
       gwd.actions.events.addHandler(' ssid_textbox SSID_NAME', 'change', gwd.test, false);
+      gwd.actions.events.addHandler(' wifi_port_input WIFI_PORT', 'change', gwd.portnuminput, false);
     };
     gwd.actions.events.deregisterEventHandlers = function(event) {
       gwd.actions.events.removeHandler(' FinishedButton FINISHED_BUTTON', 'click', gwd.finished, false);
       gwd.actions.events.removeHandler(' ssid_textbox SSID_NAME', 'change', gwd.test, false);
+      gwd.actions.events.removeHandler(' wifi_port_input WIFI_PORT', 'change', gwd.portnuminput, false);
     };
     document.addEventListener("DOMContentLoaded", gwd.actions.events.registerEventHandlers);
     document.addEventListener("unload", gwd.actions.events.deregisterEventHandlers);
@@ -957,7 +974,7 @@
       <div class="gwd-div-gee7 gwd-grp-8pxd"></div>
       <div class="gwd-div-gee7 gwd-div-4jbu gwd-grp-8pxd"></div>
       <h1 class="gwd-h1-1lqc gwd-grp-8pxd">Port</h1>
-      <input type="number" value="4999" min="1000" max="20000" step="1" data-gwd-grp-id="number_1" class="gwd-grp-8pxd gwd-input-4xf8">
+      <div data-gwd-group="wifi_port_input" class="gwd-div-1pk0 gwd-grp-8pxd"></div>
     </div>
     <div data-gwd-group-def="FocusName" data-gwd-group-class="gwd-grp-1xej" style="display: none;" data-gwd-grp-autoresize="false">
       <div class="gwd-div-gee7 gwd-grp-1xej"></div>
@@ -995,7 +1012,7 @@
       <div class="gwd-div-gee7 gwd-div-uyzq gwd-grp-1ic3"></div>
       <div class="gwd-div-gee7 gwd-div-4jbu gwd-grp-1ic3"></div>
       <h1 class="gwd-h1-1lqc gwd-grp-1ic3">Port<br class="gwd-grp-1ic3"></h1>
-      <input type="number" value="4999" min="1000" max="20000" step="1" data-gwd-grp-id="number_2" class="gwd-grp-1ic3 gwd-input-7w17">
+      <div class="gwd-div-1dq6 gwd-grp-1ic3" data-gwd-group="wifi_port_input"></div>
     </div>
     <div data-gwd-group-def="PassLine320" data-gwd-group-class="gwd-grp-f2lw" style="display: none;" data-gwd-grp-autoresize="false">
       <div class="gwd-div-gee7 gwd-div-uyzq gwd-grp-f2lw"></div>
@@ -1020,6 +1037,9 @@
     </div>
     <div data-gwd-group-def="FinishedButton" data-gwd-group-class="gwd-grp-8o1y" style="display: none;">
       <button data-gwd-grp-id="FINISHED_BUTTON" class="gwd-button-vfb9 gwd-grp-8o1y">Save and Reboot</button>
+    </div>
+    <div data-gwd-group-def="wifi_port_input" data-gwd-group-class="gwd-grp-1ul1" style="display: none;">
+      <input type="number" value="4999" min="1000" max="20000" step="1" data-gwd-grp-id="WIFI_PORT" class="gwd-input-7w17 gwd-grp-1ul1">
     </div>
   </template>
   <div class="gwd-div-1ag5"></div>
