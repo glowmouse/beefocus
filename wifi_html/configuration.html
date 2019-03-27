@@ -358,18 +358,6 @@
       font-size: 28px;
       font-weight: normal;
     }
-    [data-gwd-group="FocusName"] .gwd-grp-1xej.gwd-input-kd6l {
-      position: absolute;
-      height: 30px;
-      top: 50%;
-      transform-style: preserve-3d;
-      transform: translate3d(0px, -18px, 0px);
-      overflow: hidden;
-      background-image: none;
-      background-color: rgb(192, 192, 192);
-      left: 310px;
-      width: 280px;
-    }
     [data-gwd-group="FocusName"] {
       width: 600px;
       height: 50px;
@@ -648,18 +636,6 @@
       width: 140px;
       font-size: 18px;
     }
-    [data-gwd-group="FocusName320"] .gwd-grp-n11a.gwd-input-kd6l {
-      position: absolute;
-      height: 30px;
-      top: 50%;
-      transform-style: preserve-3d;
-      transform: translate3d(0px, -18px, 0px);
-      overflow: hidden;
-      background-image: none;
-      background-color: rgb(192, 192, 192);
-      left: 170px;
-      width: 140px;
-    }
     [data-gwd-group="FocusName320"] {
       width: 320px;
       height: 50px;
@@ -822,7 +798,7 @@
       background-image: none;
       background-color: rgb(192, 192, 192);
       left: 0px;
-      width: 100%;
+      width: 98%;
     }
     [data-gwd-group="pass_input"] {
       width: 144px;
@@ -832,11 +808,42 @@
       position: absolute;
       left: 170px;
       top: 0px;
+      width: 140px;
     }
     [data-gwd-group="PassLine"] .gwd-grp-1pih.gwd-div-16o6 {
       position: absolute;
       width: 280px;
       left: 310px;
+      top: 50%;
+      transform: translate3d(0px, -25px, 0px);
+      transform-style: preserve-3d;
+    }
+    [data-gwd-group="name_input"] .gwd-grp-1lmr.gwd-input-kd6l {
+      position: absolute;
+      height: 30px;
+      top: 50%;
+      transform-style: preserve-3d;
+      transform: translate3d(0px, -18px, 0px);
+      overflow: hidden;
+      background-image: none;
+      background-color: rgb(192, 192, 192);
+      left: 0px;
+      width: 98%;
+    }
+    [data-gwd-group="name_input"] {
+      width: 98%;
+      height: 50px;
+    }
+    [data-gwd-group="FocusName"] .gwd-grp-1xej.gwd-div-do9f {
+      position: absolute;
+      left: 310px;
+      top: 0px;
+      width: 280px;
+    }
+    [data-gwd-group="FocusName320"] .gwd-grp-n11a.gwd-div-1f0l {
+      position: absolute;
+      width: 140px;
+      left: 170px;
       top: 50%;
       transform: translate3d(0px, -25px, 0px);
       transform-style: preserve-3d;
@@ -922,6 +929,15 @@
         gwdId.getElementInInstance(document, instance).value = document.password;
       });
     };
+    gwd.name_set = function(event) {
+      document.hostname = event.target.value;
+      var gwdId = new gwd.GwdId(' name_input NAME_INPUT');
+      groupName = gwdId.getGroupName();
+      var instances = document.querySelectorAll("[" + gwd.GwdId.GROUP_REFERENCE_ATTR + " = " + groupName + "]");
+      Array.prototype.forEach.call(instances, function(instance) {
+        gwdId.getElementInInstance(document, instance).value = document.hostname;
+      });
+    };
   </script>
   <script type="text/javascript" gwd-events="registration">
     // Support code for event handling in Google Web Designer
@@ -931,12 +947,14 @@
       gwd.actions.events.addHandler(' ssid_textbox SSID_NAME', 'change', gwd.test, false);
       gwd.actions.events.addHandler(' wifi_port_input WIFI_PORT', 'change', gwd.portnuminput, false);
       gwd.actions.events.addHandler(' pass_input PASS_INPUT', 'change', gwd.password_set, false);
+      gwd.actions.events.addHandler(' name_input NAME_INPUT', 'change', gwd.name_set, false);
     };
     gwd.actions.events.deregisterEventHandlers = function(event) {
       gwd.actions.events.removeHandler(' FinishedButton FINISHED_BUTTON', 'click', gwd.finished, false);
       gwd.actions.events.removeHandler(' ssid_textbox SSID_NAME', 'change', gwd.test, false);
       gwd.actions.events.removeHandler(' wifi_port_input WIFI_PORT', 'change', gwd.portnuminput, false);
       gwd.actions.events.removeHandler(' pass_input PASS_INPUT', 'change', gwd.password_set, false);
+      gwd.actions.events.removeHandler(' name_input NAME_INPUT', 'change', gwd.name_set, false);
     };
     document.addEventListener("DOMContentLoaded", gwd.actions.events.registerEventHandlers);
     document.addEventListener("unload", gwd.actions.events.deregisterEventHandlers);
@@ -996,7 +1014,7 @@
       <div class="gwd-div-gee7 gwd-grp-1xej"></div>
       <div class="gwd-div-gee7 gwd-div-4jbu gwd-grp-1xej"></div>
       <h1 class="gwd-h1-1lqc gwd-grp-1xej">Focuser Name</h1>
-      <input type="text" class="gwd-input-kd6l gwd-grp-1xej" data-gwd-grp-id="text_5" value="beefocuser">
+      <div class="gwd-div-do9f gwd-grp-1xej" data-gwd-group="name_input"></div>
     </div>
     <div data-gwd-group-def="CommitBut" data-gwd-group-class="gwd-grp-ggms" style="display: none;" data-gwd-grp-autoresize="false">
       <div class="gwd-div-gee7 gwd-grp-ggms"></div>
@@ -1040,7 +1058,7 @@
       <div class="gwd-div-gee7 gwd-div-uyzq gwd-grp-n11a"></div>
       <div class="gwd-div-gee7 gwd-div-4jbu gwd-grp-n11a"></div>
       <h1 class="gwd-h1-1lqc gwd-grp-n11a">Focuser Name</h1>
-      <input type="text" class="gwd-input-kd6l gwd-grp-n11a" data-gwd-grp-id="text_9" value="beefocuser">
+      <div data-gwd-grp-autoresize="false" data-gwd-group="name_input" class="gwd-div-1f0l gwd-grp-n11a"></div>
     </div>
     <div data-gwd-group-def="CommitBut320" data-gwd-group-class="gwd-grp-1u7t" style="display: none;" data-gwd-grp-autoresize="false">
       <div class="gwd-div-gee7 gwd-grp-1u7t gwd-div-zj2r"></div>
@@ -1059,6 +1077,9 @@
     </div>
     <div data-gwd-group-def="pass_input" data-gwd-group-class="gwd-grp-1dr1" style="display: none;">
       <input type="text" class="gwd-input-kd6l gwd-grp-1dr1" data-gwd-grp-id="PASS_INPUT" placeholder="Your Wifi Password">
+    </div>
+    <div data-gwd-group-def="name_input" data-gwd-group-class="gwd-grp-1lmr" style="display: none;" data-gwd-grp-autoresize="false">
+      <input type="text" class="gwd-input-kd6l gwd-grp-1lmr" data-gwd-grp-id="NAME_INPUT" value="beefocuser">
     </div>
   </template>
   <div class="gwd-div-1ag5"></div>
