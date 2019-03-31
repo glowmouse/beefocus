@@ -143,6 +143,25 @@ Power Supply</text>
 <pad name="DC0" x="-2.54" y="-13.97" drill="0.9" rot="R180"/>
 <wire x1="-5.969" y1="-16.383" x2="5.969" y2="-16.383" width="0.1524" layer="21"/>
 </package>
+<package name="BUTTON6X6X10MMSIDE">
+<pad name="PB_P0" x="-2.25" y="0" drill="1" shape="octagon"/>
+<pad name="PB_P1" x="2.25" y="0" drill="1" shape="octagon"/>
+<pad name="P$3" x="3.5" y="2.5" drill="1.5" shape="octagon"/>
+<pad name="P$4" x="-3.5" y="2.5" drill="1.5" shape="octagon"/>
+<wire x1="-3.75" y1="-2.75" x2="-1.75" y2="-2.75" width="0.127" layer="21"/>
+<wire x1="-1.75" y1="-2.75" x2="1.75" y2="-2.75" width="0.127" layer="21"/>
+<wire x1="1.75" y1="-2.75" x2="3.75" y2="-2.75" width="0.127" layer="21"/>
+<wire x1="3.75" y1="-2.75" x2="3.75" y2="5" width="0.127" layer="21"/>
+<wire x1="-3.75" y1="5" x2="-3.75" y2="-2.75" width="0.127" layer="21"/>
+<wire x1="-1.75" y1="-2.75" x2="-1.75" y2="-2.25" width="0.127" layer="21"/>
+<wire x1="-1.75" y1="-2.25" x2="1.75" y2="-2.25" width="0.127" layer="21"/>
+<wire x1="1.75" y1="-2.25" x2="1.75" y2="-2.75" width="0.127" layer="21"/>
+<wire x1="-3.75" y1="5" x2="-3.5" y2="5" width="0.127" layer="21"/>
+<wire x1="-3.5" y1="5" x2="-3.5" y2="1.25" width="0.127" layer="21"/>
+<wire x1="3.75" y1="5" x2="3.5" y2="5" width="0.127" layer="21"/>
+<wire x1="3.5" y1="5" x2="3.5" y2="1.25" width="0.127" layer="21"/>
+<wire x1="-3.5" y1="1.25" x2="3.5" y2="1.25" width="0.127" layer="21"/>
+</package>
 </packages>
 <symbols>
 <symbol name="DCPOWERCONV">
@@ -173,6 +192,13 @@ Supply</text>
 <pin name="VCC_5V" x="-2.54" y="20.32" length="middle" rot="R270"/>
 <pin name="OUT" x="0" y="20.32" length="middle" rot="R270"/>
 <pin name="GND" x="2.54" y="20.32" length="middle" rot="R270"/>
+</symbol>
+<symbol name="BUTTON">
+<pin name="PB_P0" x="-2.54" y="0" length="middle" rot="R270"/>
+<pin name="PB_P1" x="2.54" y="0" length="middle" rot="R270"/>
+<wire x1="2.54" y1="2.54" x2="0" y2="2.54" width="0.254" layer="94"/>
+<wire x1="0" y1="2.54" x2="-2.54" y2="2.54" width="0.254" layer="94"/>
+<wire x1="0" y1="2.54" x2="0" y2="5.08" width="0.254" layer="94"/>
 </symbol>
 </symbols>
 <devicesets>
@@ -211,6 +237,22 @@ Supply</text>
 <connect gate="G$1" pin="GND" pad="GND"/>
 <connect gate="G$1" pin="OUT" pad="OUT"/>
 <connect gate="G$1" pin="VCC_5V" pad="VCC_5V"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="BUTTON6X6X10MMSIDE">
+<gates>
+<gate name="G$1" symbol="BUTTON" x="0" y="-2.54"/>
+</gates>
+<devices>
+<device name="" package="BUTTON6X6X10MMSIDE">
+<connects>
+<connect gate="G$1" pin="PB_P0" pad="PB_P0"/>
+<connect gate="G$1" pin="PB_P1" pad="PB_P1"/>
 </connects>
 <technologies>
 <technology name=""/>

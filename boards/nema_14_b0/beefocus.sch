@@ -15265,6 +15265,25 @@ The Slot footprint only works if the mill layer is transmitted to the PCB fab ho
 Down Buck 
 Power Supply</text>
 </package>
+<package name="BUTTON6X6X10MMSIDE">
+<pad name="PB_P0" x="-2.25" y="0" drill="1" shape="octagon"/>
+<pad name="PB_P1" x="2.25" y="0" drill="1" shape="octagon"/>
+<pad name="P$3" x="3.5" y="2.5" drill="1.5" shape="octagon"/>
+<pad name="P$4" x="-3.5" y="2.5" drill="1.5" shape="octagon"/>
+<wire x1="-3.75" y1="-2.75" x2="-1.75" y2="-2.75" width="0.127" layer="21"/>
+<wire x1="-1.75" y1="-2.75" x2="1.75" y2="-2.75" width="0.127" layer="21"/>
+<wire x1="1.75" y1="-2.75" x2="3.75" y2="-2.75" width="0.127" layer="21"/>
+<wire x1="3.75" y1="-2.75" x2="3.75" y2="5" width="0.127" layer="21"/>
+<wire x1="-3.75" y1="5" x2="-3.75" y2="-2.75" width="0.127" layer="21"/>
+<wire x1="-1.75" y1="-2.75" x2="-1.75" y2="-2.25" width="0.127" layer="21"/>
+<wire x1="-1.75" y1="-2.25" x2="1.75" y2="-2.25" width="0.127" layer="21"/>
+<wire x1="1.75" y1="-2.25" x2="1.75" y2="-2.75" width="0.127" layer="21"/>
+<wire x1="-3.75" y1="5" x2="-3.5" y2="5" width="0.127" layer="21"/>
+<wire x1="-3.5" y1="5" x2="-3.5" y2="1.25" width="0.127" layer="21"/>
+<wire x1="3.75" y1="5" x2="3.5" y2="5" width="0.127" layer="21"/>
+<wire x1="3.5" y1="5" x2="3.5" y2="1.25" width="0.127" layer="21"/>
+<wire x1="-3.5" y1="1.25" x2="3.5" y2="1.25" width="0.127" layer="21"/>
+</package>
 </packages>
 <symbols>
 <symbol name="DCPOWERCONV">
@@ -15285,6 +15304,13 @@ Step Down
 Buck Power
 Supply</text>
 </symbol>
+<symbol name="BUTTON">
+<pin name="PB_P0" x="-2.54" y="0" length="middle" rot="R270"/>
+<pin name="PB_P1" x="2.54" y="0" length="middle" rot="R270"/>
+<wire x1="2.54" y1="2.54" x2="0" y2="2.54" width="0.254" layer="94"/>
+<wire x1="0" y1="2.54" x2="-2.54" y2="2.54" width="0.254" layer="94"/>
+<wire x1="0" y1="2.54" x2="0" y2="5.08" width="0.254" layer="94"/>
+</symbol>
 </symbols>
 <devicesets>
 <deviceset name="DCPOWERCONV">
@@ -15303,6 +15329,22 @@ Supply</text>
 <connect gate="G$1" pin="VOUT0-" pad="VOUT0-"/>
 <connect gate="G$1" pin="VOUT1+" pad="VOUT1+"/>
 <connect gate="G$1" pin="VOUT1-" pad="VOUT1-"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="BUTTON6X6X10MMSIDE">
+<gates>
+<gate name="G$1" symbol="BUTTON" x="0" y="-2.54"/>
+</gates>
+<devices>
+<device name="" package="BUTTON6X6X10MMSIDE">
+<connects>
+<connect gate="G$1" pin="PB_P0" pad="PB_P0"/>
+<connect gate="G$1" pin="PB_P1" pad="PB_P1"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -15602,7 +15644,6 @@ Comments, suggestions and bug reports please send to: &lt;b&gt;&lt;a href="mailt
 <parts>
 <part name="U$1" library="RepRapjr" deviceset="POLOLU_A4983CARRIER" device=""/>
 <part name="JP1" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X4" device="/90" package3d_urn="urn:adsk.eagle:package:22404/2"/>
-<part name="PROG" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X2" device="/90" package3d_urn="urn:adsk.eagle:package:22437/2"/>
 <part name="ENDSTOP" library="pinhead" library_urn="urn:adsk.eagle:library:325" deviceset="PINHD-1X2" device="/90" package3d_urn="urn:adsk.eagle:package:22437/2"/>
 <part name="C4" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="CPOL-US" device="E3.5-8" package3d_urn="urn:adsk.eagle:package:25842/1" value="100uF"/>
 <part name="J3" library="SparkFun-Connectors" deviceset="POWER_JACK" device=""/>
@@ -15620,6 +15661,7 @@ Comments, suggestions and bug reports please send to: &lt;b&gt;&lt;a href="mailt
 <part name="R7" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-US_" device="0309/V" package3d_urn="urn:adsk.eagle:package:26090/1" value="10k"/>
 <part name="U$6" library="glowmouse_custom" deviceset="DCPOWERCONV" device=""/>
 <part name="U$7" library="diy-modules" deviceset="WEMOS-D1-MINI" device=""/>
+<part name="U$8" library="glowmouse_custom" deviceset="BUTTON6X6X10MMSIDE" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -15628,7 +15670,6 @@ Comments, suggestions and bug reports please send to: &lt;b&gt;&lt;a href="mailt
 <instances>
 <instance part="U$1" gate="G$1" x="12.7" y="27.94" rot="R270"/>
 <instance part="JP1" gate="A" x="5.08" y="-5.08" rot="R270"/>
-<instance part="PROG" gate="G$1" x="-30.48" y="-5.08" rot="R270"/>
 <instance part="ENDSTOP" gate="G$1" x="-96.52" y="15.24" rot="R270"/>
 <instance part="C4" gate="G$1" x="33.02" y="15.24"/>
 <instance part="J3" gate="G$1" x="58.42" y="-2.54" rot="R90"/>
@@ -15646,6 +15687,7 @@ Comments, suggestions and bug reports please send to: &lt;b&gt;&lt;a href="mailt
 <instance part="R7" gate="G$1" x="-91.44" y="35.56" rot="R90"/>
 <instance part="U$6" gate="G$1" x="53.34" y="43.18"/>
 <instance part="U$7" gate="G$1" x="-55.88" y="48.26"/>
+<instance part="U$8" gate="G$1" x="-30.48" y="-7.62" rot="R180"/>
 </instances>
 <busses>
 </busses>
@@ -15714,13 +15756,13 @@ Comments, suggestions and bug reports please send to: &lt;b&gt;&lt;a href="mailt
 <wire x1="-35.56" y1="48.26" x2="-38.1" y2="48.26" width="0.1524" layer="91"/>
 <wire x1="-35.56" y1="5.08" x2="-35.56" y2="12.7" width="0.1524" layer="91"/>
 <wire x1="-35.56" y1="12.7" x2="-35.56" y2="48.26" width="0.1524" layer="91"/>
-<wire x1="-35.56" y1="5.08" x2="-30.48" y2="5.08" width="0.1524" layer="91"/>
-<pinref part="PROG" gate="G$1" pin="2"/>
-<wire x1="-30.48" y1="5.08" x2="-30.48" y2="-2.54" width="0.1524" layer="91"/>
 <pinref part="R3" gate="G$1" pin="1"/>
 <wire x1="-22.86" y1="12.7" x2="-35.56" y2="12.7" width="0.1524" layer="91"/>
 <junction x="-35.56" y="12.7"/>
 <pinref part="U$7" gate="G$1" pin="D3"/>
+<wire x1="-35.56" y1="5.08" x2="-33.02" y2="5.08" width="0.1524" layer="91"/>
+<pinref part="U$8" gate="G$1" pin="PB_P1"/>
+<wire x1="-33.02" y1="5.08" x2="-33.02" y2="-7.62" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="N$4" class="0">
@@ -15856,12 +15898,9 @@ Comments, suggestions and bug reports please send to: &lt;b&gt;&lt;a href="mailt
 <net name="N$16" class="0">
 <segment>
 <wire x1="-30.48" y1="43.18" x2="-38.1" y2="43.18" width="0.1524" layer="91"/>
-<pinref part="PROG" gate="G$1" pin="1"/>
-<wire x1="-27.94" y1="10.16" x2="-27.94" y2="-2.54" width="0.1524" layer="91"/>
 <pinref part="U$1" gate="G$1" pin="GND@0"/>
 <wire x1="12.7" y1="12.7" x2="12.7" y2="10.16" width="0.1524" layer="91"/>
 <wire x1="12.7" y1="10.16" x2="-27.94" y2="10.16" width="0.1524" layer="91"/>
-<junction x="-27.94" y="10.16"/>
 <wire x1="-27.94" y1="25.4" x2="-27.94" y2="10.16" width="0.1524" layer="91"/>
 <wire x1="-30.48" y1="25.4" x2="-27.94" y2="25.4" width="0.1524" layer="91"/>
 <wire x1="-30.48" y1="25.4" x2="-30.48" y2="30.48" width="0.1524" layer="91"/>
@@ -15870,6 +15909,9 @@ Comments, suggestions and bug reports please send to: &lt;b&gt;&lt;a href="mailt
 <wire x1="-15.24" y1="30.48" x2="-30.48" y2="30.48" width="0.1524" layer="91"/>
 <junction x="-30.48" y="30.48"/>
 <pinref part="U$7" gate="G$1" pin="GND"/>
+<pinref part="U$8" gate="G$1" pin="PB_P0"/>
+<wire x1="-27.94" y1="10.16" x2="-27.94" y2="-7.62" width="0.1524" layer="91"/>
+<junction x="-27.94" y="10.16"/>
 </segment>
 </net>
 <net name="N$2" class="0">
