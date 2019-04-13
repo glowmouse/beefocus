@@ -161,6 +161,9 @@ Power Supply</text>
 <wire x1="3.75" y1="5" x2="3.5" y2="5" width="0.127" layer="21"/>
 <wire x1="3.5" y1="5" x2="3.5" y2="1.25" width="0.127" layer="21"/>
 <wire x1="-3.5" y1="1.25" x2="3.5" y2="1.25" width="0.127" layer="21"/>
+<wire x1="-1.27" y1="-2.54" x2="-1.27" y2="-12.7" width="0.127" layer="21"/>
+<wire x1="-1.27" y1="-12.7" x2="1.27" y2="-12.7" width="0.127" layer="21"/>
+<wire x1="1.27" y1="-12.7" x2="1.27" y2="-2.54" width="0.127" layer="21"/>
 </package>
 </packages>
 <symbols>
