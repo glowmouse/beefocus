@@ -33,7 +33,7 @@ class NetInterfaceSim: public NetInterface {
     input = "";
     return false;
   }
-  NetInterface& operator<<( char c )
+  NetInterface& operator<<( char c ) override
   {
     std::cout << c;
     return *this;

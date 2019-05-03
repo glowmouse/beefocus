@@ -45,8 +45,8 @@ class HWEvent
   /// 
   HWEvent( HWI::Pin pinRHS, HWI::PinState stateRHS ) :
     pin{ pinRHS },
-    state{ stateRHS },
-    type{ Type::DIGITAL_IO }
+    type{ Type::DIGITAL_IO },
+    state{ stateRHS }
   {
   }
  
@@ -58,8 +58,8 @@ class HWEvent
   /// 
   HWEvent( HWI::Pin pinRHS, HWI::PinIOMode modeRHS) :
     pin{ pinRHS },
-    mode{ modeRHS },
-    type{ Type::PIN_MODE }
+    type{ Type::PIN_MODE },
+    mode{ modeRHS }
   {
   }
 

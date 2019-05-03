@@ -19,6 +19,8 @@ class HWI
 {
   public:
 
+  virtual ~HWI() {}
+
   enum class Pin {
     START_OF_PINS = 0,
     STEP = 0,
