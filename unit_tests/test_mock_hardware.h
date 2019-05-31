@@ -52,6 +52,7 @@ class HWMockTimed: public HWI
   HWMockTimed() = delete;
   HWMockTimed( const HWMockTimed& ) = delete;
   HWMockTimed& operator=( const HWMockTimed& ) = delete;
+  virtual ~HWMockTimed() {}
 
   ///
   /// @brief Mock DigitalWrite hardware interface

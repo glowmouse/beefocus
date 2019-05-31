@@ -1,5 +1,2 @@
-Untested gerber files for the nema_14_b0 board.  I've sent the board out
-to get it made, but there are no guarantees that these files will work.
-
-Update Apr 13 - Old board didn't work, sending a revised board out.
+Tested gerber files for the nema_14_b0 board.  The board worked, but the DC to DC converters I used in this board aren't sold anymore.  I've moved on to nema_14_b1. 
 

@@ -8,6 +8,8 @@ class DebugInterface
 	public:
 
   virtual void rawWrite( const char *bytes, std::size_t numBytes ) = 0;
+
+  virtual ~DebugInterface() {}
 };
 
 inline DebugInterface& operator<<( DebugInterface& stream, char c )

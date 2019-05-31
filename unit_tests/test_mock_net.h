@@ -136,6 +136,7 @@ class NetMockSimpleTimed: public NetInterface
       outputEvents.emplace_back(TimedStringEvent(time, currentOutput ));
       currentOutput = "";
     }
+    return *this;
   }
 
   ///
@@ -176,16 +177,16 @@ class NetMockSimpleTimed: public NetInterface
   }
 
   private:
+  /// @brief  Input events to be sent back to the caller
+  const TimedStringEvents inputEvents;
   /// @brief  Current Time
   int time;
+  /// @brief  The next input event that needs to be processed.
+  TimedStringEvents::const_iterator nextInputEvent;
   /// @brief  The current string that's being written to 
   std::string currentOutput;
   /// @brief  Recorded output events
   TimedStringEvents outputEvents;
-  /// @brief  Input events to be sent back to the caller
-  const TimedStringEvents inputEvents;
-  /// @brief  The next input event that needs to be processed.
-  TimedStringEvents::const_iterator nextInputEvent;
 };
 
 ///
