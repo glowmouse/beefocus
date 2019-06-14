@@ -10,6 +10,10 @@
 #include "hardware_interface.h"
 #include "command_parser.h"
 
+#ifdef GTEST_FOUND
+#include <gtest/gtest_prod.h>
+#endif
+
 ///
 /// @brief Focuser Namespace
 /// 
@@ -273,6 +277,30 @@ class StateStack {
   std::vector< CommandPacket > stack;
 };
 
+/// @brief Main Focuser Class
+///
+/// The Focuser class has two main jobs:
+///
+/// 1. It accepts new commands from a network interface
+/// 2. Over time, it manipulates a hardware interface to implement the commands
+///
+/// At construction time the Focuser is provided three interfaces - an
+/// interface to the network (i.e., a Wifi Connection), an interface to the 
+/// the hardware (i.e., the pins in a Micro-Controller) an interface for
+/// debug logging, and the focuser's hardware parameters
+///
+/// Once the focuser is initialized, the loop function is used to real time
+/// updates.  The loop function returns a minimum time that the caller should
+/// wait before calling loop again, in microseconds.
+///
+/// the main event loop could look something like the following:
+///
+/// Focuser( std::move(net), std::move(hardware), std::move(debug), params );
+/// for ( ;; ) {
+///   unsigned int delay = Focuser.loop();
+///   delayMicroseconds( delay );   
+/// }
+/// 
 class Focuser 
 {
   public:
@@ -294,10 +322,19 @@ class Focuser
   ///
   /// @brief Update the Focuser's State
   ///
-  /// @return The amount of time the caller should wait (in microsecodns)
+  /// @return The amount of time the caller should wait (in microseconds)
   ///         before calling loop again.
   ///
   unsigned int loop();
+
+  private:
+
+#ifdef GTEST_FOUND
+  // So we can unit test the consistency of the class's constant - static 
+  // data without exposing it to everybody
+  FRIEND_TEST(FOCUSER_STATE, allStatesHaveImplementations);
+  FRIEND_TEST(FOCUSER_STATE, allCommandsHaveImplementations);
+#endif
 
   static const std::unordered_map<CommandParser::Command,
     void (Focuser::*)( CommandParser::CommandPacket),EnumHash> 
@@ -305,8 +342,6 @@ class Focuser
 
   using ptrToMember = unsigned int ( Focuser::*) ( void );
   static const std::unordered_map< State, ptrToMember, EnumHash > stateImpl;
-
-  private:
 
   /// @brief Deleted copy constructor
   Focuser( const Focuser& other ) = delete;

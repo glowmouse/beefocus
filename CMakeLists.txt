@@ -49,6 +49,7 @@ find_package (GTest)
 find_package (GMock)
 
 IF (GTEST_FOUND)
+  add_definitions( -DGTEST_FOUND )
   MESSAGE (STATUS  "GTEST found, running unit tests")
   ADD_SUBDIRECTORY(unit_tests)
 ELSE()
