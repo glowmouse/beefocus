@@ -9,123 +9,43 @@
 
 using namespace FS;
 
-const StateToString FS::stateNames =
-{
-  { State::ACCEPT_COMMANDS,               "ACCEPTING_COMMANDS" },
-  { State::DO_STEPS,                      "DO_STEPS"           },
-  { State::STEPPER_INACTIVE_AND_WAIT,     "STEPPER_INACTIVE"   },
-  { State::STEPPER_ACTIVE_AND_WAIT,       "STEPPER_ACTIVE"     },
-  { State::SET_DIR,                       "SET_DIR"            },
-  { State::MOVING,                        "MOVING"             },
-  { State::STOP_AT_HOME,                  "STOP_AT_HOME"       },
-  { State::SLEEP,                         "LOW_POWER"          },
-  { State::ERROR_STATE,                   "ERROR ERROR ERROR"  },
-};
+//
+// Implementation of the Focuser class
+//
+// As described in focuser_state.h, the Focuser Class has two main jobs:
+//
+// 1. It accepts new commands from a network interface
+// 2. Over time, it manipulates a hardware interface to implement the commands
+//
+// At construction time the Focuser is provided three interfaces - an
+// interface to the network (i.e., a Wifi Connection), an interface to the 
+// the hardware (i.e., the pins in a Micro-Controller) an interface for
+// debug logging, and the focuser's hardware parameters
+//
+// Once the focuser is initialized, the loop function is used to real time
+// updates.  The loop function returns a minimum time that the caller should
+// wait before calling loop again, in microseconds.
+//
+// Private member functions prefaced with 'do' are command processors.  They
+// take input for a command that came from the focuser's network interface
+// and adjust the Focuser class's state so it can process that input. For
+// example, the doHome method pushes a State::STOP_AT_HOME command onto the
+// focuser's state stack.
+//
+// When loop is called, the Focuser class processess the top command on its
+// state stack.  The methods that do this processing are prefaced with 
+// 'state'.  For example, stateStopAtHome checks to see if the hardware
+// interface's home pin is active.  If it is, it pops it's current state
+// (State::STOP_AT_HOME' from the focuser's state stack and considers the
+// operating finished.  If it isn't, it pushes commands onto the focuser's
+// state stack that will result in the focuser rewinding one step.
+//
 
-const CommandToBool FS::doesCommandInterrupt= 
-{
-  { CommandParser::Command::Abort,         true   },
-  { CommandParser::Command::Home,          true   },
-  { CommandParser::Command::LHome,         true   },
-  { CommandParser::Command::PStatus,       false  },
-  { CommandParser::Command::MStatus,       false  },
-  { CommandParser::Command::SStatus,       false  },
-  { CommandParser::Command::ABSPos,        true   },
-  { CommandParser::Command::RELPos,        true   },
-  { CommandParser::Command::Sync,          true   },
-  { CommandParser::Command::Firmware,      false  },
-  { CommandParser::Command::Caps,          false  },
-  { CommandParser::Command::NoCommand,     false  },
-};
-
-const std::unordered_map<CommandParser::Command,
-  void (Focuser::*)( CommandParser::CommandPacket),EnumHash> 
-  Focuser::commandImpl = 
-{
-  { CommandParser::Command::Abort,      &Focuser::doAbort },
-  { CommandParser::Command::Home,       &Focuser::doHome },
-  { CommandParser::Command::LHome,      &Focuser::doLHome },
-  { CommandParser::Command::PStatus,    &Focuser::doPStatus },
-  { CommandParser::Command::MStatus,    &Focuser::doMStatus },
-  { CommandParser::Command::SStatus,    &Focuser::doSStatus },
-  { CommandParser::Command::ABSPos,     &Focuser::doABSPos },
-  { CommandParser::Command::RELPos,     &Focuser::doRELPos },
-  { CommandParser::Command::Sync,       &Focuser::doSync},
-  { CommandParser::Command::Firmware,   &Focuser::doFirmware},
-  { CommandParser::Command::Caps,       &Focuser::doCaps},
-  { CommandParser::Command::NoCommand,  &Focuser::doError },
-};
-
-const std::unordered_map<State,unsigned int (Focuser::*)( void ),EnumHash>
-  Focuser::stateImpl =
-{
-  { State::ACCEPT_COMMANDS,           &Focuser::stateAcceptCommands },
-  { State::DO_STEPS,                  &Focuser::stateDoingSteps },
-  { State::STEPPER_INACTIVE_AND_WAIT, &Focuser::stateStepInactiveAndWait },
-  { State::STEPPER_ACTIVE_AND_WAIT,   &Focuser::stateStepActiveAndWait },
-  { State::SET_DIR,                   &Focuser::stateSetDir },
-  { State::MOVING,                    &Focuser::stateMoving },
-  { State::STOP_AT_HOME,              &Focuser::stateStopAtHome },
-  { State::SLEEP,                     &Focuser::stateSleep },
-  { State::ERROR_STATE,               &Focuser::stateError }
-};
-
-BuildParams::BuildParamMap BuildParams::builds = {
-  {
-    Build::LOW_POWER_HYPERSTAR_FOCUSER,
-    {
-      TimingParams { 
-        100,        // Check for new commands every 100ms
-        50,         // Take 50 steps before checking for interrupts
-        5*60*1000,  // Go to sleep after 5 minutes of inactivity
-        1000,       // Check for new input in sleep mode every second
-        1000        // Take 1 second to power up the focuser motor on awaken
-      },
-      true,         // Focuser can use a home switch to synch
-      35000         // End of the line for my focuser
-    }
-  },
-  { Build::UNIT_TEST_BUILD_HYPERSTAR, 
-    {
-      TimingParams { 
-        10,         // Check for new commands every 10ms
-        2,          // Take 2 steps before checking for interrupts
-        1000,       // Go to sleep after 1 second of inactivity
-        500,        // Check for new input in sleep mode every 500ms
-        200,        // Allow 200ms to power on the motor
-      },
-      true,         // Focuser can use a home switch to synch
-      35000         // End of the line for my focuser
-    }
-  },
-  {
-    Build::TRADITIONAL_FOCUSER,
-    {
-      TimingParams { 
-        100,        // Check for new commands every 100ms
-        50,         // Take 50 steps before checking for interrupts
-        10*24*60*1000,  // Go to sleep after 10 days of inactivity
-        1000,       // Check for new input in sleep mode every second
-        1000        // Take 1 second to power up the focuser motor on awaken
-      },
-      false,        // Focuser cannot use a home switch to synch
-      5000          // Mostly a place holder
-    }
-  },
-  { Build::UNIT_TEST_TRADITIONAL_FOCUSER, 
-    {
-      TimingParams { 
-        10,         // Check for new commands every 10ms
-        2,          // Take 2 steps before checking for interrupts
-        1000,       // Go to sleep after 1 second of inactivity
-        500,        // Check for new input in sleep mode every 500ms
-        200,        // Allow 200ms to power on the motor
-      },
-      false,        // Focuser cannot use a home switch to synch
-      5000          // Mostly a place holder
-    }
-  },
-};
+/////////////////////////////////////////////////////////////////////////
+//
+// Public Interfaces
+//
+/////////////////////////////////////////////////////////////////////////
 
 Focuser::Focuser(
     std::unique_ptr<NetInterface> netArg,
@@ -171,6 +91,176 @@ Focuser::Focuser(
   hardware->DigitalWrite( HWI::Pin::STEP, HWI::PinState::STEP_INACTIVE );
 
   log << "Focuser is up\n";
+}
+
+unsigned int Focuser::loop()
+{
+  ptrToMember function = stateImpl.at( stateStack.topState() );
+  const unsigned uSecToNextCall = (this->*function)();
+  uSecRemainder += uSecToNextCall;
+  time += uSecRemainder / 1000;
+  uSecRemainder = uSecRemainder % 1000;
+  return uSecToNextCall;
+}
+
+/////////////////////////////////////////////////////////////////////////
+//
+// Private Interfaces
+//
+// Section Overview:
+// 
+// 1. Constant Data
+// 2. Methods that interpret input from the network
+// 3. Methods that process the commands over time
+// 4. Utility Methods
+// 
+/////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////
+//
+// Section 1.  Constant Data
+//
+/////////////////////////////////////////////////////////////////////////
+
+// What does the focuser execute if it's in a particular state?
+const std::unordered_map<State,unsigned int (Focuser::*)( void ),EnumHash>
+  Focuser::stateImpl =
+{
+  { State::ACCEPT_COMMANDS,           &Focuser::stateAcceptCommands },
+  { State::DO_STEPS,                  &Focuser::stateDoingSteps },
+  { State::STEPPER_INACTIVE_AND_WAIT, &Focuser::stateStepInactiveAndWait },
+  { State::STEPPER_ACTIVE_AND_WAIT,   &Focuser::stateStepActiveAndWait },
+  { State::SET_DIR,                   &Focuser::stateSetDir },
+  { State::MOVING,                    &Focuser::stateMoving },
+  { State::STOP_AT_HOME,              &Focuser::stateStopAtHome },
+  { State::SLEEP,                     &Focuser::stateSleep },
+  { State::ERROR_STATE,               &Focuser::stateError }
+};
+
+// Bind State Enums to Human Readable Debug Names
+const StateToString FS::stateNames =
+{
+  { State::ACCEPT_COMMANDS,               "ACCEPTING_COMMANDS" },
+  { State::DO_STEPS,                      "DO_STEPS"           },
+  { State::STEPPER_INACTIVE_AND_WAIT,     "STEPPER_INACTIVE"   },
+  { State::STEPPER_ACTIVE_AND_WAIT,       "STEPPER_ACTIVE"     },
+  { State::SET_DIR,                       "SET_DIR"            },
+  { State::MOVING,                        "MOVING"             },
+  { State::STOP_AT_HOME,                  "STOP_AT_HOME"       },
+  { State::SLEEP,                         "LOW_POWER"          },
+  { State::ERROR_STATE,                   "ERROR ERROR ERROR"  },
+};
+
+// Implementation of the commands that the Focuser Supports 
+const std::unordered_map<CommandParser::Command,
+  void (Focuser::*)( CommandParser::CommandPacket),EnumHash> 
+  Focuser::commandImpl = 
+{
+  { CommandParser::Command::Abort,      &Focuser::doAbort },
+  { CommandParser::Command::Home,       &Focuser::doHome },
+  { CommandParser::Command::LHome,      &Focuser::doLHome },
+  { CommandParser::Command::PStatus,    &Focuser::doPStatus },
+  { CommandParser::Command::MStatus,    &Focuser::doMStatus },
+  { CommandParser::Command::SStatus,    &Focuser::doSStatus },
+  { CommandParser::Command::ABSPos,     &Focuser::doABSPos },
+  { CommandParser::Command::RELPos,     &Focuser::doRELPos },
+  { CommandParser::Command::Sync,       &Focuser::doSync},
+  { CommandParser::Command::Firmware,   &Focuser::doFirmware},
+  { CommandParser::Command::Caps,       &Focuser::doCaps},
+  { CommandParser::Command::NoCommand,  &Focuser::doError },
+};
+
+// Can a command be interrupted/aborted?
+const CommandToBool FS::doesCommandInterrupt= 
+{
+  { CommandParser::Command::Abort,         true   },
+  { CommandParser::Command::Home,          true   },
+  { CommandParser::Command::LHome,         true   },
+  { CommandParser::Command::PStatus,       false  },
+  { CommandParser::Command::MStatus,       false  },
+  { CommandParser::Command::SStatus,       false  },
+  { CommandParser::Command::ABSPos,        true   },
+  { CommandParser::Command::RELPos,        true   },
+  { CommandParser::Command::Sync,          true   },
+  { CommandParser::Command::Firmware,      false  },
+  { CommandParser::Command::Caps,          false  },
+  { CommandParser::Command::NoCommand,     false  },
+};
+
+// Builds currently supported by BeeFocus
+BuildParams::BuildParamMap BuildParams::builds = {
+  {
+    Build::LOW_POWER_HYPERSTAR_FOCUSER,
+    {
+      TimingParams { 
+        100,        // Check for new commands every 100ms
+        50,         // Take 50 steps before checking for interrupts
+        5*60*1000,  // Go to sleep after 5 minutes of inactivity
+        1000,       // Check for new input in sleep mode every second
+        1000        // Take 1 second to power up the focuser motor on awaken
+      },
+      true,         // Focuser can use a home switch to synch
+      50000         // End of the line for my focuser
+    }
+  },
+  { Build::UNIT_TEST_BUILD_HYPERSTAR, 
+    {
+      TimingParams { 
+        10,         // Check for new commands every 10ms
+        2,          // Take 2 steps before checking for interrupts
+        1000,       // Go to sleep after 1 second of inactivity
+        500,        // Check for new input in sleep mode every 500ms
+        200,        // Allow 200ms to power on the motor
+      },
+      true,         // Focuser can use a home switch to synch
+      35000         
+    }
+  },
+  {
+    Build::TRADITIONAL_FOCUSER,
+    {
+      TimingParams { 
+        100,        // Check for new commands every 100ms
+        50,         // Take 50 steps before checking for interrupts
+        10*24*60*1000,  // Go to sleep after 10 days of inactivity
+        1000,       // Check for new input in sleep mode every second
+        1000        // Take 1 second to power up the focuser motor on awaken
+      },
+      false,        // Focuser cannot use a home switch to synch
+      5000          // Mostly a place holder
+    }
+  },
+  { Build::UNIT_TEST_TRADITIONAL_FOCUSER, 
+    {
+      TimingParams { 
+        10,         // Check for new commands every 10ms
+        2,          // Take 2 steps before checking for interrupts
+        1000,       // Go to sleep after 1 second of inactivity
+        500,        // Check for new input in sleep mode every 500ms
+        200,        // Allow 200ms to power on the motor
+      },
+      false,        // Focuser cannot use a home switch to synch
+      5000          // Mostly a place holder
+    }
+  },
+};
+
+/////////////////////////////////////////////////////////////////////////
+//
+// Section 2. Methods that interpret input from the network
+//
+/////////////////////////////////////////////////////////////////////////
+
+// Entry point for all commands
+void Focuser::processCommand( CommandParser::CommandPacket cp )
+{
+  if ( doesCommandInterrupt.at( cp.command ))
+  {
+    timeLastInterruptingCommandOccured = time;
+  }
+  auto function = commandImpl.at( cp.command );
+  (this->*function)( cp );
 }
 
 void Focuser::doAbort( CommandParser::CommandPacket cp )
@@ -281,15 +371,12 @@ void Focuser::doError( CommandParser::CommandPacket cp )
   stateStack.push( State::ERROR_STATE, __LINE__ );   
 }
 
-void Focuser::processCommand( CommandParser::CommandPacket cp )
-{
-  if ( doesCommandInterrupt.at( cp.command ))
-  {
-    timeLastInterruptingCommandOccured = time;
-  }
-  auto function = commandImpl.at( cp.command );
-  (this->*function)( cp );
-}
+/////////////////////////////////////////////////////////////////////////
+//
+// Section 3. Methods that process the commands over time
+//
+/////////////////////////////////////////////////////////////////////////
+
 
 unsigned int Focuser::stateAcceptCommands()
 {
@@ -496,15 +583,12 @@ unsigned int Focuser::stateError()
   return 10*1000*1000; // 10 sec pause 
 }
 
-unsigned int Focuser::loop()
-{
-  ptrToMember function = stateImpl.at( stateStack.topState() );
-  const unsigned uSecToNextCall = (this->*function)();
-  uSecRemainder += uSecToNextCall;
-  time += uSecRemainder / 1000;
-  uSecRemainder = uSecRemainder % 1000;
-  return uSecToNextCall;
-}
+/////////////////////////////////////////////////////////////////////////
+//
+// Section 4. Utility Methods
+//
+/////////////////////////////////////////////////////////////////////////
+
 
 void Focuser::setMotor( WifiDebugOstream& log, MotorState m )
 {

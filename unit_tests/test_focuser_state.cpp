@@ -79,17 +79,18 @@ TEST( FOCUSER_STATE, allCommandsHaveInterruptStatus)
   }
 }
 
+namespace FS {
+
 TEST( FOCUSER_STATE, allCommandsHaveImplementations )
 {
   for ( CommandParser::Command c = CommandParser::Command::StartOfCommands;
-        c < CommandParser::Command::EndOfCommands; ++c )
+        c < CommandParser::Command::EndOfCommands; ::operator++(c) )
   {
     ASSERT_NE( 
       FS::Focuser::commandImpl.find( c ),
       FS::Focuser::commandImpl.end());
   }
 }
- 
  
 TEST( FOCUSER_STATE, allStatesHaveImplementations )
 {
@@ -101,7 +102,7 @@ TEST( FOCUSER_STATE, allStatesHaveImplementations )
       FS::Focuser::stateImpl.end());
   }
 } 
-
+}
 
 TEST( FOCUSER_STATE, allStatesHaveDebugNames )
 {
