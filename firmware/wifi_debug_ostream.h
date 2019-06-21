@@ -10,6 +10,10 @@
 class WifiDebugOstream	
 {
   public:
+
+  struct category: beefocus_tag {};
+  using char_type = char;
+
   WifiDebugOstream( DebugInterface* serialDebugArg, NetInterface* wifiDebugArg  )
     : m_wifiDebug{ wifiDebugArg }, 
       m_serialDebug{ serialDebugArg},
@@ -28,6 +32,15 @@ class WifiDebugOstream
     *(m_wifiDebug) << c;
     m_lastWasNewline = isNewLine;
     return *this;
+  }
+
+  std::streamsize write( const char_type* s, std::streamsize n )
+  {
+    for ( std::streamsize i = 0; i < n; ++i )
+    {
+      (*this) << s[i];
+    }
+    return n;
   }
 
   private:

@@ -24,6 +24,11 @@ class DebugInterfaceIgnoreMock: public DebugInterface
   void rawWrite( const char* bytes, std::size_t numBytes ) override
   {
   }
+
+  std::streamsize write( const char_type* s, std::streamsize n ) override
+  {
+    return n;
+  }
 };
 
 #endif
