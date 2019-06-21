@@ -448,21 +448,21 @@ extern const CommandToBool doesCommandInterrupt;
 
 /// @brief Output StateArg
 template <class T,
-  typename = my_enable_if_t<is_beefocus_ostream<T>::value>>
-T& operator<<( T& ostream, StateArg sA )
+  typename = my_enable_if_t<is_beefocus_sink<T>::value>>
+T& operator<<( T& sink, StateArg sA )
 {
   switch (sA.getType() )
   {
     case StateArg::Type::NONE:
-      ostream << "NoArg";
+      sink << "NoArg";
       break;
     case StateArg::Type::INT:
-      ostream << sA.getInt();
+      sink << sA.getInt();
       break;
     default:
       assert(0);
   }
-  return ostream; 
+  return sink; 
 }
 
 }

@@ -2,6 +2,7 @@
 #define __WifiInterfaceEthernet_H__
 
 #include <string>
+#include <ios>
 #include <ESP8266WiFi.h>
 #include "wifi_ostream.h"
 #include "wifi_secrets.h"
@@ -14,6 +15,9 @@ class WifiDebugOstream;
 class WifiConnectionEthernet: public NetConnection {
 
   public:
+
+  struct category: beefocus_tag {};
+  using char_type = char;
 
   WifiConnectionEthernet()
   {
@@ -56,6 +60,15 @@ class WifiConnectionEthernet: public NetConnection {
     return m_connectedClient;
   }
 
+  std::streamsize write( const char_type* s, std::streamsize n ) 
+  {
+    for ( std::streamsize i = 0; i < n; ++i )
+    {
+      (*this) << s[i];
+    }
+    return n;
+  }
+
   private:
 
   void handleNewIncomingData( WifiDebugOstream& log );    
@@ -86,6 +99,15 @@ class WifiInterfaceEthernet: public NetInterface {
 
   bool getString( WifiDebugOstream &log, std::string& string ) override;
   WifiInterfaceEthernet& operator<<( char c ) override;
+
+  std::streamsize write( const char_type* s, std::streamsize n ) override
+  {
+    for ( std::streamsize i = 0; i < n; ++i )
+    {
+      (*this) << s[i];
+    }
+    return n;
+  }
 
   private:
 

@@ -33,6 +33,8 @@ class NetMockSimpleTimed: public NetInterface
 {
   public:
 
+  struct category: public beefocus_tag {};
+
   ///
   /// @brief Create a network mock given a vector of Input Events
   ///
@@ -137,6 +139,15 @@ class NetMockSimpleTimed: public NetInterface
       currentOutput = "";
     }
     return *this;
+  }
+
+  std::streamsize write( const char_type* s, std::streamsize n) override
+  {
+    for ( std::streamsize i = 0; i < n; ++i )
+    {
+      *this << s[i];
+    }
+    return n;
   }
 
   ///

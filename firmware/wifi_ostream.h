@@ -6,6 +6,8 @@
 class WifiOstream {
   public:
 
+  struct category: public beefocus_tag {};
+
   WifiOstream() : m_connectedClient{nullptr}
   {
   }
