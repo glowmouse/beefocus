@@ -16,15 +16,11 @@ class DebugInterfaceIgnoreMock: public DebugInterface
   ///
   /// @brief No-op write for debug interface
   ///
-  /// @param[in] bytes     Data to be written
-  /// @param[in] numBytes  The number of bytes
+  /// @param[in] s         Data to be written
+  /// @param[in] n         The number of bytes
   ///
-  /// No-op.  Does nothing
+  /// @return n - number of bytes not writte (No-op.  Does nothing)
   ///
-  void rawWrite( const char* bytes, std::size_t numBytes ) override
-  {
-  }
-
   std::streamsize write( const char_type* s, std::streamsize n ) override
   {
     return n;

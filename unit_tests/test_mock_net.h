@@ -125,7 +125,7 @@ class NetMockSimpleTimed: public NetInterface
   /// 1.  If c != 'n', append it to the currentOutput string.
   /// 2.  If c == 'n', append the currentOutput to the outputEvents.
   ///
-  NetInterface& operator<<( char c ) override 
+  void onechar(char c ) 
   {
     if ( c != '\n' )
     {
@@ -138,14 +138,13 @@ class NetMockSimpleTimed: public NetInterface
       outputEvents.emplace_back(TimedStringEvent(time, currentOutput ));
       currentOutput = "";
     }
-    return *this;
   }
 
   std::streamsize write( const char_type* s, std::streamsize n) override
   {
     for ( std::streamsize i = 0; i < n; ++i )
     {
-      *this << s[i];
+      onechar( s[i] );
     }
     return n;
   }

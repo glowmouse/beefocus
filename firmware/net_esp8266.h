@@ -40,34 +40,13 @@ class WifiConnectionEthernet: public NetConnection {
     }
   }
 
-  WifiConnectionEthernet& operator<<( char c )
-  {
-    putChar(c);
-    return *this;
-  }
-
-  void putChar( char c ) override
-  {
-    if ( m_connectedClient )
-    {
-      m_connectedClient.write( &c, 1 );
-    }
-  }
-
   void initConnection( WiFiServer &server );
   bool getString( WifiDebugOstream &log, std::string& string ) override;
   operator bool( void ) override {
     return m_connectedClient;
   }
 
-  std::streamsize write( const char_type* s, std::streamsize n ) 
-  {
-    for ( std::streamsize i = 0; i < n; ++i )
-    {
-      (*this) << s[i];
-    }
-    return n;
-  }
+  std::streamsize write( const char_type* s, std::streamsize n ) override; 
 
   private:
 
@@ -98,16 +77,7 @@ class WifiInterfaceEthernet: public NetInterface {
   void setup( DebugInterface& debugLog ) override;
 
   bool getString( WifiDebugOstream &log, std::string& string ) override;
-  WifiInterfaceEthernet& operator<<( char c ) override;
-
-  std::streamsize write( const char_type* s, std::streamsize n ) override
-  {
-    for ( std::streamsize i = 0; i < n; ++i )
-    {
-      (*this) << s[i];
-    }
-    return n;
-  }
+  std::streamsize write( const char_type* s, std::streamsize n ) override;
 
   private:
 
