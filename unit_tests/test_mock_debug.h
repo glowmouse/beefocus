@@ -25,6 +25,12 @@ class DebugInterfaceIgnoreMock: public DebugInterface
   {
     return n;
   }
+  
+  void disable() override 
+  {
+    // Can't disable what we're ignoring.
+  }
+
 };
 
 #endif

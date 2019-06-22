@@ -14,7 +14,10 @@ class DebugESP8266: public DebugInterface
 	DebugESP8266( DebugESP8266& other ) = delete;
 
   std::streamsize write( const char_type* s, std::streamsize n ) override;
+  void disable() override; 
 
+private:
+  bool isDisabled = false;
 };
 
 #endif

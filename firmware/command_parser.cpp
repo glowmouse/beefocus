@@ -39,6 +39,7 @@ const std::vector<CommandTemplate> commandTemplates =
   { "sync",       Command::Sync,     HasArg::Yes },
   { "firmware",   Command::Firmware, HasArg::No  },
   { "caps",       Command::Caps,     HasArg::No  },
+  { "debugoff",   Command::DebugOff, HasArg::No  },
 }; 
 
 /// @brief Process an integer argument

@@ -76,6 +76,10 @@ class DebugInterfaceSim: public DebugInterface
     // Ignore for now.
     return n;
   }
+  void disable() override 
+  {
+    // Can't disable what we're ignoring.
+  }
 };
 
 void loop() {

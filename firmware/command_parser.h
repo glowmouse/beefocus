@@ -24,6 +24,7 @@ namespace CommandParser {
     Sync,                 ///<  Argument is the new position
     Firmware,             ///<  Get the firmware version
     Caps,                 ///<  Get build specific focuser capabilities
+    DebugOff,             ///<  Disable debug interface.
     NoCommand,            ///<  No command was specified.
     EndOfCommands         ///<  End of the comand list.
   };

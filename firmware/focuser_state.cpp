@@ -168,6 +168,7 @@ const std::unordered_map<CommandParser::Command,
   { CommandParser::Command::Sync,       &Focuser::doSync},
   { CommandParser::Command::Firmware,   &Focuser::doFirmware},
   { CommandParser::Command::Caps,       &Focuser::doCaps},
+  { CommandParser::Command::DebugOff,   &Focuser::doDebugOff},
   { CommandParser::Command::NoCommand,  &Focuser::doError },
 };
 
@@ -185,6 +186,7 @@ const CommandToBool FS::doesCommandInterrupt=
   { CommandParser::Command::Sync,          true   },
   { CommandParser::Command::Firmware,      false  },
   { CommandParser::Command::Caps,          false  },
+  { CommandParser::Command::DebugOff,      false  },
   { CommandParser::Command::NoCommand,     false  },
 };
 
@@ -195,13 +197,29 @@ BuildParams::BuildParamMap BuildParams::builds = {
     {
       TimingParams { 
         100,        // Check for new commands every 100ms
-        50,         // Take 50 steps before checking for interrupts
+        100,        // Take 100 steps before checking for interrupts
         5*60*1000,  // Go to sleep after 5 minutes of inactivity
         1000,       // Check for new input in sleep mode every second
-        1000        // Take 1 second to power up the focuser motor on awaken
+        1000,       // Take 1 second to power up the focuser motor on awaken
+        1000        // Wait 1000 microseconds between steps       
       },
       true,         // Focuser can use a home switch to synch
       50000         // End of the line for my focuser
+    }
+  },
+  {
+    Build::LOW_POWER_HYPERSTAR_FOCUSER_MICROSTEP,
+    {
+      TimingParams { 
+        100,        // Check for new commands every 100ms
+        1000,       // Take 1000 steps before checking for interrupts
+        5*60*1000,  // Go to sleep after 5 minutes of inactivity
+        1000,       // Check for new input in sleep mode every second
+        1000,       // Take 1 second to power up the focuser motor on awaken
+        31          // Wait 31 microseconds between steps       
+      },
+      true,         // Focuser can use a home switch to synch
+      500000        // End of the line for my focuser
     }
   },
   { Build::UNIT_TEST_BUILD_HYPERSTAR, 
@@ -212,6 +230,7 @@ BuildParams::BuildParamMap BuildParams::builds = {
         1000,       // Go to sleep after 1 second of inactivity
         500,        // Check for new input in sleep mode every 500ms
         200,        // Allow 200ms to power on the motor
+        1000        // Wait 1000 microseconds between steps       
       },
       true,         // Focuser can use a home switch to synch
       35000         
@@ -225,7 +244,8 @@ BuildParams::BuildParamMap BuildParams::builds = {
         50,         // Take 50 steps before checking for interrupts
         10*24*60*1000,  // Go to sleep after 10 days of inactivity
         1000,       // Check for new input in sleep mode every second
-        1000        // Take 1 second to power up the focuser motor on awaken
+        1000,       // Take 1 second to power up the focuser motor on awaken
+        1000        // Wait 1000 microseconds between steps       
       },
       false,        // Focuser cannot use a home switch to synch
       5000          // Mostly a place holder
@@ -239,6 +259,7 @@ BuildParams::BuildParamMap BuildParams::builds = {
         1000,       // Go to sleep after 1 second of inactivity
         500,        // Check for new input in sleep mode every 500ms
         200,        // Allow 200ms to power on the motor
+        1000        // Wait 1000 microseconds between steps       
       },
       false,        // Focuser cannot use a home switch to synch
       5000          // Mostly a place holder
@@ -336,6 +357,15 @@ void Focuser::doCaps( CommandParser::CommandPacket cp )
   *net << "CanHome: " << (buildParams.focuserHasHome ? "YES\n" : "NO\n" );
 }
 
+void Focuser::doDebugOff( CommandParser::CommandPacket cp )
+{
+  (void) cp;
+  DebugInterface& log = *debugLog;
+
+  log << "Disabling low level debug output";
+  log.disable();
+}
+
 void Focuser::doRELPos( CommandParser::CommandPacket cp )
 {
   cp.optionalArg += focuserPosition;
@@ -428,14 +458,14 @@ unsigned int Focuser::stateStepInactiveAndWait()
 {
   hardware->DigitalWrite( HWI::Pin::STEP, HWI::PinState::STEP_INACTIVE );
   stateStack.pop();
-  return 1000;
+  return buildParams.timingParams.getMicroSecondStepPause();
 }
 
 unsigned int Focuser::stateStepActiveAndWait()
 {
   hardware->DigitalWrite( HWI::Pin::STEP, HWI::PinState::STEP_ACTIVE );
   stateStack.pop();
-  return 1000;
+  return buildParams.timingParams.getMicroSecondStepPause();
 }
 
 unsigned int Focuser::stateDoingSteps()
