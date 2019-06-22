@@ -6,8 +6,9 @@ DebugESP8266::DebugESP8266( void )
 	Serial.begin( 115200 );
 }
 
-void DebugESP8266::rawWrite( const char* bytes, size_t num )
+std::streamsize DebugESP8266::write( const char_type* s, std::streamsize n )
 {
-	Serial.write( (uint8 *) bytes, num );
+	Serial.write( (uint8 *) s, n );
+  return n;
 }
 

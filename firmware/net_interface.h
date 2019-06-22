@@ -28,7 +28,6 @@ class NetInterface {
   virtual void setup( DebugInterface &debugLog ) = 0;
 
   virtual bool getString( WifiDebugOstream &log, std::string& string ) = 0;
-  virtual NetInterface& operator<<( char c ) = 0;
   virtual std::streamsize write( const char_type* s, std::streamsize n ) = 0;
 
   private:
@@ -37,18 +36,16 @@ class NetInterface {
 class NetConnection {
   public:
 
-  NetConnection& operator<<( char c )
-  {
-    putChar( c );
-    return *this;
-  }
+  struct category : public beefocus_tag {};
+  using char_type = char;
+
   virtual bool getString( WifiDebugOstream& lot, std::string& string )=0;
   virtual operator bool( void ) = 0;
   virtual void reset( void ) = 0;
+  virtual std::streamsize write( const char_type* s, std::streamsize n ) = 0;
 
   protected:
 
-  virtual void putChar( char c ) = 0;
 
 };
 

@@ -21,29 +21,30 @@ class WifiDebugOstream
   {
   }
 
-  WifiDebugOstream& operator<<( char c )
-  { 
-    *(m_serialDebug) << c;
-    bool isNewLine = ( c == '\n' );
-    if ( m_lastWasNewline && !isNewLine )
-    {
-      (*m_wifiDebug) << "# ";
-    }
-    *(m_wifiDebug) << c;
-    m_lastWasNewline = isNewLine;
-    return *this;
-  }
-
   std::streamsize write( const char_type* s, std::streamsize n )
   {
     for ( std::streamsize i = 0; i < n; ++i )
     {
-      (*this) << s[i];
+      onechar( s[i] );
     }
     return n;
   }
 
   private:
+
+  void onechar(char c )
+  { 
+    m_serialDebug->write( &c, 1 );
+    bool isNewLine = ( c == '\n' );
+    if ( m_lastWasNewline && !isNewLine )
+    {
+      (*m_wifiDebug) << "# ";
+    }
+    m_wifiDebug->write( &c, 1 );
+    m_lastWasNewline = isNewLine;
+  }
+
+
   NetInterface* m_wifiDebug;
   DebugInterface* m_serialDebug;
   bool m_lastWasNewline;

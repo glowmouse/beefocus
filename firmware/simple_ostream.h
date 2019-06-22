@@ -54,14 +54,6 @@ template< class T >
 struct is_beefocus_sink< T, decltype(
   inttype_if_beefocus<typename T::category>{0}) > : std::true_type {};
 
-/// @brief Output a buffer
-template <class T,
-  typename = my_enable_if_t<is_beefocus_sink<T>::value>>
-void rawWrite( T& sink,  const char *bytes, std::size_t numBytes )
-{
-   sink.write( bytes, numBytes );
-}
-
 /// @brief Output a WIFI IP address
 template <class T,
   typename = my_enable_if_t<is_beefocus_sink<T>::value>>
@@ -93,7 +85,9 @@ T& operator<<( T& sink, unsigned int i )
   }
 
   // Handle the lowest digit
-  sink << (char) ('0' + (i % 10));
+  char c = '0' + (i % 10);
+  sink.write( &c, 1 );
+
   return sink;
 }
 

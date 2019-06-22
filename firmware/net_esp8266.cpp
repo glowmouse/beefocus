@@ -77,6 +77,7 @@ void WifiInterfaceEthernet::handleNewConnections( WifiDebugOstream &log )
   }
 }
 
+#ifdef GONE
 WifiInterfaceEthernet& WifiInterfaceEthernet::operator<<( char c )
 {
   std::for_each( m_connections.begin(), m_connections.end(), [&] ( NetConnection& interface )
@@ -84,6 +85,14 @@ WifiInterfaceEthernet& WifiInterfaceEthernet::operator<<( char c )
     interface << c;
   }); 
   return *this;
+}
+#endif
+std::streamsize WifiInterfaceEthernet::write(const char_type* s, std::streamsize n)
+{
+  std::for_each( m_connections.begin(), m_connections.end(), [&] ( NetConnection& interface )
+  {
+    interface.write( s, n );
+  }); 
 }
 
 void WifiInterfaceEthernet::reset(void)
@@ -147,5 +156,9 @@ void WifiConnectionEthernet::handleNewIncomingData( WifiDebugOstream& log )
   }
 }
 
+std::streamsize WifiConnectionEthernet::write( const char_type* s, std::streamsize n )
+{
+  m_connectedClient.write( s, n );
+} 
 
 

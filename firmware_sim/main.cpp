@@ -36,11 +36,6 @@ class NetInterfaceSim: public NetInterface {
     input = "";
     return false;
   }
-  NetInterface& operator<<( char c ) override
-  {
-    std::cout << c;
-    return *this;
-  }
   std::streamsize write( const char_type* s, std::streamsize n )
   {
     for ( std::streamsize i = 0; i < n; ++i ) {
@@ -76,15 +71,6 @@ class DebugInterfaceSim: public DebugInterface
   struct category: virtual beefocus_tag {};
   using char_type = char;
 
-  void rawWrite( const char* bytes, std::size_t numBytes ) override
-  {
-    // Ignore for now.
-    //for ( int i=0; i<numBytes; ++i )
-    //{
-    //  std::cout << bytes[i];
-    //}
-  }
- 
   std::streamsize write( const char_type* s, std::streamsize n )
   {
     // Ignore for now.
