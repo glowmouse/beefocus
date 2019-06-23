@@ -100,6 +100,7 @@ unsigned int Focuser::loop()
   uSecRemainder += uSecToNextCall;
   time += uSecRemainder / 1000;
   uSecRemainder = uSecRemainder % 1000;
+  net->flush();
   return uSecToNextCall;
 }
 

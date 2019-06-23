@@ -47,6 +47,7 @@ class WifiConnectionEthernet: public NetConnection {
   }
 
   std::streamsize write( const char_type* s, std::streamsize n ) override; 
+  void flush() override;
 
   private:
 
@@ -55,6 +56,9 @@ class WifiConnectionEthernet: public NetConnection {
   int m_currentIncomingBuffer;
   std::string m_incomingBuffers[2];
   WiFiClient m_connectedClient;
+  std::array< char, 1500> outgoingBuffer;
+  size_t bytesInOutBuffer = 0;
+  bool allOutputFlushed = true;
 };
 
 /// @brief Interface to the client
@@ -78,6 +82,7 @@ class WifiInterfaceEthernet: public NetInterface {
 
   bool getString( WifiDebugOstream &log, std::string& string ) override;
   std::streamsize write( const char_type* s, std::streamsize n ) override;
+  void flush() override;
 
   private:
 

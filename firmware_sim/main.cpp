@@ -36,11 +36,14 @@ class NetInterfaceSim: public NetInterface {
     input = "";
     return false;
   }
-  std::streamsize write( const char_type* s, std::streamsize n )
+  std::streamsize write( const char_type* s, std::streamsize n ) override
   {
     for ( std::streamsize i = 0; i < n; ++i ) {
       std::cout << s[i];
     }
+  }
+  void flush() override
+  {
   }
 };
 
