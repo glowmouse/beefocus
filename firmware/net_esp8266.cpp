@@ -15,7 +15,7 @@ void WifiInterfaceEthernet::setup( DebugInterface& log ) {
   // Kudos Erik H. Bakke for pointing this point.
   WiFi.persistent( false );
   WiFi.mode( WIFI_STA );
-  wifi_set_sleep_type(LIGHT_SLEEP_T);
+  WiFi.hostname( hostname );
   WiFi.begin(ssid, password);
    
   while (WiFi.status() != WL_CONNECTED) {
@@ -36,6 +36,7 @@ void WifiInterfaceEthernet::setup( DebugInterface& log ) {
     adr[i] = dsIP[i];
   log << "Telnet to this address to connect: " << adr << " " << tcp_port << "\n";
 
+  wifi_set_sleep_type(LIGHT_SLEEP_T);
 }
 
 bool WifiInterfaceEthernet::getString( WifiDebugOstream& log, std::string& string )

@@ -91,6 +91,7 @@ class WifiInterfaceEthernet: public NetInterface {
   // Make a CI Test to lock these defaults in?
   static constexpr const char* ssid = WifiSecrets::ssid; 
   static constexpr const char* password = WifiSecrets::password;
+  static constexpr const char* hostname = WifiSecrets::hostname;
   const uint16_t tcp_port{4999};
 
   WiFiServer m_server{tcp_port};
