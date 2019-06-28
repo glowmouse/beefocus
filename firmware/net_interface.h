@@ -29,6 +29,7 @@ class NetInterface {
 
   virtual bool getString( WifiDebugOstream &log, std::string& string ) = 0;
   virtual std::streamsize write( const char_type* s, std::streamsize n ) = 0;
+  virtual void flush() = 0;
 
   private:
 };
@@ -43,6 +44,7 @@ class NetConnection {
   virtual operator bool( void ) = 0;
   virtual void reset( void ) = 0;
   virtual std::streamsize write( const char_type* s, std::streamsize n ) = 0;
+  virtual void flush() = 0;
 
   protected:
 

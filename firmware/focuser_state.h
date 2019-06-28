@@ -126,13 +126,15 @@ class TimingParams
     int maxStepsBetweenChecksRHS          = 50,
     unsigned msInactivityToSleepRHS       = 5*60*1000,  // 5 minutes
     int msEpochForSleepCommandChecksRHS   = 1*1000,     // 1 seconds
-    int msToPowerStepperRHS               = 1*1000      // 1 second
+    int msToPowerStepperRHS               = 1*1000,     // 1 second
+    unsigned microSecondStepPauseRHS      = 1000        // 1 ms
   ) :
     msEpochBetweenCommandChecks{ msEpochBetweenCommandChecksRHS },
     maxStepsBetweenChecks{ maxStepsBetweenChecksRHS },
     msInactivityToSleep{ msInactivityToSleepRHS },
     msEpochForSleepCommandChecks{ msEpochForSleepCommandChecksRHS },
-    msToPowerStepper{ msToPowerStepperRHS}
+    msToPowerStepper{ msToPowerStepperRHS},
+    microSecondStepPause{ microSecondStepPauseRHS }
   {
   }
 
@@ -156,6 +158,10 @@ class TimingParams
   { 
     return msToPowerStepper;
   }
+  int getMicroSecondStepPause() const 
+  { 
+    return microSecondStepPause;
+  }
 
   private:
   int msEpochBetweenCommandChecks;
@@ -163,11 +169,13 @@ class TimingParams
   unsigned msInactivityToSleep;
   int msEpochForSleepCommandChecks;
   int msToPowerStepper;
+  unsigned microSecondStepPause;
 };
 
 enum class Build
 {
   LOW_POWER_HYPERSTAR_FOCUSER,
+  LOW_POWER_HYPERSTAR_FOCUSER_MICROSTEP,
   TRADITIONAL_FOCUSER,
   UNIT_TEST_BUILD_HYPERSTAR,
   UNIT_TEST_TRADITIONAL_FOCUSER
@@ -384,6 +392,7 @@ class Focuser
   void doSync( CommandParser::CommandPacket );
   void doFirmware( CommandParser::CommandPacket );
   void doCaps( CommandParser::CommandPacket );
+  void doDebugOff( CommandParser::CommandPacket );
   void doError( CommandParser::CommandPacket );
 
   std::unique_ptr<NetInterface> net;

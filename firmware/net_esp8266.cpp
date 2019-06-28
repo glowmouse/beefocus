@@ -15,7 +15,7 @@ void WifiInterfaceEthernet::setup( DebugInterface& log ) {
   // Kudos Erik H. Bakke for pointing this point.
   WiFi.persistent( false );
   WiFi.mode( WIFI_STA );
-  wifi_set_sleep_type(LIGHT_SLEEP_T);
+  WiFi.hostname( hostname );
   WiFi.begin(ssid, password);
    
   while (WiFi.status() != WL_CONNECTED) {
@@ -36,6 +36,7 @@ void WifiInterfaceEthernet::setup( DebugInterface& log ) {
     adr[i] = dsIP[i];
   log << "Telnet to this address to connect: " << adr << " " << tcp_port << "\n";
 
+  //wifi_set_sleep_type(LIGHT_SLEEP_T);
 }
 
 bool WifiInterfaceEthernet::getString( WifiDebugOstream& log, std::string& string )
@@ -77,21 +78,20 @@ void WifiInterfaceEthernet::handleNewConnections( WifiDebugOstream &log )
   }
 }
 
-#ifdef GONE
-WifiInterfaceEthernet& WifiInterfaceEthernet::operator<<( char c )
-{
-  std::for_each( m_connections.begin(), m_connections.end(), [&] ( NetConnection& interface )
-  {
-    interface << c;
-  }); 
-  return *this;
-}
-#endif
 std::streamsize WifiInterfaceEthernet::write(const char_type* s, std::streamsize n)
 {
   std::for_each( m_connections.begin(), m_connections.end(), [&] ( NetConnection& interface )
   {
     interface.write( s, n );
+  }); 
+  return n;
+}
+
+void WifiInterfaceEthernet::flush()
+{
+  std::for_each( m_connections.begin(), m_connections.end(), [&] ( NetConnection& interface )
+  {
+    interface.flush();
   }); 
 }
 
@@ -111,7 +111,8 @@ void WifiConnectionEthernet::initConnection( WiFiServer &server )
       m_connectedClient.stop();
   }
   m_connectedClient = server.available();
-  (*this) << "# Bee Focuser is ready for commands\n";  
+  m_connectedClient.setNoDelay( true );
+  (*this) << "# Bee Focuser is ready for commands\n"; 
 }
 
 bool WifiConnectionEthernet::getString( WifiDebugOstream &log, std::string& string )
@@ -158,7 +159,33 @@ void WifiConnectionEthernet::handleNewIncomingData( WifiDebugOstream& log )
 
 std::streamsize WifiConnectionEthernet::write( const char_type* s, std::streamsize n )
 {
-  m_connectedClient.write( s, n );
+  if ( !m_connectedClient ) { return n; }
+  if ( n + bytesInOutBuffer > outgoingBuffer.max_size() )
+  {
+    flush();
+  }
+  memcpy( outgoingBuffer.data() + bytesInOutBuffer, s, n );
+  bytesInOutBuffer +=n;
+  return n;
 } 
 
+void WifiConnectionEthernet::flush()
+{
+  if ( !m_connectedClient ) { return; }
+
+  if ( bytesInOutBuffer )
+  { 
+    //wifi_set_sleep_type(NONE_SLEEP_T);
+    m_connectedClient.write( outgoingBuffer.data(), bytesInOutBuffer );
+    allOutputFlushed = false;
+    bytesInOutBuffer = 0;
+  }
+  else if ( !allOutputFlushed )
+  {
+    allOutputFlushed = m_connectedClient.flush(1);
+  }
+  else {
+    //wifi_set_sleep_type(LIGHT_SLEEP_T);
+  }
+} 
 

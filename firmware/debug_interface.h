@@ -11,6 +11,7 @@ class DebugInterface
   using char_type = char;
 
   virtual std::streamsize write( const char_type* s, std::streamsize n ) = 0;
+  virtual void disable() = 0;
 
   virtual ~DebugInterface() {}
 };

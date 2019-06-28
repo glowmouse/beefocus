@@ -149,6 +149,10 @@ class NetMockSimpleTimed: public NetInterface
     return n;
   }
 
+  void flush() override
+  {
+  }
+
   ///
   /// @brief      Advance network mock time by "ticks" ms
   /// @param[in]  The amount of time by, in ms
