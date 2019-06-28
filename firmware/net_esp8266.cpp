@@ -36,7 +36,7 @@ void WifiInterfaceEthernet::setup( DebugInterface& log ) {
     adr[i] = dsIP[i];
   log << "Telnet to this address to connect: " << adr << " " << tcp_port << "\n";
 
-  wifi_set_sleep_type(LIGHT_SLEEP_T);
+  //wifi_set_sleep_type(LIGHT_SLEEP_T);
 }
 
 bool WifiInterfaceEthernet::getString( WifiDebugOstream& log, std::string& string )
@@ -175,7 +175,7 @@ void WifiConnectionEthernet::flush()
 
   if ( bytesInOutBuffer )
   { 
-    wifi_set_sleep_type(NONE_SLEEP_T);
+    //wifi_set_sleep_type(NONE_SLEEP_T);
     m_connectedClient.write( outgoingBuffer.data(), bytesInOutBuffer );
     allOutputFlushed = false;
     bytesInOutBuffer = 0;
@@ -185,7 +185,7 @@ void WifiConnectionEthernet::flush()
     allOutputFlushed = m_connectedClient.flush(1);
   }
   else {
-    wifi_set_sleep_type(LIGHT_SLEEP_T);
+    //wifi_set_sleep_type(LIGHT_SLEEP_T);
   }
 } 
 
