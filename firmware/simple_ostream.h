@@ -65,7 +65,7 @@ T& operator<<( T& sink, const BeeFocus::IpAddress& address )
 
 /// @brief Output a C style string.
 template <class T,
-  my_enable_if_t<is_beefocus_sink<T>::value>>
+  typename = my_enable_if_t<is_beefocus_sink<T>::value>>
 T& operator<<( T& sink, const char* string )
 {
   std::size_t length = strlen( string );
