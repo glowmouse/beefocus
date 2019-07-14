@@ -41,6 +41,7 @@ class NetInterfaceSim: public NetInterface {
     for ( std::streamsize i = 0; i < n; ++i ) {
       std::cout << s[i];
     }
+    return n;
   }
   void flush() override
   {
@@ -74,7 +75,7 @@ class DebugInterfaceSim: public DebugInterface
   struct category: virtual beefocus_tag {};
   using char_type = char;
 
-  std::streamsize write( const char_type* s, std::streamsize n )
+  std::streamsize write( const char_type* s, std::streamsize n ) override
   {
     // Ignore for now.
     return n;
