@@ -3,7 +3,12 @@
 #include "wifi_ostream.h"
 #include "wifi_debug_ostream.h"
 
-void WifiInterfaceEthernet::setup( DebugInterface& log ) {
+WifiInterfaceEthernet::WifiInterfaceEthernet( DebugInterface& log ) 
+  : m_lastSlotAllocated{0},
+    m_kickout{0},
+    m_nextToKick{m_connections.begin()}
+{
+  reset();
   delay(10);
 
   log << "Init Wifi\n";
@@ -37,6 +42,11 @@ void WifiInterfaceEthernet::setup( DebugInterface& log ) {
   log << "Telnet to this address to connect: " << adr << " " << tcp_port << "\n";
 
   //wifi_set_sleep_type(LIGHT_SLEEP_T);
+}
+
+WifiInterfaceEthernet::~WifiInterfaceEthernet()
+{
+  reset();
 }
 
 bool WifiInterfaceEthernet::getString( WifiDebugOstream& log, std::string& string )

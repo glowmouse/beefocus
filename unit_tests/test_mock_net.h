@@ -5,6 +5,7 @@
 #ifndef __TEST_MOCK_NET_H__
 #define __TEST_MOCK_NET_H__
 
+#include <algorithm>    // for std::copy_if
 #include "net_interface.h"
 #include "test_mock_event.h"
 
@@ -77,13 +78,6 @@ class NetMockSimpleTimed: public NetInterface
   // delete unused operators for safety
   NetMockSimpleTimed( const HWMockTimed& ) = delete;
   NetMockSimpleTimed& operator=( const NetMockSimpleTimed& ) = delete;
-
-  /// 
-  /// @brief Implement setup required by NetInterface.  Does nothing.
-  /// 
-  void setup( DebugInterface& debugLog ) override
-  {
-  }
 
   ///
   /// @brief Get input from the net interface

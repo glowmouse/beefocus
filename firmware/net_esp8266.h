@@ -68,17 +68,12 @@ class WifiConnectionEthernet: public NetConnection {
 class WifiInterfaceEthernet: public NetInterface {
   public:
 
-  WifiInterfaceEthernet() : m_lastSlotAllocated{0}, m_kickout{0}, m_nextToKick{m_connections.begin()}
-  {
-    reset();
-  }
-  ~WifiInterfaceEthernet()
-  {
-    reset();
-  }
+  WifiInterfaceEthernet( DebugInterface& log);
+  WifiInterfaceEthernet() = delete;
+  WifiInterfaceEthernet(const WifiInterfaceEthernet& ) = delete;
+  ~WifiInterfaceEthernet();
 
   void reset( void );
-  void setup( DebugInterface& debugLog ) override;
 
   bool getString( WifiDebugOstream &log, std::string& string ) override;
   std::streamsize write( const char_type* s, std::streamsize n ) override;
