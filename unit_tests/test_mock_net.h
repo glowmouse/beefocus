@@ -5,6 +5,7 @@
 #ifndef __TEST_MOCK_NET_H__
 #define __TEST_MOCK_NET_H__
 
+#include <algorithm>    // for std::copy_if
 #include "net_interface.h"
 #include "test_mock_event.h"
 
