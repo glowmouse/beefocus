@@ -321,9 +321,9 @@ class Focuser
   /// @param[in] params       - Hardware Parameters 
   ///
   Focuser( 
-		std::unique_ptr<NetInterface> netArg,
-		std::unique_ptr<HWI> hardwareArg,
-		std::unique_ptr<DebugInterface> debugArg,
+		std::shared_ptr<NetInterface> netArg,
+		std::shared_ptr<HWI> hardwareArg,
+		std::shared_ptr<DebugInterface> debugArg,
     const BuildParams params
 	);
 
@@ -395,9 +395,9 @@ class Focuser
   void doDebugOff( CommandParser::CommandPacket );
   void doError( CommandParser::CommandPacket );
 
-  std::unique_ptr<NetInterface> net;
-  std::unique_ptr<HWI> hardware;
-  std::unique_ptr<DebugInterface> debugLog;
+  std::shared_ptr<NetInterface> net;
+  std::shared_ptr<HWI> hardware;
+  std::shared_ptr<DebugInterface> debugLog;
   
   const BuildParams buildParams;
 

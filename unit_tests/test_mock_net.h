@@ -78,13 +78,6 @@ class NetMockSimpleTimed: public NetInterface
   NetMockSimpleTimed( const HWMockTimed& ) = delete;
   NetMockSimpleTimed& operator=( const NetMockSimpleTimed& ) = delete;
 
-  /// 
-  /// @brief Implement setup required by NetInterface.  Does nothing.
-  /// 
-  void setup( DebugInterface& debugLog ) override
-  {
-  }
-
   ///
   /// @brief Get input from the net interface
   /// @param[in]  log          - Debug Log (ignored)

@@ -14,10 +14,6 @@ class NetInterfaceSim: public NetInterface {
   struct category: virtual beefocus_tag {};
   using char_type = char;
 
-  void setup( DebugInterface& debugLog ) override
-  {
-    debugLog << "Simulator Net Interface Init\n";
-  }
   bool getString( WifiDebugOstream& log, std::string& input ) override
   {
     fd_set readfds;

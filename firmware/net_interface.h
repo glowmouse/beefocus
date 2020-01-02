@@ -18,14 +18,12 @@ class NetInterface {
   struct category : public beefocus_tag {};
   using char_type = char;
 
-  NetInterface()
+  NetInterface( void )
   {
   }
   virtual ~NetInterface()
   {
   }
-
-  virtual void setup( DebugInterface &debugLog ) = 0;
 
   virtual bool getString( WifiDebugOstream &log, std::string& string ) = 0;
   virtual std::streamsize write( const char_type* s, std::streamsize n ) = 0;

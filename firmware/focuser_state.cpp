@@ -48,29 +48,27 @@ using namespace FS;
 /////////////////////////////////////////////////////////////////////////
 
 Focuser::Focuser(
-    std::unique_ptr<NetInterface> netArg,
-    std::unique_ptr<HWI> hardwareArg,
-    std::unique_ptr<DebugInterface> debugArg,
-    const BuildParams params
-) : buildParams{ params }
+    std::shared_ptr<NetInterface>     netArg,
+    std::shared_ptr<HWI>              hardwareArg,
+    std::shared_ptr<DebugInterface>   debugArg,
+    const BuildParams                 params
+) : net             { netArg },
+    hardware        { hardwareArg },
+    debugLog        { debugArg },
+    buildParams     { params },
+    dir             { Dir::FORWARD },
+    motorState      { MotorState::OFF},
+    focuserPosition { 0 },
+    isSynched       { false },
+    time            { 0 },
+    uSecRemainder   { 0 },
+    timeLastInterruptingCommandOccured { 0 }
 {
-  focuserPosition = 0;
-  isSynched = false;
-  time = 0;
-  uSecRemainder = 0;
-  timeLastInterruptingCommandOccured = 0;
-  motorState = MotorState::OFF;
-
-  std::swap( net, netArg );
-  std::swap( hardware, hardwareArg );
-  std::swap( debugLog, debugArg );
-  
   DebugInterface& dlog = *debugLog;
   dlog << "Bringing up net interface\n";
   
   // Bring up the interface to the controlling computer
 
-  net->setup( dlog );
   WifiDebugOstream log( debugLog.get(), net.get() );
 
   //
@@ -86,7 +84,6 @@ Focuser::Focuser(
   // 
   setMotor( log, MotorState::ON ); 
 
-  dir = Dir::FORWARD;
   hardware->DigitalWrite( HWI::Pin::DIR, HWI::PinState::DIR_FORWARD); 
   hardware->DigitalWrite( HWI::Pin::STEP, HWI::PinState::STEP_INACTIVE );
 
